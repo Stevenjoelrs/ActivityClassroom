@@ -1,0 +1,8 @@
+{
+  "name": "activity-classroom",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}
