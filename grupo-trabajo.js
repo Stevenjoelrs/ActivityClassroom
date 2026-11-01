@@ -31,8 +31,9 @@ export class GrupoTrabajo {
       nombre,
       actividadId,
       modalidad,
-      integrantes,
+      integrantes: Object.freeze([...integrantes]),
       maximoIntegrantes,
     });
+    Object.freeze(this);
   }
 }

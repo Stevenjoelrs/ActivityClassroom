@@ -111,3 +111,33 @@ test("rechaza un máximo que no sea un entero positivo seguro", () => {
     );
   }
 });
+
+test("no permite reasignar datos de un grupo establecido", () => {
+  const grupo = new GrupoTrabajo(datosValidos);
+
+  for (const [campo, valor] of [
+    ["nombre", "Grupo 2"],
+    ["actividadId", "ACT-02"],
+    ["modalidad", "sorteo"],
+    ["integrantes", ["EST-03"]],
+    ["maximoIntegrantes", 5],
+  ]) {
+    assert.throws(() => { grupo[campo] = valor; }, TypeError);
+  }
+});
+
+test("no permite cambiar ni agregar integrantes", () => {
+  const grupo = new GrupoTrabajo({ ...datosValidos, integrantes: ["EST-01"] });
+
+  assert.throws(() => { grupo.integrantes[0] = "EST-03"; }, TypeError);
+  assert.throws(() => grupo.integrantes.push("EST-03"), TypeError);
+});
+
+test("modificar la lista original no cambia el grupo", () => {
+  const integrantes = ["EST-01", "EST-02"];
+  const grupo = new GrupoTrabajo({ ...datosValidos, integrantes });
+
+  integrantes.push("EST-03");
+
+  assert.deepEqual(grupo.integrantes, ["EST-01", "EST-02"]);
+});
