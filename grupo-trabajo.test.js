@@ -26,3 +26,88 @@ test("registra integrantes de un sorteo ya realizado", () => {
   assert.equal(grupo.modalidad, "sorteo");
   assert.deepEqual(grupo.integrantes, ["EST-01", "EST-02"]);
 });
+
+test("rechaza integrantes duplicados", () => {
+  assert.throws(
+    () => new GrupoTrabajo({ ...datosValidos, integrantes: ["EST-01", "EST-01"] }),
+    /dos veces/,
+  );
+});
+
+test("rechaza un grupo que supera el máximo", () => {
+  assert.throws(
+    () => new GrupoTrabajo({ ...datosValidos, maximoIntegrantes: 1 }),
+    /supera/,
+  );
+});
+
+test("acepta un grupo con el máximo exacto", () => {
+  const grupo = new GrupoTrabajo({ ...datosValidos, maximoIntegrantes: 2 });
+
+  assert.equal(grupo.integrantes.length, 2);
+});
+
+test("acepta un grupo sin máximo establecido", () => {
+  const grupo = new GrupoTrabajo(datosValidos);
+
+  assert.equal(grupo.maximoIntegrantes, null);
+  assert.equal(grupo.integrantes.length, 2);
+});
+
+test("rechaza nombre o actividad sin datos válidos", () => {
+  for (const campo of ["nombre", "actividadId"]) {
+    for (const valor of ["", "   ", null, undefined, 123]) {
+      assert.throws(
+        () => new GrupoTrabajo({ ...datosValidos, [campo]: valor }),
+        campo === "nombre" ? /nombre/ : /identificadores/,
+      );
+    }
+  }
+});
+
+test("rechaza modalidades no admitidas", () => {
+  for (const modalidad of ["", "manual", null, undefined]) {
+    assert.throws(
+      () => new GrupoTrabajo({ ...datosValidos, modalidad }),
+      /modalidad/,
+    );
+  }
+});
+
+test("rechaza grupos sin un arreglo de integrantes no vacío", () => {
+  for (const integrantes of [[], "EST-01", null, undefined, 123]) {
+    assert.throws(
+      () => new GrupoTrabajo({ ...datosValidos, integrantes }),
+      /colección de integrantes/,
+    );
+  }
+});
+
+test("rechaza identificadores de integrantes inválidos y arreglos con huecos", () => {
+  for (const integrantes of [
+    [""], ["   "], [null], [undefined], [123], [" EST-01"], ["EST-01 "], Array(2),
+  ]) {
+    assert.throws(
+      () => new GrupoTrabajo({ ...datosValidos, integrantes }),
+      /identificadores/,
+    );
+  }
+});
+
+test("rechaza identificador de actividad con espacios en los extremos", () => {
+  assert.throws(
+    () => new GrupoTrabajo({ ...datosValidos, actividadId: " ACT-01 " }),
+    /identificadores/,
+  );
+});
+
+test("rechaza un máximo que no sea un entero positivo seguro", () => {
+  for (const maximoIntegrantes of [
+    0, -1, true, false, 1.5, "2", NaN, Infinity, Number.MAX_SAFE_INTEGER + 1,
+  ]) {
+    assert.throws(
+      () => new GrupoTrabajo({ ...datosValidos, maximoIntegrantes }),
+      /entero positivo/,
+    );
+  }
+});
