@@ -11,14 +11,21 @@ Desde la raíz del proyecto:
 npm test
 ```
 
-Si `npm` no está disponible, las pruebas también se ejecutan con:
+`npm test` equivale a `node --test` y descubre los `*.test.js` en todas las
+subcarpetas.
+
+Para una ruta explícita, entrecomillarla:
 
 ```sh
-node --test
+node --test "backend/**/*.test.js"
 ```
 
 El suite actual ejecuta **43 pruebas** nativas con `node:test` y
 `node:assert/strict`.
+
+Nuestras pruebas de dominio no necesitan instalar nada. Cuando se integren las
+pruebas de HU-03/HU-04 (repositorio externo), se requerirá `npm ci` dentro de
+`backend/`, porque sus servicios importan `dotenv`/`multer`.
 
 ## Calendario académico (HU-01)
 
