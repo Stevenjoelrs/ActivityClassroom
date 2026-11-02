@@ -83,15 +83,15 @@ export class CalendarioAcademico {
     );
 
     if (eventosMateria.length === 0) {
-      return {
+      return Object.freeze({
         mensaje: "No existen eventos programados para esta materia.",
         eventos: Object.freeze([]),
-      };
+      });
     }
 
-    return {
+    return Object.freeze({
       mensaje: null,
       eventos: Object.freeze([...eventosMateria]),
-    };
+    });
   }
 }

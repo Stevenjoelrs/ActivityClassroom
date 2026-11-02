@@ -12,14 +12,71 @@ const datosValidos = {
   descripcion: "Clase de Arquitectura",
 };
 
-test("HU-01: registra y permite consultar eventos de una materia", () => {
+test("HU-01: CA-01/CA-05 registra y consulta una clase con fecha, horario y descripción", () => {
   const calendario = new CalendarioAcademico();
   calendario.registrarEvento(new EventoAcademico(datosValidos));
 
   const resultado = calendario.consultarMateria("MAT-101");
+  const evento = resultado.eventos[0];
 
-  assert.equal(resultado.eventos.length, 1);
-  assert.equal(resultado.eventos[0].descripcion, "Clase de Arquitectura");
+  assert.equal(evento.tipo, "clase");
+  assert.equal(evento.fecha, "2026-11-10");
+  assert.equal(evento.horario, "08:00 - 10:00");
+  assert.equal(evento.descripcion, "Clase de Arquitectura");
+});
+
+test("HU-01: CA-02 registra una entrega de tarea con su fecha", () => {
+  const evento = new EventoAcademico({
+    ...datosValidos,
+    tipo: "entrega_tarea",
+    fecha: "2026-11-20",
+    descripcion: "Entrega del informe",
+  });
+
+  assert.equal(evento.tipo, "entrega_tarea");
+  assert.equal(evento.fecha, "2026-11-20");
+  assert.equal(evento.descripcion, "Entrega del informe");
+});
+
+test("HU-01: CA-03 registra una actividad académica con su descripción", () => {
+  const evento = new EventoAcademico({
+    ...datosValidos,
+    tipo: "actividad",
+    descripcion: "Exposición grupal",
+  });
+
+  assert.equal(evento.tipo, "actividad");
+  assert.equal(evento.descripcion, "Exposición grupal");
+});
+
+test("HU-01: CA-04 refleja suspensiones registradas en el calendario", () => {
+  const calendario = new CalendarioAcademico();
+  calendario.registrarEvento(
+    new EventoAcademico({
+      ...datosValidos,
+      id: "EV-03",
+      tipo: "suspension",
+      fecha: "2026-11-15",
+      descripcion: "Clase suspendida por feriado",
+      suspendido: true,
+    }),
+  );
+
+  const resultado = calendario.consultarMateria("MAT-101");
+
+  assert.equal(resultado.eventos[0].suspendido, true);
+});
+
+test("HU-01: CA-06 informa cuando no existen eventos para una materia", () => {
+  const calendario = new CalendarioAcademico();
+
+  const resultado = calendario.consultarMateria("MAT-999");
+
+  assert.equal(
+    resultado.mensaje,
+    "No existen eventos programados para esta materia.",
+  );
+  assert.equal(resultado.eventos.length, 0);
 });
 
 test("HU-01: devuelve únicamente los eventos de la materia consultada", () => {
@@ -38,36 +95,6 @@ test("HU-01: devuelve únicamente los eventos de la materia consultada", () => {
 
   assert.equal(resultado.eventos.length, 1);
   assert.equal(resultado.eventos[0].materiaId, "MAT-101");
-});
-
-test("HU-01: informa cuando no existen eventos para una materia", () => {
-  const calendario = new CalendarioAcademico();
-
-  const resultado = calendario.consultarMateria("MAT-999");
-
-  assert.equal(
-    resultado.mensaje,
-    "No existen eventos programados para esta materia.",
-  );
-  assert.equal(resultado.eventos.length, 0);
-});
-
-test("HU-01: refleja suspensiones registradas en el calendario", () => {
-  const calendario = new CalendarioAcademico();
-  calendario.registrarEvento(
-    new EventoAcademico({
-      ...datosValidos,
-      id: "EV-03",
-      tipo: "suspension",
-      fecha: "2026-11-15",
-      descripcion: "Clase suspendida por feriado",
-      suspendido: true,
-    }),
-  );
-
-  const resultado = calendario.consultarMateria("MAT-101");
-
-  assert.equal(resultado.eventos[0].suspendido, true);
 });
 
 test("HU-01: rechaza identificadores inválidos de evento y materia", () => {
@@ -145,7 +172,7 @@ test("HU-01: rechaza un estado de suspensión no booleano", () => {
   }
 });
 
-test("HU-01: registra todos los tipos de evento admitidos", () => {
+test("HU-01: admite todos los tipos de evento", () => {
   for (const tipo of ["clase", "entrega_tarea", "actividad", "suspension"]) {
     const evento = new EventoAcademico({ ...datosValidos, tipo });
 
@@ -211,6 +238,16 @@ test("HU-01: la consulta vacía devuelve un arreglo congelado", () => {
     () => resultado.eventos.push(new EventoAcademico(datosValidos)),
     TypeError,
   );
+});
+
+test("HU-01: el resultado de la consulta es de solo lectura", () => {
+  const calendario = new CalendarioAcademico();
+  calendario.registrarEvento(new EventoAcademico(datosValidos));
+
+  const resultado = calendario.consultarMateria("MAT-101");
+
+  assert.throws(() => { resultado.mensaje = "Otro mensaje"; }, TypeError);
+  assert.throws(() => { resultado.eventos = []; }, TypeError);
 });
 
 test("HU-01: cada consulta devuelve una copia independiente de los eventos", () => {
