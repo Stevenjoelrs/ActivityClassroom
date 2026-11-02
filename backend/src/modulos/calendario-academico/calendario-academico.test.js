@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
+import { crearAlmacenAcademico } from "../../compartido/almacen-academico.js";
 import { CalendarioAcademico, EventoAcademico } from "./calendario-academico.js";
+import { crearRepositorioCalendario } from "./calendario.repository.js";
 
 const datosValidos = {
   id: "EV-01",
@@ -263,3 +265,24 @@ test("HU-01: cada consulta devuelve una copia independiente de los eventos", () 
   assert.equal(primera.eventos.length, 1);
   assert.equal(segunda.eventos.length, 2);
 });
+
+test("HU-01: dos instancias que comparten el mismo repositorio ven los mismos datos", () => {
+  const repositorio = crearRepositorioCalendario(crearAlmacenAcademico());
+  const cal1 = new CalendarioAcademico(repositorio);
+  const cal2 = new CalendarioAcademico(repositorio);
+  cal1.registrarEvento(new EventoAcademico(datosValidos));
+
+  const consulta = cal2.consultarMateria("MAT-101");
+  assert.equal(consulta.eventos.length, 1);
+  assert.equal(consulta.eventos[0].id, "EV-01");
+});
+
+test("HU-01: una instancia sin argumentos sigue funcionando y queda aislada de otras", () => {
+  const cal1 = new CalendarioAcademico();
+  const cal2 = new CalendarioAcademico();
+  cal1.registrarEvento(new EventoAcademico(datosValidos));
+
+  assert.equal(cal1.consultarMateria("MAT-101").eventos.length, 1);
+  assert.equal(cal2.consultarMateria("MAT-101").eventos.length, 0);
+});
+

@@ -1,8 +1,10 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
+import { crearAlmacenAcademico } from "../../compartido/almacen-academico.js";
 import { GrupoTrabajo } from "./grupo-trabajo.js";
 import { RegistroGrupos } from "./registro-grupos.js";
+import { crearRepositorioGrupos } from "./grupos.repository.js";
 
 const datosValidos = {
   nombre: "Grupo 1",
@@ -78,3 +80,24 @@ test("HU-02: cada consulta devuelve una copia independiente de los grupos", () =
   assert.equal(primera.length, 1);
   assert.equal(segunda.length, 2);
 });
+
+test("HU-02: dos instancias que comparten el mismo repositorio ven los mismos datos", () => {
+  const repositorio = crearRepositorioGrupos(crearAlmacenAcademico());
+  const reg1 = new RegistroGrupos(repositorio);
+  const reg2 = new RegistroGrupos(repositorio);
+  reg1.registrar(new GrupoTrabajo(datosValidos));
+
+  const resultado = reg2.consultarPorActividad("ACT-01");
+  assert.equal(resultado.length, 1);
+  assert.equal(resultado[0].nombre, "Grupo 1");
+});
+
+test("HU-02: una instancia sin argumentos sigue funcionando y queda aislada de otras", () => {
+  const reg1 = new RegistroGrupos();
+  const reg2 = new RegistroGrupos();
+  reg1.registrar(new GrupoTrabajo(datosValidos));
+
+  assert.equal(reg1.consultarPorActividad("ACT-01").length, 1);
+  assert.equal(reg2.consultarPorActividad("ACT-01").length, 0);
+});
+

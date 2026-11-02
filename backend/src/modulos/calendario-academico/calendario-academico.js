@@ -1,3 +1,6 @@
+import { crearAlmacenAcademico } from "../../compartido/almacen-academico.js";
+import { crearRepositorioCalendario } from "./calendario.repository.js";
+
 const TIPOS_EVENTO = Object.freeze([
   "clase",
   "entrega_tarea",
@@ -64,13 +67,19 @@ export class EventoAcademico {
 }
 
 export class CalendarioAcademico {
-  #eventos = [];
+  #repositorio;
+
+  constructor(
+    repositorio = crearRepositorioCalendario(crearAlmacenAcademico()),
+  ) {
+    this.#repositorio = repositorio;
+  }
 
   registrarEvento(evento) {
     if (!(evento instanceof EventoAcademico)) {
       throw new Error("El evento debe ser una instancia de EventoAcademico.");
     }
-    this.#eventos.push(evento);
+    this.#repositorio.guardar(evento);
   }
 
   consultarMateria(materiaId) {
@@ -78,9 +87,9 @@ export class CalendarioAcademico {
       throw new Error("El identificador de la materia debe ser válido.");
     }
 
-    const eventosMateria = this.#eventos.filter(
-      (evento) => evento.materiaId === materiaId,
-    );
+    const eventosMateria = this.#repositorio
+      .listar()
+      .filter((evento) => evento.materiaId === materiaId);
 
     if (eventosMateria.length === 0) {
       return Object.freeze({
