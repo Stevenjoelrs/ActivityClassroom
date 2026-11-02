@@ -14,7 +14,7 @@ npm run dev
 
 El puerto predeterminado es `3000`. Si ya tienes `.env`, verifica `PORT=3000`. El archivo `.env` es opcional para esta demo; `.env.example` muestra las variables admitidas.
 
-Deja el backend ejecutándose mientras usas el frontend. Para detenerlo, presiona **Ctrl+C**. Las entregas, los archivos y el feedback se pierden al reiniciar Express, incluso cuando nodemon reinicia por un cambio de código.
+Deja el backend ejecutándose mientras usas el frontend. `npm start` ejecuta sin nodemon. Para detenerlo, presiona **Ctrl+C**. Las entregas, los archivos y el feedback se pierden al reiniciar Express, incluso cuando nodemon reinicia por un cambio de código.
 
 ## Estructura por funcionalidad
 
@@ -47,9 +47,11 @@ src/
 └── server.js                     # Inicia el servidor
 ```
 
-Cada nueva funcionalidad tendrá su carpeta dentro de `modulos/`. El recorrido es **ruta → controlador → servicio → repositorio**. Los endpoints van en el archivo `.routes.js` de su módulo; `app.js` les asigna un prefijo.
+Cada nueva funcionalidad tendrá su carpeta dentro de `modulos/`. Las carpetas representan funcionalidades, no roles. Las utilidades comunes van en `compartido/`. El recorrido es **ruta → controlador → servicio → repositorio**. Los endpoints van en el archivo `.routes.js` de su módulo; `app.js` les asigna un prefijo.
 
 ## Endpoints
+
+Los endpoints se definen en el archivo `.routes.js` de cada módulo y se registran con su prefijo en `app.js`. Los endpoints generales permanecen en `routes/status.routes.js`.
 
 | Método | Dirección | Función |
 | --- | --- | --- |
