@@ -174,3 +174,55 @@ test("HU-01: rechaza consultar una materia con identificador inválido", () => {
     );
   }
 });
+
+test("HU-01: no permite reasignar datos de un evento establecido", () => {
+  const evento = new EventoAcademico(datosValidos);
+
+  for (const [campo, valor] of [
+    ["id", "EV-99"],
+    ["materiaId", "MAT-999"],
+    ["tipo", "suspension"],
+    ["fecha", "2026-12-01"],
+    ["horario", "10:00 - 12:00"],
+    ["descripcion", "Otra descripción"],
+    ["suspendido", true],
+  ]) {
+    assert.throws(() => { evento[campo] = valor; }, TypeError);
+  }
+});
+
+test("HU-01: no permite modificar el arreglo de eventos consultado", () => {
+  const calendario = new CalendarioAcademico();
+  calendario.registrarEvento(new EventoAcademico(datosValidos));
+
+  const resultado = calendario.consultarMateria("MAT-101");
+
+  assert.throws(() => { resultado.eventos[0] = {}; }, TypeError);
+  assert.throws(
+    () => resultado.eventos.push(new EventoAcademico(datosValidos)),
+    TypeError,
+  );
+});
+
+test("HU-01: la consulta vacía devuelve un arreglo congelado", () => {
+  const resultado = new CalendarioAcademico().consultarMateria("MAT-999");
+
+  assert.throws(
+    () => resultado.eventos.push(new EventoAcademico(datosValidos)),
+    TypeError,
+  );
+});
+
+test("HU-01: cada consulta devuelve una copia independiente de los eventos", () => {
+  const calendario = new CalendarioAcademico();
+  calendario.registrarEvento(new EventoAcademico(datosValidos));
+
+  const primera = calendario.consultarMateria("MAT-101");
+  calendario.registrarEvento(
+    new EventoAcademico({ ...datosValidos, id: "EV-02" }),
+  );
+  const segunda = calendario.consultarMateria("MAT-101");
+
+  assert.equal(primera.eventos.length, 1);
+  assert.equal(segunda.eventos.length, 2);
+});

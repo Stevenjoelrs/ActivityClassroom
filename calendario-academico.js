@@ -59,6 +59,7 @@ export class EventoAcademico {
       descripcion,
       suspendido,
     });
+    Object.freeze(this);
   }
 }
 
@@ -84,13 +85,13 @@ export class CalendarioAcademico {
     if (eventosMateria.length === 0) {
       return {
         mensaje: "No existen eventos programados para esta materia.",
-        eventos: [],
+        eventos: Object.freeze([]),
       };
     }
 
     return {
       mensaje: null,
-      eventos: eventosMateria,
+      eventos: Object.freeze([...eventosMateria]),
     };
   }
 }
