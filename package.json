@@ -1,0 +1,17 @@
+{
+  "name": "sistema-aula",
+  "version": "1.0.0",
+  "description": "Proyecto de gestion de aula para apuntes y asignacion de asientos",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "aula",
+    "apuntes",
+    "asientos",
+    "javascript"
+  ],
+  "author": "Camila y Ximena",
+  "license": "ISC"
+} 
