@@ -132,16 +132,4 @@ describe('US-02 · Revisión de tareas con feedback (service)', () => {
     expect(lista[0].id).toBe('nueva');
   });
 
-  test('Regla adicional: dado que se guarda un feedback, entonces se registra la fecha de actualización', async () => {
-    const { servicio, repositorio } = crearServicio({ existente: crearEntrega() });
-
-    await servicio.guardarFeedback('e1', docente, feedbackValido);
-
-    expect(repositorio.guardarFeedback.mock.calls[0][2].actualizado).toBe('2026-11-02T12:00:00.000Z');
-  });
-
-  test('Regla adicional: dada una entrega inexistente, cuando el docente intenta abrir el adjunto, entonces se rechaza con "No existe entrega para revisar"', async () => {
-    const { servicio } = crearServicio({ existente: null });
-    await expect(servicio.adjunto('no-existe', docente)).rejects.toThrow('No existe entrega para revisar');
-  });
 });

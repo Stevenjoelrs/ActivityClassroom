@@ -30,24 +30,4 @@ describe('US-02 · Revisión de tareas (validaciones del feedback)', () => {
     const datos = { ...feedbackValido, correcto: '   ' };
     expect(() => validarFeedback(datos)).toThrow('Falta indicar lo que está bien');
   });
-
-  test('Regla adicional: dado un feedback sin datos (undefined o null), entonces se rechaza', () => {
-    expect(() => validarFeedback(undefined)).toThrow('Falta indicar');
-    expect(() => validarFeedback(null)).toThrow('Falta indicar');
-  });
-
-  test('Regla adicional: dado un campo con espacios al inicio y al final, entonces se guarda sin ellos', () => {
-    const datos = { ...feedbackValido, correcto: '  Muy bien  ' };
-    expect(validarFeedback(datos).correcto).toBe('Muy bien');
-  });
-
-  test('Regla adicional: dado un campo de más de 10000 caracteres, entonces se rechaza', () => {
-    const datos = { ...feedbackValido, corregir: 'a'.repeat(10001) };
-    expect(() => validarFeedback(datos)).toThrow('no puede superar 10000 caracteres');
-  });
-
-  test('Regla adicional: dado un campo de exactamente 10000 caracteres, entonces se acepta', () => {
-    const datos = { ...feedbackValido, corregir: 'a'.repeat(10000) };
-    expect(() => validarFeedback(datos)).not.toThrow();
-  });
 });

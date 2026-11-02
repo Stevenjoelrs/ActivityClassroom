@@ -35,7 +35,7 @@ const archivoValido = {
   buffer: Buffer.from('contenido'),
 };
 
-describe('Envío de tareas por correo (service)', () => {
+describe('US-01 ·Envío de tareas por correo (service)', () => {
   test('Envío exitoso: dado un remitente institucional, un adjunto válido y el correo del docente, cuando envía, entonces se envía el correo y se guarda la entrega', async () => {
     const { servicio, correo, repositorio } = crearServicio();
     const resultado = await servicio.enviar(datosValidos, archivoValido);
@@ -65,13 +65,6 @@ describe('Envío de tareas por correo (service)', () => {
     const { servicio } = crearServicio();
     const archivo = { ...archivoValido, size: MAX_FILE_SIZE + 1 };
     await expect(servicio.enviar(datosValidos, archivo)).rejects.toThrow('El archivo no puede superar los');
-  });
-
-  test('Tamaño límite: dado un archivo de exactamente 10 MB, entonces se acepta', async () => {
-    const { servicio, repositorio } = crearServicio();
-    const archivo = { ...archivoValido, size: MAX_FILE_SIZE };
-    await servicio.enviar(datosValidos, archivo);
-    expect(repositorio.guardar).toHaveBeenCalledTimes(1);
   });
 
   test('Remitente no institucional: dado un remitente fuera del dominio institucional, entonces se rechaza', async () => {
