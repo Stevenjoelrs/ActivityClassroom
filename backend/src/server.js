@@ -3,7 +3,7 @@ import { config } from './config/env.js';
 import { pool } from './config/database.js';
 
 const server = app.listen(config.port, '127.0.0.1', () => {
-  console.log(`Sistema académico: http://localhost:${config.port}/api`);
+  console.log(`Sistema académico: http://127.0.0.1:${config.port}/api`);
 });
 server.on('error', (error) => {
   console.error(error.code === 'EADDRINUSE'
