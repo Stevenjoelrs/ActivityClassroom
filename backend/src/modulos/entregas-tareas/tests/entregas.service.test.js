@@ -35,7 +35,7 @@ const archivoValido = {
   buffer: Buffer.from('contenido'),
 };
 
-describe('US-01 · Envío de tareas por correo (service)', () => {
+describe('Envío de tareas por correo (service)', () => {
   test('Envío exitoso: dado un remitente institucional, un adjunto válido y el correo del docente, cuando envía, entonces se envía el correo y se guarda la entrega', async () => {
     const { servicio, correo, repositorio } = crearServicio();
     const resultado = await servicio.enviar(datosValidos, archivoValido);
