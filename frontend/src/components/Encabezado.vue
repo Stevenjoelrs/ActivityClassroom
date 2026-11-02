@@ -1,7 +1,18 @@
 <script setup>
 import { nextTick, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { BookOpen, House, Presentation, GraduationCap, Menu, X, ArrowUpRight } from '@lucide/vue'
+import {
+  BookOpen,
+  House,
+  Presentation,
+  GraduationCap,
+  CalendarDays,
+  CalendarPlus,
+  Users,
+  Menu,
+  X,
+  ArrowUpRight,
+} from '@lucide/vue'
 import { Button } from '@/components/ui/button'
 import {
   NavigationMenu,
@@ -16,7 +27,10 @@ const controlMenu = ref(null)
 const enlaces = [
   { to: '/', texto: 'Inicio', icono: House },
   { to: '/docente', texto: 'Docente', icono: Presentation },
+  { to: '/docente/eventos', texto: 'Eventos', icono: CalendarPlus },
+  { to: '/docente/grupos', texto: 'Grupos', icono: Users },
   { to: '/estudiante', texto: 'Estudiante', icono: GraduationCap },
+  { to: '/estudiante/calendario', texto: 'Calendario', icono: CalendarDays },
 ]
 watch(() => route.path, () => { abierto.value = false })
 async function cerrarMenu() {
@@ -171,7 +185,7 @@ async function cerrarMenu() {
 }
 .control-menu { color: var(--color-marino); }
 .control-menu:hover { background: var(--color-marino-suave); }
-@media (max-width: 720px) {
+@media (max-width: 1024px) {
   .barra { min-height: 76px; padding: var(--espacio-2); gap: var(--espacio-1); }
   .navegacion-escritorio { display: none; }
   .control-menu { display: inline-flex; flex-shrink: 0; }
