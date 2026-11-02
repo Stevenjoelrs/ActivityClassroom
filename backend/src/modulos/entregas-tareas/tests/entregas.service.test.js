@@ -35,8 +35,8 @@ const archivoValido = {
   buffer: Buffer.from('contenido'),
 };
 
-describe('servicio de entregas', () => {
-  test('con datos y archivo válidos llama al correo y guarda la entrega', async () => {
+describe('US-01 · Envío de tareas por correo (service)', () => {
+  test('Envío exitoso: dado un remitente institucional, un adjunto válido y el correo del docente, cuando envía, entonces se envía el correo y se guarda la entrega', async () => {
     const { servicio, correo, repositorio } = crearServicio();
     const resultado = await servicio.enviar(datosValidos, archivoValido);
 
@@ -44,49 +44,51 @@ describe('servicio de entregas', () => {
     expect(repositorio.guardar).toHaveBeenCalledTimes(1);
     expect(repositorio.guardar.mock.calls[0][0].estado).toBe('POR REVISAR');
     expect(resultado.id).toBe('id-123');
+    expect(repositorio.guardar.mock.calls[0][0].enviado).toBe('2026-11-02T10:00:00Z');
+    expect(resultado.enviado).toBe('2026-11-02T10:00:00Z');
   });
 
-  test('rechaza si no hay archivo y no envía ni guarda nada', async () => {
+  test('Sin adjunto: dado que no adjunta archivo, cuando intenta enviar, entonces se rechaza con "Debe adjuntar un archivo"', async () => {
     const { servicio, correo, repositorio } = crearServicio();
     await expect(servicio.enviar(datosValidos, undefined)).rejects.toThrow('Debe adjuntar un archivo');
     expect(correo.enviar).not.toHaveBeenCalled();
     expect(repositorio.guardar).not.toHaveBeenCalled();
   });
 
-  test('rechaza una extensión inválida', async () => {
+  test('Formato inválido: dado un archivo .exe, entonces se rechaza indicando los formatos permitidos (.pdf, .docx, .zip)', async () => {
     const { servicio } = crearServicio();
     const archivo = { ...archivoValido, originalname: 'virus.exe' };
     await expect(servicio.enviar(datosValidos, archivo)).rejects.toThrow('.pdf, .docx, .zip');
   });
 
-  test('rechaza un archivo mayor a 10 MB', async () => {
+  test('Tamaño excedido: dado un archivo mayor a 10 MB, entonces se rechaza', async () => {
     const { servicio } = crearServicio();
     const archivo = { ...archivoValido, size: MAX_FILE_SIZE + 1 };
     await expect(servicio.enviar(datosValidos, archivo)).rejects.toThrow('El archivo no puede superar los');
   });
 
-  test('acepta un archivo de exactamente 10 MB', async () => {
+  test('Tamaño límite: dado un archivo de exactamente 10 MB, entonces se acepta', async () => {
     const { servicio, repositorio } = crearServicio();
     const archivo = { ...archivoValido, size: MAX_FILE_SIZE };
     await servicio.enviar(datosValidos, archivo);
     expect(repositorio.guardar).toHaveBeenCalledTimes(1);
   });
 
-  test('rechaza un remitente no institucional', async () => {
+  test('Remitente no institucional: dado un remitente fuera del dominio institucional, entonces se rechaza', async () => {
     const { servicio, correo } = crearServicio();
     const datos = { ...datosValidos, remitente: 'estudiante@gmail.com' };
-   await expect(servicio.enviar(datos, archivoValido)).rejects.toThrow('El remitente debe usar el dominio @est.umss.edu.bo');
+    await expect(servicio.enviar(datos, archivoValido)).rejects.toThrow('El remitente debe usar el dominio @est.umss.edu.bo');
     expect(correo.enviar).not.toHaveBeenCalled();
   });
 
-  test('rechaza un correo de docente inválido', async () => {
+  test('Correo del docente inválido: dado un destinatario con formato inválido, entonces se rechaza', async () => {
     const { servicio, correo } = crearServicio();
     const datos = { ...datosValidos, destinatario: 'no-es-un-correo' };
     await expect(servicio.enviar(datos, archivoValido)).rejects.toThrow('Correo del docente inválido');
     expect(correo.enviar).not.toHaveBeenCalled();
   });
 
-  test('si el correo falla, informa el error y no guarda la entrega', async () => {
+  test('Fallo del servicio de correo: dado que el correo falla, entonces no se confirma el envío, se informa el error y no se guarda la entrega', async () => {
     const { servicio, repositorio } = crearServicio({ confirmado: false });
     await expect(servicio.enviar(datosValidos, archivoValido)).rejects.toThrow('no confirmó el envío');
     expect(repositorio.guardar).not.toHaveBeenCalled();
