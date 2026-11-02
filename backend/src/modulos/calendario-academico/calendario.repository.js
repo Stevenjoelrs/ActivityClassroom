@@ -1,4 +1,6 @@
 import { almacenAcademico } from "../../compartido/almacen-academico.js";
+import { crearRepositorioArchivo } from "../../compartido/repositorio-archivo.js";
+import { EventoAcademico } from "./calendario-academico.js";
 
 export function crearRepositorioCalendario(datos = almacenAcademico) {
   return {
@@ -12,3 +14,11 @@ export function crearRepositorioCalendario(datos = almacenAcademico) {
 }
 
 export const repositorioCalendario = crearRepositorioCalendario();
+
+export function crearRepositorioCalendarioArchivo(ruta) {
+  return crearRepositorioArchivo({
+    ruta,
+    hidratar: (d) => new EventoAcademico(d),
+  });
+}
+
