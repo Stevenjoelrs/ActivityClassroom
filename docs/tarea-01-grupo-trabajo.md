@@ -60,8 +60,8 @@ recibe como dato: aún no existe un catálogo que lo obtenga desde la actividad.
 
 ## Evidencia del ciclo TDD
 
-Se ejecutó `npm test` en cada paso con Node.js 24.18.0. Se utilizan `node:test` y
-`node:assert/strict`, módulos nativos, sin instalar paquetes.
+Se ejecutó `node --test` en cada paso con Node.js 26.12.1. Se utilizan `node:test`
+y `node:assert/strict`, módulos nativos, sin instalar paquetes.
 
 | Ciclo | Rojo: prueba antes del código | Verde: implementación mínima | Commit en verde |
 | --- | --- | --- | --- |
@@ -70,7 +70,8 @@ Se ejecutó `npm test` en cada paso con Node.js 24.18.0. Se utilizan `node:test`
 | Composición estable | 3 pruebas fallan al intentar modificar el grupo o el arreglo de entrada | Grupo y copia del arreglo congelados; 15 pruebas pasan | `3fe843a` |
 
 Después se revisó el código para refactorizar: no hizo falta agregar más clases
-ni extraer abstracciones.
+ni extraer abstracciones. El suite actual de HU-02 tiene 22 pruebas; el proyecto
+completo, 43.
 
 ## Operaciones descubiertas al programar
 
@@ -83,11 +84,11 @@ ni extraer abstracciones.
 
 - [x] Alcance, reglas y criterios del incremento identificados.
 - [x] Diagrama UML elaborado.
-- [ ] Tarjeta CRC: elaboración manual por el estudiante.
+- [x] Tarjeta CRC elaborada y revisada.
 - [x] Casos de aceptación diseñados y expresados como pruebas de dominio.
 - [x] Pruebas escritas y ejecutadas antes del código correspondiente.
 - [x] Funcionalidad mínima implementada.
-- [x] 39 pruebas del proyecto ejecutadas satisfactoriamente.
+- [x] 43 pruebas del proyecto ejecutadas satisfactoriamente.
 - [x] Necesidad de refactorización revisada.
 - [x] Incremento contrastado con sus criterios.
 - [ ] HU-02 completa, con consulta de todos los grupos de una actividad y flujo de entregas.

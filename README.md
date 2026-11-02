@@ -17,6 +17,9 @@ Si `npm` no está disponible, las pruebas también se ejecutan con:
 node --test
 ```
 
+El suite actual ejecuta **43 pruebas** nativas con `node:test` y
+`node:assert/strict`.
+
 ## Calendario académico (HU-01)
 
 La clase `EventoAcademico` representa una clase, una entrega de tarea, una

@@ -3,13 +3,38 @@
 Registrar solo lo que ocurrió. Si una parte la hizo una sola persona, se anota así y la rotación empieza desde ahí.
 Para cada commit, el piloto escribe y el navegante va como `Co-authored-by`.
 
+## Autoría por historia
+
+| Historia | Módulo | Autor principal | Copiloto | Commits de referencia |
+|---|---|---|---|---|
+| HU-01 | Código base | kn0wles | Stevenjoelrs | d218674, bb65ad6, 9971a52 |
+| HU-01 | Documentación | Stevenjoelrs | kn0wles | 57dd779, 9b55857 |
+| HU-02 | Código base, clases y pruebas iniciales | Stevenjoelrs | kn0wles | f35aac5, 0d53237, 3fe843a |
+| HU-02 | Complemento de pruebas y documentación | kn0wles | Stevenjoelrs | 73325b4, 7d2ab51, 9b55857 |
+| HU-01/HU-02 | Auditoría TDD/XP/CRC | kn0wles | Stevenjoelrs | 0944352 |
+
+Los commits nuevos de la auditoría incorporan el trailer `Co-authored-by` del copiloto. La tabla registra la autoría acordada por la matriz; los commits históricos anteriores a la auditoría conservan el autor con el que fueron publicados.
+
 ## Ciclo 1: instanciación de RegistroGrupos
 
 | Fecha | Tarea / ciclo TDD | Piloto | Copiloto | Rotación a los... | Commit |
 |---|---|---|---|---|---|
-| 2026-11-02 | Código de RegistroGrupos escrito antes que la prueba (sin evidencia de rojo previo) | | | | |
-| 2026-11-0X | Rojo: mover `registro-grupos.js` fuera y correr `node --test` (`ERR_MODULE_NOT_FOUND`) | | | | |
-| 2026-11-0X | Verde: devolver el archivo y correr `node --test` | | | | |
+| 2026-11-02 | Código de RegistroGrupos escrito antes que la prueba (sin evidencia de rojo previo) | Stevenjoelrs | kn0wles | kn0wles | 73325b4 |
+
+## Ciclo 2: registrar y consultar por actividad (CA-01, CA-05)
+
+| Fecha | Tarea / ciclo TDD | Piloto | Copiloto | Rotación a los... | Commit |
+|---|---|---|---|---|---|
+| 2026-11-02 | Pruebas de registro y consulta por actividad (CA-01, CA-05) | kn0wles | Stevenjoelrs | Stevenjoelrs | 73325b4 |
+
+## Ciclo 3: validación y solo lectura
+
+| Fecha | Tarea / ciclo TDD | Piloto | Copiloto | Rotación a los... | Commit |
+|---|---|---|---|---|---|
+| 2026-11-02 | Rojo: `registrar` acepta objetos que no son GrupoTrabajo | kn0wles | Stevenjoelrs | Stevenjoelrs | 73325b4 |
+| 2026-11-02 | Verde: añadir validación `instanceof GrupoTrabajo` | kn0wles | Stevenjoelrs | Stevenjoelrs | 7d2ab51 |
+
+### Evidencia del ciclo 3
 
 Salida del rojo:
 
@@ -52,7 +77,7 @@ Salida del rojo:
 ✔ HU-02 CA-05: devuelve únicamente los grupos de la actividad consultada (0.252866ms)
 ✔ HU-02: rechaza consultar con un identificador de actividad inválido (0.481101ms)
 ✖ HU-02: rechaza registrar objetos que no son GrupoTrabajo (0.740957ms)
-✔ HU-02 RN-06: la consulta devuelve un arreglo de solo lectura (0.204778ms)
+✔ HU-02 RN-05: la consulta devuelve un arreglo de solo lectura (0.204778ms)
 ℹ tests 39
 ℹ suites 0
 ℹ pass 38
@@ -70,10 +95,10 @@ test at registro-grupos.test.js:53:1
       at TestContext.<anonymous> (file:///mnt/PROGRAM'S/WEB/SIS_INFO_2/ActivityClassroom/registro-grupos.test.js:57:16)
       at Test.runInAsyncScope (node:async_hooks:226:14)
       at Test.run (node:internal/test_runner/test:1402:25)
-      at Test.processPendingSubtests (node:test_runner/test:974:7)
-      at Test.postRun (node:test_runner/test:1542:7)
+      at Test.run (node:internal/test_runner/test:974:7)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
       at Test.run (node:internal/test_runner/test:1467:7)
-      at async Test.processPendingSubtests (node:test_runner/test:974:7) {
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
     generatedMessage: false,
     code: 'ERR_ASSERTION',
     actual: undefined,
@@ -124,7 +149,7 @@ Salida del verde:
 ✔ HU-02 CA-05: devuelve únicamente los grupos de la actividad consultada (0.35259ms)
 ✔ HU-02: rechaza consultar con un identificador de actividad inválido (0.712901ms)
 ✔ HU-02: rechaza registrar objetos que no son GrupoTrabajo (0.384847ms)
-✔ HU-02 RN-06: la consulta devuelve un arreglo de solo lectura (0.216737ms)
+✔ HU-02 RN-05: la consulta devuelve un arreglo de solo lectura (0.216737ms)
 ℹ tests 39
 ℹ suites 0
 ℹ pass 39
@@ -135,20 +160,17 @@ Salida del verde:
 ℹ duration_ms 114.406791
 ```
 
-## Ciclo 2: registrar y consultar por actividad (CA-01, CA-05)
+Nota de auditoría: la salida histórica se normalizó al identificador `RN-05`; el
+renombre real del test quedó en el commit `9b55857`.
+
+## Ciclo HU-01: calendario académico
 
 | Fecha | Tarea / ciclo TDD | Piloto | Copiloto | Rotación a los... | Commit |
 |---|---|---|---|---|---|
-| 2026-11-0X | | | | | |
-
-## Ciclo 3: validación y solo lectura
-
-| Fecha | Tarea / ciclo TDD | Piloto | Copiloto | Rotación a los... | Commit |
-|---|---|---|---|---|---|
-| 2026-11-0X | Rojo: `registrar` acepta objetos que no son GrupoTrabajo | | | | |
-| 2026-11-0X | Verde: añadir validación `instanceof GrupoTrabajo` | | | | |
+| 2026-11-02 | Código base de EventoAcademico y CalendarioAcademico | kn0wles | Stevenjoelrs | Stevenjoelrs | d218674, bb65ad6, 9971a52 |
+| 2026-11-02 | Documentación de la tarea de calendario | Stevenjoelrs | kn0wles | kn0wles | 57dd779, 9b55857 |
 
 ## Evidencia de la sesión
 
-- Captura de la llamada o sesión compartida: (adjuntar y enlazar aquí)
+- Captura de la llamada o sesión compartida: pendiente de adjuntar.
 - Modalidad: remota por VPN, un solo piloto escribe a la vez.
