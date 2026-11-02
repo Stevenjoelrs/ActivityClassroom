@@ -86,9 +86,10 @@ grupo también se congela para impedir reasignaciones. El máximo es opcional
 inválidos producen `Error` con un mensaje descriptivo.
 
 La [documentación de la tarea 01 de grupos](docs/tarea-01-grupo-trabajo.md) incluye
-UML, los ciclos TDD y las tareas siguientes. La tarjeta CRC queda pendiente de
-elaboración manual. El registro vive en memoria; todavía no hay interfaz ni
-almacenamiento persistente.
+UML, los ciclos TDD y las tareas siguientes. El registro vive en memoria; todavía
+no hay interfaz ni almacenamiento persistente.
 
 La [documentación de historias de usuario](docs/US.md) y las
-[tarjetas CRC](docs/crc.puml) resumen ambas historias.
+[tarjetas CRC](docs/crc.md) resumen ambas historias. También están disponibles la
+[matriz de aceptación](docs/matriz-aceptacion.md), los [roles](docs/roles.md), la
+[bitácora](docs/bitacora.md) y las [fuentes](docs/fuentes.md).

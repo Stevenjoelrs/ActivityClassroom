@@ -21,19 +21,19 @@ Estado según las pruebas actuales. Actualizar después de cada `node --test`.
 
 | HU | CA/RN | Caso | Dado/Cuando | Esperado | Test | Estado |
 |----|-------|------|-------------|----------|------|--------|
-| HU-02 | CA-01 | Registrar grupo | Registrar un grupo en el registro | Queda disponible para consulta | regitro-grupos.test.js | ✅ |
+| HU-02 | CA-01 | Registrar grupo | Registrar un grupo en el registro | Queda disponible para consulta | registro-grupos.test.js | ✅ |
 | HU-02 | CA-02 | Grupo por afinidad | Crear grupo con modalidad `afinidad` | Se conservan datos e integrantes | grupo-trabajo.test.js | ✅ |
 | HU-02 | CA-03 | Grupo por sorteo | Crear grupo con modalidad `sorteo` | Se conserva la lista recibida | grupo-trabajo.test.js | ✅ |
 | HU-02 | CA-04 | Consultar integrantes | Consultar un grupo | Se leen sus integrantes | grupo-trabajo.test.js | ✅ |
-| HU-02 | CA-05 | Consultar por actividad | ACT-01 y ACT-02 con grupos | Solo los de ACT-01 | regitro-grupos.test.js | ✅ |
+| HU-02 | CA-05 | Consultar por actividad | ACT-01 y ACT-02 con grupos | Solo los de ACT-01 | registro-grupos.test.js | ✅ |
 | HU-02 | CA-06 | Duplicado | Mismo id dos veces | Error | grupo-trabajo.test.js | ✅ |
 | HU-02 | CA-07 | Máximo superado | 3 integrantes con máximo 2 | Error | grupo-trabajo.test.js | ✅ |
 | HU-02 | RN-01 | Modalidades | Modalidad distinta de afinidad o sorteo | Error | grupo-trabajo.test.js | ✅ |
 | HU-02 | RN-02 | Sin distribución automática | El sorteo llega ya definido | El sistema no distribuye | (por diseño, sin test) | ➖ |
 | HU-02 | RN-04 | Falta de participación | Integrante que no participa | El grupo no se disuelve | (requiere flujo de entregas) | ⏳ pendiente |
-| HU-02 | RN-06 | Grupo establecido | Reasignar datos o integrantes | TypeError | grupo-trabajo.test.js | ✅ |
-| HU-02 | RN-06 | Consulta de solo lectura | Modificar el arreglo devuelto | TypeError | regitro-grupos.test.js | ✅ |
-| HU-02 | - | Registrar objeto inválido | `registrar({})`, `null`, texto | Error "instancia de GrupoTrabajo" | regitro-grupos.test.js | ❌ falta |
-| HU-02 | - | Consulta con id inválido | `consultarPorActividad("")` o `null` | Error | regitro-grupos.test.js | ✅ |
+| HU-02 | RN-05 | Grupo establecido | Reasignar datos o integrantes | TypeError | grupo-trabajo.test.js | ✅ |
+| HU-02 | RN-05 | Consulta de solo lectura | Modificar el arreglo devuelto | TypeError | registro-grupos.test.js | ✅ |
+| HU-02 | - | Registrar objeto inválido | `registrar({})`, `null`, texto | Error "instancia de GrupoTrabajo" | registro-grupos.test.js | ✅ |
+| HU-02 | - | Consulta con id inválido | `consultarPorActividad("")` o `null` | Error | registro-grupos.test.js | ✅ |
 
 Leyenda: ✅ prueba que pasa, ❌ prueba que falla o falta, ⏳ pendiente de otra funcionalidad, ➖ sin prueba por diseño.

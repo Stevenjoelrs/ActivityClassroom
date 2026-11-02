@@ -12,10 +12,10 @@ consultar los eventos de una materia:
 - Fecha, horario opcional y descripción.
 - Indicador de suspensión para las clases canceladas.
 
-`CalendarioAcademico` registra eventos en memoria y devuelve únicamente los de la
-materia consultada. Si no existen eventos, informa la situación con un mensaje y
-un arreglo vacío. Los eventos y los resultados de las consultas son de solo
-lectura.
+`CalendarioAcademico` registra eventos en memoria. `consultarMateria(materiaId)`
+devuelve `{mensaje, eventos}` con únicamente los eventos de la materia consultada;
+si no existen eventos, `mensaje` contiene el aviso informativo y `eventos` es un
+arreglo vacío. Los eventos y los resultados de las consultas son de solo lectura.
 
 El registro de este incremento vive en memoria. Todavía no hay pantalla, base de
 datos, catálogo de materias ni autenticación de estudiantes.
@@ -89,7 +89,7 @@ ni extraer abstracciones.
 - [x] Casos de aceptación diseñados y expresados como pruebas de dominio.
 - [x] Pruebas escritas y ejecutadas antes del código correspondiente.
 - [x] Funcionalidad mínima implementada.
-- [x] 18 pruebas de calendario y 33 pruebas del proyecto ejecutadas satisfactoriamente.
+- [x] 18 pruebas de calendario y 39 pruebas del proyecto ejecutadas satisfactoriamente.
 - [x] Necesidad de refactorización revisada.
 - [x] Incremento contrastado con sus criterios.
 - [ ] HU-01 completa, con integración con actividades, entregas y notificaciones.

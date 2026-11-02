@@ -45,6 +45,11 @@ classDiagram
         +number maximoIntegrantes
         +constructor(datos)
     }
+    class RegistroGrupos {
+        +registrar(grupo)
+        +consultarPorActividad(actividadId)
+    }
+    RegistroGrupos o-- GrupoTrabajo
 ```
 
 El constructor valida los datos. Los atributos se consultan directamente y no
@@ -67,6 +72,13 @@ Se ejecutó `npm test` en cada paso con Node.js 24.18.0. Se utilizan `node:test`
 Después se revisó el código para refactorizar: no hizo falta agregar más clases
 ni extraer abstracciones.
 
+## Operaciones descubiertas al programar
+
+- `RegistroGrupos.registrar` valida que el objeto recibido sea una instancia de
+  `GrupoTrabajo`.
+- `RegistroGrupos.consultarPorActividad` valida el identificador de la actividad
+  y devuelve una copia congelada de los grupos encontrados.
+
 ## Checklist XP de esta tarea
 
 - [x] Alcance, reglas y criterios del incremento identificados.
@@ -75,7 +87,7 @@ ni extraer abstracciones.
 - [x] Casos de aceptación diseñados y expresados como pruebas de dominio.
 - [x] Pruebas escritas y ejecutadas antes del código correspondiente.
 - [x] Funcionalidad mínima implementada.
-- [x] 15 pruebas ejecutadas satisfactoriamente.
+- [x] 39 pruebas del proyecto ejecutadas satisfactoriamente.
 - [x] Necesidad de refactorización revisada.
 - [x] Incremento contrastado con sus criterios.
 - [ ] HU-02 completa, con consulta de todos los grupos de una actividad y flujo de entregas.
@@ -84,7 +96,6 @@ ni extraer abstracciones.
 
 | Tarea | Primera prueba propuesta |
 | --- | --- |
-| Consultar los grupos registrados para una actividad | Al consultar ACT-01 se obtienen únicamente sus grupos |
 | Representar horarios, entregas y actividades ya registrados | Un evento conserva fecha, horario y descripción |
 | Consultar el calendario de una materia | Se muestran únicamente los eventos de esa materia |
 | Informar que no hay eventos | Una consulta vacía muestra un mensaje informativo |

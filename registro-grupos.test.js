@@ -58,7 +58,7 @@ test("HU-02: rechaza registrar objetos que no son GrupoTrabajo", () => {
     }
 });
 
-test("HU-02 RN-06: la consulta devuelve un arreglo de solo lectura", () => {
+test("HU-02 RN-05: la consulta devuelve un arreglo de solo lectura", () => {
     const registro = new RegistroGrupos();
     registro.registrar(new GrupoTrabajo(datosValidos));
 
