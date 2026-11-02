@@ -66,4 +66,19 @@ Estado según las pruebas actuales. Actualizar después de cada `node --test`.
 | HU-01/02 | - | Configuración DATA_DIR | `process.env.DATA_DIR` definido | Utiliza el directorio configurado | backend/src/compartido/repositorios.test.js | ✅ |
 | HU-01/02 | - | Directorio por defecto | Sin argumento ni variable de entorno | Resuelve `backend/data/` | backend/src/compartido/repositorios.test.js | ✅ |
 
+## Servicios HTTP y conversión a AppError (HU-01 y HU-02)
+
+| HU | CA/RN | Caso | Dado/Cuando | Esperado | Test | Estado |
+|----|-------|------|-------------|----------|------|--------|
+| HU-01 | CA-01/02/03/05 | Servicio calendario registro y consulta | Registrar clases, entregas y actividades | Se consultan por materia | backend/src/modulos/calendario-academico/calendario.service.test.js | ✅ |
+| HU-01 | CA-04 | Clase suspendida | Registrar evento suspendido | Refleja `suspendido: true` | backend/src/modulos/calendario-academico/calendario.service.test.js | ✅ |
+| HU-01 | CA-06 | Materia sin eventos | Consultar materia sin registros | Mensaje y arreglo vacío | backend/src/modulos/calendario-academico/calendario.service.test.js | ✅ |
+| HU-01 | - | Conversión a AppError | Error de validación del dominio | AppError(400) con mismo mensaje | backend/src/modulos/calendario-academico/calendario.service.test.js | ✅ |
+| HU-01 | - | Persistencia de servicio | Recrear servicio sobre archivo JSON | Datos se conservan intactos | backend/src/modulos/calendario-academico/calendario.service.test.js | ✅ |
+| HU-02 | CA-01..05 | Servicio grupos registro y consulta | Registrar afinidad y sorteo | Se consultan por actividad | backend/src/modulos/grupos-trabajo/grupos.service.test.js | ✅ |
+| HU-02 | CA-06 | Integrantes duplicados | Mismo estudiante dos veces | AppError(400) | backend/src/modulos/grupos-trabajo/grupos.service.test.js | ✅ |
+| HU-02 | CA-07 | Máximo superado | Más integrantes que el máximo | AppError(400) | backend/src/modulos/grupos-trabajo/grupos.service.test.js | ✅ |
+| HU-02 | - | Filtro por actividad y validación | Actividad distinta o id vacío | No devuelve de otra y AppError(400) | backend/src/modulos/grupos-trabajo/grupos.service.test.js | ✅ |
+| HU-02 | - | Persistencia de servicio | Recrear servicio sobre archivo JSON | Datos se conservan intactos | backend/src/modulos/grupos-trabajo/grupos.service.test.js | ✅ |
+
 Leyenda: ✅ prueba que pasa, ❌ prueba que falla o falta, ⏳ pendiente de otra funcionalidad, ➖ sin prueba por diseño.

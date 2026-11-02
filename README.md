@@ -20,7 +20,7 @@ Para una ruta explícita, entrecomillarla:
 node --test "backend/**/*.test.js"
 ```
 
-El suite actual ejecuta **64 pruebas** nativas con `node:test` y
+El suite actual ejecuta **74 pruebas** nativas con `node:test` y
 `node:assert/strict`.
 
 Nuestras pruebas de dominio no necesitan instalar nada. Cuando se integren las
@@ -125,6 +125,46 @@ según la siguiente prioridad:
   limpiándose automáticamente al finalizar la ejecución.
 - La escritura a disco se realiza de forma atómica mediante un archivo temporal y
   `fs.renameSync`, garantizando que tras guardar no queden archivos temporales residuales.
+
+## Interfaz
+
+El frontend está desarrollado en Vue 3 con Vite, Vue Router y componentes accesibles (shadcn-vue y lucide). Consume el backend Express a través del proxy configurado en Vite hacia `/api`.
+
+### Cómo ejecutar la aplicación
+
+1. **Iniciar el backend:**
+   ```bash
+   cd backend
+   npm ci
+   npm run dev
+   ```
+   El servidor iniciará en `http://localhost:3000/api`.
+
+2. **Iniciar el frontend:**
+   ```bash
+   cd frontend
+   npm ci
+   npm run dev
+   ```
+   La interfaz estará disponible en `http://localhost:5173`.
+
+### Rutas de la interfaz
+
+| Ruta | Nombre | Vista | Descripción |
+|---|---|---|---|
+| `/estudiante/calendario` | `calendario-estudiante` | `CalendarioView.vue` | Consulta de eventos por materia (HU-01) con avisos de clases suspendidas |
+| `/docente/eventos` | `eventos-docente` | `EventosView.vue` | Registro de eventos académicos (clase, tarea, actividad, suspensión) (HU-01) |
+| `/docente/grupos` | `grupos-docente` | `GruposView.vue` | Registro de grupos por afinidad o sorteo y consulta por actividad (HU-02) |
+| `/estudiante` | `inicio-estudiante` | `InicioEstudianteView.vue` | Envío simulado de tareas (HU-03) |
+| `/docente` | `inicio-docente` | `InicioDocenteView.vue` | Revisión de tareas y retroalimentación (HU-04) |
+| `/` | `inicio` | `InicioView.vue` | Estado de la API y presentación del sistema |
+
+### Endpoints HTTP de HU-01 y HU-02
+
+- `POST /api/calendario/eventos` → 201 `{ evento }`
+- `GET /api/calendario?materia=<id>` → 200 `{ mensaje, eventos }`
+- `POST /api/grupos` → 201 `{ grupo }`
+- `GET /api/grupos?actividad=<id>` → 200 `{ grupos }`
 
 La [documentación de historias de usuario](docs/US.md) y las
 [tarjetas CRC](docs/crc.md) resumen ambas historias. También están disponibles la

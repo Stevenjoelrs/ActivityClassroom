@@ -99,3 +99,12 @@ Una tarjeta por clase implementada. Los colaboradores coinciden con el código.
 | Proveer acceso unificado a repositorios persistentes | |
 
 **Atributos clave:** `directorio`, `calendario`, `grupos`.
+
+<!--
+PENDIENTE (servicios, controladores y rutas HTTP):
+- ServicioCalendario: orquesta el registro y consulta de eventos, convierte errores de dominio en AppError(400). Colaboradores: CalendarioAcademico, EventoAcademico, AppError.
+- ControladorCalendario: maneja peticiones HTTP para POST /api/calendario/eventos (201) y GET /api/calendario?materia=<id> (200). Colaborador: ServicioCalendario.
+- ServicioGrupos: orquesta el registro y consulta de grupos por actividad, convierte errores de dominio en AppError(400). Colaboradores: RegistroGrupos, GrupoTrabajo, AppError.
+- ControladorGrupos: maneja peticiones HTTP para POST /api/grupos (201) y GET /api/grupos?actividad=<id> (200). Colaborador: ServicioGrupos.
+-->
+
