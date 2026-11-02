@@ -1,119 +1,87 @@
 # Backend — Sistema Académico Universitario
 
-API REST con Node.js, Express y JavaScript. El acceso a PostgreSQL utiliza `pg`, SQL directo y consultas parametrizadas, sin ORM.
+Ejercicio de pair programming para las US-01 y US-02, con Node.js, Express y JavaScript. Usa correo simulado y almacenamiento en memoria: no necesita Gmail, credenciales de Google ni PostgreSQL.
 
-## Iniciar el backend
+## Iniciar
 
-Desde la raíz del proyecto:
+Desde la raíz:
 
 ```bash
 cd backend
 npm ci
-```
-
-Configura en `.env`:
-
-```dotenv
-PORT=3000
-FRONTEND_ORIGIN=http://localhost:5173
-DATABASE_URL=
-```
-
-Inicia el servidor:
-
-```bash
 npm run dev
 ```
 
-`dev` usa nodemon para reiniciar al guardar cambios. `npm start` ejecuta sin reinicio automático. Para detenerlo, presiona **Ctrl+C**.
+El puerto predeterminado es `3000`. Si ya tienes `.env`, verifica `PORT=3000`. El archivo `.env` es opcional para esta demo; `.env.example` muestra las variables admitidas.
 
-`DATABASE_URL` puede quedar vacía: Express y el endpoint de prueba funcionan sin PostgreSQL. Cuando tengas una base disponible, configura su URL únicamente en `.env`, con el formato `postgresql://usuario:clave@localhost:5432/sistema_academico`. No subas credenciales a Git.
+Deja el backend ejecutándose mientras usas el frontend. Para detenerlo, presiona **Ctrl+C**. Las entregas, los archivos y el feedback se pierden al reiniciar Express, incluso cuando nodemon reinicia por un cambio de código.
 
-## Estructura y responsabilidades
+## Estructura por funcionalidad
 
 ```text
-backend/
-├── src/
-│   ├── config/                # Variables de entorno y conexión PostgreSQL
-│   │   ├── env.js             # Lee y valida la configuración
-│   │   └── database.js        # Pool de pg y comprobación de conexión
-│   ├── routes/                # Métodos HTTP y direcciones de los endpoints
-│   │   └── status.routes.js   # Endpoints de prueba y estado
-│   ├── controllers/           # Reciben datos HTTP y construyen respuestas
-│   ├── services/              # Reglas de negocio y validaciones
-│   ├── repositories/          # Consultas SQL a PostgreSQL
-│   ├── middlewares/           # Carpeta prevista para verificaciones comunes
-│   ├── app.js                 # Configura Express, CORS, rutas y errores
-│   └── server.js              # Inicia el servidor y cierra las conexiones
-├── .env.example               # Variables de ejemplo, sin credenciales reales
-├── package.json               # Dependencias y scripts npm
-└── package-lock.json          # Versiones exactas de las dependencias
+src/
+├── modulos/
+│   ├── entregas-tareas/            # US-01: envío simulado de tareas
+│   │   ├── entregas.routes.js      # Endpoint y recepción del adjunto con multer
+│   │   ├── entregas.controller.js  # Lee la solicitud y responde JSON
+│   │   ├── entregas.service.js     # Valida, llama al correo y registra el envío
+│   │   ├── entregas.validaciones.js # Extensiones y límite de 10 MB
+│   │   └── entregas.repository.js  # Guarda la entrega en memoria
+│   └── revision-tareas/            # US-02: revisión y feedback
+│       ├── revision.routes.js     # Endpoints de consulta, adjunto y feedback
+│       ├── revision.controller.js # Solicitudes y respuestas HTTP
+│       ├── revision.service.js    # Entrega más reciente y reglas de revisión
+│       ├── revision.validaciones.js # Tres campos obligatorios de feedback
+│       └── revision.repository.js # Consulta y actualización en memoria
+├── compartido/
+│   ├── datos-memoria.js           # Almacén común a ambos módulos
+│   ├── correo-simulado.js         # Simula éxito o fallo; no envía correos reales
+│   ├── validaciones.js           # Correo institucional e identificador de tarea
+│   └── error.js                  # Errores con mensaje y código HTTP
+├── config/
+│   ├── env.js                    # Puerto, origen y dominio institucional
+│   └── database.js               # Pool pg reservado para uso futuro
+├── routes/
+│   └── status.routes.js          # Endpoints de prueba y estado
+├── app.js                        # Configura Express y registra los módulos
+└── server.js                     # Inicia el servidor
 ```
 
-Las carpetas sin implementación se irán completando al desarrollar las HU. El manejo de errores actual está en `app.js`; `middlewares/` se creará cuando sea necesario extraer lógica compartida. Git no conserva carpetas vacías.
+Cada nueva funcionalidad tendrá su carpeta dentro de `modulos/`. El recorrido es **ruta → controlador → servicio → repositorio**. Los endpoints van en el archivo `.routes.js` de su módulo; `app.js` les asigna un prefijo.
 
-## ¿Dónde van los endpoints?
+## Endpoints
 
-Se definen en `src/routes/`. Cada ruta indica un método HTTP (`GET`, `POST`, etc.) y una dirección. `app.js` registra el prefijo de esas rutas.
-
-Por ejemplo, en `app.js`:
-
-```js
-app.use('/api', statusRoutes);
-```
-
-Y en `routes/status.routes.js`:
-
-```js
-router.get('/', (req, res) => {
-  res.json({ mensaje: 'API del sistema académico funcionando' });
-});
-```
-
-Al combinar el prefijo `/api` con `/`, el endpoint final es `GET /api`.
-
-### Endpoints existentes
-
-| Método | Dirección | Respuesta |
+| Método | Dirección | Función |
 | --- | --- | --- |
-| GET | `/api` | Mensaje JSON para comprobar que Express responde |
-| GET | `/api/health` | Estado de la API y de PostgreSQL por separado |
+| GET | `/api` | Comprobar que Express responde |
+| GET | `/api/health` | Estado de la API y de la conexión PostgreSQL opcional |
+| POST | `/api/entregas/enviar` | Simular envío y registrar una entrega |
+| GET | `/api/revision?docente=docente@umss.edu&tarea=PRACTICA-01` | Listar la entrega más reciente por estudiante |
+| GET | `/api/revision/:id/adjunto?docente=docente@umss.edu` | Descargar el adjunto para abrirlo |
+| PUT | `/api/revision/:id/feedback` | Guardar o modificar feedback |
 
-Puedes comprobarlos en `http://localhost:3000/api` y `http://localhost:3000/api/health`.
+El envío usa `multipart/form-data`: `remitente`, `destinatario`, `tarea`, `archivo` y `simularFallo` (`true` o `false`). Se admiten `.pdf`, `.docx` y `.zip`, de hasta 10 × 1024 × 1024 bytes. El remitente debe pertenecer a `est.umss.edu`. La confirmación devuelve `ENVIO_SIMULADO` y la hora; no afirma haber enviado un correo real.
 
-`/api/health` responde HTTP 200 con el estado de cada servicio. `database.estado` puede ser `sin_configurar`, `disponible` o `no_disponible`. Una base no disponible no impide iniciar el servidor ni usar `/api`.
+El feedback usa JSON con `docente`, `correcto`, `incorrecto` y `corregir`. Deben completarse los tres campos antes de guardar. Una entrega nueva está `POR REVISAR`; al guardar pasa a `REVISADA`. Una edición conserva ese estado. Un correo posterior del mismo estudiante es una entrega nueva y empieza `POR REVISAR`.
 
-## Cómo organizar una funcionalidad
+## Probar la demo manualmente
 
-Agrupamos los archivos por funcionalidad dentro de cada capa. Por ejemplo, si una HU requiere gestionar cursos:
+1. En Estudiante, usa `estudiante@est.umss.edu`, `docente@umss.edu`, `PRACTICA-01` y adjunta un archivo permitido.
+2. Simula el envío. En Docente, consulta el mismo correo y tarea.
+3. Selecciona la entrega, descarga el adjunto y completa los tres campos de feedback.
+4. Guarda, edita el feedback o envía otra entrega del mismo estudiante para comprobar cuál aparece.
+5. Para comprobar el fallo del correo, marca la casilla correspondiente en Estudiante: debe mostrarse el error sin registrar una nueva entrega.
 
-```text
-routes/cursos.routes.js
-controllers/cursos.controller.js
-services/cursos.service.js
-repositories/cursos.repository.js
-```
+Es una demostración local con datos de prueba. Los correos escritos en formularios son filtros, no autenticación ni permisos. No se deben cargar datos privados. El envío y la recepción reales de correo quedan fuera de esta versión del ejercicio.
 
-Es un ejemplo de nombres; no significa que esa funcionalidad ya exista.
+## Pruebas unitarias de Wendy
 
-El recorrido de una solicitud será:
+No se incluyen unit tests. Las reglas están en los archivos `.service.js` y `.validaciones.js` de cada módulo. Las fábricas `crearServicioEntregas({ repositorio, correo, dominio, generarId })` y `crearServicioRevision({ repositorio, reloj })` permiten sustituir sus dependencias sin levantar Express.
 
-```text
-Frontend → ruta → controlador → servicio → repositorio → PostgreSQL
-```
+`crearAlmacen()` produce datos aislados; las fábricas de repositorio aceptan ese almacén. `crearCorreoSimulado({ reloj })` permite fijar fechas para verificar resultados reproducibles. Wendy puede cubrir los criterios del PDF sin Google ni PostgreSQL.
 
-- La **ruta** relaciona el endpoint con el controlador.
-- El **controlador** recibe parámetros y datos de la solicitud, llama al servicio y envía una respuesta HTTP en JSON.
-- El **servicio** valida los datos y aplica las reglas de negocio.
-- El **repositorio** ejecuta SQL mediante el pool de `pg`. Los valores recibidos deben pasar como parámetros, nunca concatenarse al SQL.
-- Los **middlewares** realizan verificaciones compartidas antes de continuar o manejan errores.
+## Base de datos futura
 
-Los endpoints de prueba actuales responden directamente desde sus rutas porque no tienen reglas académicas. Las funcionalidades nuevas usarán las capas que correspondan.
+`database/schema.sql`, en la raíz, es una propuesta opcional con `estudiantes`, `docentes`, `tareas`, `entregas` y `feedback`. No se ejecuta ni se usa en esta demo; es para una base nueva y debe validarse antes de conectar PostgreSQL. No migra las tablas del prototipo anterior.
 
-## Roles y alcance
-
-No separamos todo el backend en carpetas `docente/` y `estudiante/`: ambos pueden trabajar con los mismos recursos. Los permisos se verificarán en el backend mediante middlewares y reglas de negocio, incluyendo el acceso al curso o registro correspondiente.
-
-Una ruta, un rol enviado desde el navegador o seleccionar un nombre no demuestra identidad. El mecanismo de acceso sin login tradicional está pendiente de definir.
-
-Solo se implementarán las funcionalidades validadas de las HU 01 y 02 y sus tarjetas CRC. No crear endpoints, tablas ni reglas adicionales antes de esa validación.
+Cuando se agregue persistencia, se reemplazarán los repositorios en memoria por consultas parametrizadas con `pg`. `DATABASE_URL` puede quedar vacía mientras tanto.
