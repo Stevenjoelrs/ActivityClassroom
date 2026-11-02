@@ -45,6 +45,10 @@ note right of CalendarioAcademico
   eventos: EventoAcademico[] (solo lectura) }
 end note
 
+note right of RegistroGrupos
+  consultarPorActividad devuelve un arreglo congelado.
+end note
+
 RegistroGrupos "1" o-- "0..*" GrupoTrabajo
 CalendarioAcademico "1" o-- "0..*" EventoAcademico
 EventoAcademico ..> TipoEvento

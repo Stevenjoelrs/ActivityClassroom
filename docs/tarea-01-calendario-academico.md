@@ -79,17 +79,18 @@ y `node:assert/strict`, módulos nativos, sin instalar paquetes.
 | Consulta estable | 4 pruebas nuevas fallan al intentar modificar eventos o resultados | Eventos y copias congelados; 18 pruebas de calendario pasan | `9971a52` |
 
 Después se revisó el código para refactorizar: no hizo falta agregar más clases
-ni extraer abstracciones.
+ni extraer abstracciones. El suite actual de calendario tiene 21 pruebas; el
+proyecto completo, 43.
 
 ## Checklist XP de esta tarea
 
 - [x] Alcance, reglas y criterios del incremento identificados.
 - [x] Diagrama UML elaborado.
-- [ ] Tarjeta CRC: elaboración manual por el estudiante.
+- [x] Tarjeta CRC elaborada y revisada.
 - [x] Casos de aceptación diseñados y expresados como pruebas de dominio.
 - [x] Pruebas escritas y ejecutadas antes del código correspondiente.
 - [x] Funcionalidad mínima implementada.
-- [x] 18 pruebas de calendario y 39 pruebas del proyecto ejecutadas satisfactoriamente.
+- [x] 21 pruebas de calendario y 43 pruebas del proyecto ejecutadas satisfactoriamente.
 - [x] Necesidad de refactorización revisada.
 - [x] Incremento contrastado con sus criterios.
 - [ ] HU-01 completa, con integración con actividades, entregas y notificaciones.
