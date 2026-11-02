@@ -20,7 +20,7 @@ Para una ruta explícita, entrecomillarla:
 node --test "backend/**/*.test.js"
 ```
 
-El suite actual ejecuta **43 pruebas** nativas con `node:test` y
+El suite actual ejecuta **64 pruebas** nativas con `node:test` y
 `node:assert/strict`.
 
 Nuestras pruebas de dominio no necesitan instalar nada. Cuando se integren las
@@ -96,8 +96,35 @@ grupo también se congela para impedir reasignaciones. El máximo es opcional
 inválidos producen `Error` con un mensaje descriptivo.
 
 La [documentación de la tarea 01 de grupos](docs/tarea-01-grupo-trabajo.md) incluye
-UML, los ciclos TDD y las tareas siguientes. El registro vive en memoria; todavía
-no hay interfaz ni almacenamiento persistente.
+UML, los ciclos TDD y las tareas siguientes.
+
+## Persistencia
+
+El almacenamiento de eventos y grupos se gestiona a través del patrón repositorio,
+desacoplando el dominio de la tecnología de persistencia.
+
+Por defecto, los repositorios persistentes guardan los datos en archivos JSON:
+- `eventos.json`: colección serializada de `EventoAcademico`.
+- `grupos.json`: colección serializada de `GrupoTrabajo`.
+
+### Ubicación y configuración (DATA_DIR)
+
+La función `crearRepositoriosPersistentes({ directorio })` resuelve la ubicación
+según la siguiente prioridad:
+1. El argumento `{ directorio }` provisto explícitamente.
+2. La variable de entorno `process.env.DATA_DIR`.
+3. El directorio por defecto `backend/data/`.
+
+### Control de versiones y pruebas
+
+- Los archivos de datos generados en `backend/data/` están ignorados mediante
+  `backend/data/.gitignore` (`*` y `!.gitignore`), garantizando que la información
+  persistida localmente no se versione en el repositorio.
+- Las pruebas automatizadas no tocan `backend/data/`; en su lugar, utilizan directorios
+  temporales creados con `node:fs` (`mkdtempSync`) y `node:os` (`tmpdir()`),
+  limpiándose automáticamente al finalizar la ejecución.
+- La escritura a disco se realiza de forma atómica mediante un archivo temporal y
+  `fs.renameSync`, garantizando que tras guardar no queden archivos temporales residuales.
 
 La [documentación de historias de usuario](docs/US.md) y las
 [tarjetas CRC](docs/crc.md) resumen ambas historias. También están disponibles la

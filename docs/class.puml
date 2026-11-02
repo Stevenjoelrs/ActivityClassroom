@@ -17,12 +17,6 @@ class GrupoTrabajo <<inmutable>> {
   +constructor(datos)
 }
 
-class RegistroGrupos {
-  -grupos: GrupoTrabajo[]
-  +registrar(grupo)
-  +consultarPorActividad(actividadId): GrupoTrabajo[]
-}
-
 class EventoAcademico <<inmutable>> {
   +id: string
   +materiaId: string
@@ -35,9 +29,64 @@ class EventoAcademico <<inmutable>> {
 }
 
 class CalendarioAcademico {
-  -eventos: EventoAcademico[]
+  -repositorio: RepositorioCalendario
+  +constructor(repositorio)
   +registrarEvento(evento)
   +consultarMateria(materiaId): ResultadoConsulta
+}
+
+class RegistroGrupos {
+  -repositorio: RepositorioGrupos
+  +constructor(repositorio)
+  +registrar(grupo)
+  +consultarPorActividad(actividadId): GrupoTrabajo[]
+}
+
+interface RepositorioCalendario <<interface>> {
+  +guardar(evento: EventoAcademico)
+  +listar(): EventoAcademico[]
+}
+
+interface RepositorioGrupos <<interface>> {
+  +guardar(grupo: GrupoTrabajo)
+  +listar(): GrupoTrabajo[]
+}
+
+class RepositorioCalendarioMemoria {
+  -datos: AlmacenAcademico
+  +guardar(evento)
+  +listar(): EventoAcademico[]
+}
+
+class RepositorioCalendarioArchivo {
+  -adaptador: RepositorioArchivo
+  +guardar(evento)
+  +listar(): EventoAcademico[]
+}
+
+class RepositorioGruposMemoria {
+  -datos: AlmacenAcademico
+  +guardar(grupo)
+  +listar(): GrupoTrabajo[]
+}
+
+class RepositorioGruposArchivo {
+  -adaptador: RepositorioArchivo
+  +guardar(grupo)
+  +listar(): GrupoTrabajo[]
+}
+
+class RepositorioArchivo {
+  -ruta: string
+  -datos: any[]
+  +guardar(entidad)
+  +listar(): any[]
+  -persistir()
+}
+
+class AlmacenAcademico {
+  +eventos: EventoAcademico[]
+  +grupos: GrupoTrabajo[]
 }
 
 note right of CalendarioAcademico
@@ -49,7 +98,29 @@ note right of RegistroGrupos
   consultarPorActividad devuelve un arreglo congelado.
 end note
 
-RegistroGrupos "1" o-- "0..*" GrupoTrabajo
-CalendarioAcademico "1" o-- "0..*" EventoAcademico
+note as NotaCambios
+  <b>Cambios respecto a la versión anterior:</b>
+  - CalendarioAcademico y RegistroGrupos delegan su almacenamiento a repositorios inyectados en el constructor.
+  - Se definen las interfaces RepositorioCalendario y RepositorioGrupos con operaciones guardar() y listar().
+  - Se implementan repositorios en memoria respaldados por AlmacenAcademico ({ eventos, grupos }).
+  - Se implementan repositorios en archivo mediante el adaptador atómico RepositorioArchivo (eventos.json y grupos.json).
+end note
+
+CalendarioAcademico --> RepositorioCalendario : inyectado
+RegistroGrupos --> RepositorioGrupos : inyectado
+
+RepositorioCalendarioMemoria ..|> RepositorioCalendario
+RepositorioCalendarioArchivo ..|> RepositorioCalendario
+RepositorioGruposMemoria ..|> RepositorioGrupos
+RepositorioGruposArchivo ..|> RepositorioGrupos
+
+RepositorioCalendarioMemoria --> AlmacenAcademico : datos
+RepositorioGruposMemoria --> AlmacenAcademico : datos
+
+RepositorioCalendarioArchivo ..> RepositorioArchivo : usa
+RepositorioGruposArchivo ..> RepositorioArchivo : usa
+
+RepositorioCalendario ..> EventoAcademico
+RepositorioGrupos ..> GrupoTrabajo
 EventoAcademico ..> TipoEvento
 @enduml

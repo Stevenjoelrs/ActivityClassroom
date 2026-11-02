@@ -18,6 +18,12 @@ Estado según las pruebas actuales. Actualizar después de cada `node --test`.
 | HU-01 | - | Evento inmutable | Reasignar datos de un evento | TypeError | backend/src/modulos/calendario-academico/calendario-academico.test.js | ✅ |
 | HU-01 | - | Consulta de solo lectura | Modificar el arreglo devuelto | TypeError | backend/src/modulos/calendario-academico/calendario-academico.test.js | ✅ |
 | HU-01 | - | Resultado inmutable | Reasignar `mensaje` o `eventos` del resultado | TypeError | backend/src/modulos/calendario-academico/calendario-academico.test.js | ✅ |
+| HU-01 | - | Repositorio inyectado compartido | Dos instancias con mismo repositorio | Ven los mismos eventos | backend/src/modulos/calendario-academico/calendario-academico.test.js | ✅ |
+| HU-01 | - | Repositorio inyectado aislado | Instancia sin argumentos | No comparte eventos con otras | backend/src/modulos/calendario-academico/calendario-academico.test.js | ✅ |
+| HU-01 | - | Repositorio guardar y listar | Guardar evento en repositorio | Se recupera con `listar()` | backend/src/modulos/calendario-academico/calendario.repository.test.js | ✅ |
+| HU-01 | - | Almacenes en memoria aislados | Dos almacenes independientes | No comparten datos | backend/src/modulos/calendario-academico/calendario.repository.test.js | ✅ |
+| HU-01 | - | Copia defensiva en listar | Modificar retorno de `listar()` | No altera el almacén | backend/src/modulos/calendario-academico/calendario.repository.test.js | ✅ |
+| HU-01 | - | Singleton repositorio | Importar `repositorioCalendario` | Expone `guardar` y `listar` | backend/src/modulos/calendario-academico/calendario.repository.test.js | ✅ |
 
 ## HU-02 - Grupos de trabajo
 
@@ -39,5 +45,25 @@ Estado según las pruebas actuales. Actualizar después de cada `node --test`.
 | HU-02 | - | Registrar objeto inválido | `registrar({})`, `null`, texto | Error "instancia de GrupoTrabajo" | backend/src/modulos/grupos-trabajo/registro-grupos.test.js | ✅ |
 | HU-02 | - | Consulta con id inválido | `consultarPorActividad("")`, `null` o con espacios | Error | backend/src/modulos/grupos-trabajo/registro-grupos.test.js | ✅ |
 | HU-02 | - | Consulta independiente | Consultar, registrar otro grupo y volver a consultar | La primera consulta no cambia | backend/src/modulos/grupos-trabajo/registro-grupos.test.js | ✅ |
+| HU-02 | - | Repositorio inyectado compartido | Dos instancias con mismo repositorio | Ven los mismos grupos | backend/src/modulos/grupos-trabajo/registro-grupos.test.js | ✅ |
+| HU-02 | - | Repositorio inyectado aislado | Instancia sin argumentos | No comparte grupos con otras | backend/src/modulos/grupos-trabajo/registro-grupos.test.js | ✅ |
+| HU-02 | - | Repositorio guardar y listar | Guardar grupo en repositorio | Se recupera con `listar()` | backend/src/modulos/grupos-trabajo/grupos.repository.test.js | ✅ |
+| HU-02 | - | Almacenes en memoria aislados | Dos almacenes independientes | No comparten datos | backend/src/modulos/grupos-trabajo/grupos.repository.test.js | ✅ |
+| HU-02 | - | Copia defensiva en listar | Modificar retorno de `listar()` | No altera el almacén | backend/src/modulos/grupos-trabajo/grupos.repository.test.js | ✅ |
+| HU-02 | - | Singleton repositorio | Importar `repositorioGrupos` | Expone `guardar` y `listar` | backend/src/modulos/grupos-trabajo/grupos.repository.test.js | ✅ |
+
+## Persistencia en archivo y cableado (HU-01 y HU-02)
+
+| HU | CA/RN | Caso | Dado/Cuando | Esperado | Test | Estado |
+|----|-------|------|-------------|----------|------|--------|
+| HU-01/02 | - | Archivo inexistente | Cargar repositorio con ruta inexistente | Devuelve lista vacía | backend/src/compartido/repositorio-archivo.test.js | ✅ |
+| HU-01/02 | - | Guardar e hidratar entidades | Guardar y reabrir con misma ruta | Instancias `EventoAcademico` y `GrupoTrabajo` | backend/src/compartido/repositorio-archivo.test.js | ✅ |
+| HU-01/02 | - | JSON con formato inválido | Archivo con sintaxis JSON corrupta | Error con mensaje claro | backend/src/compartido/repositorio-archivo.test.js | ✅ |
+| HU-01/02 | - | Datos inválidos en archivo | Objeto serializado no cumple validación | Error de validación del dominio | backend/src/compartido/repositorio-archivo.test.js | ✅ |
+| HU-01/02 | - | Creación de directorio | Guardar en ruta con subcarpetas inexistentes | Crea la estructura de carpetas | backend/src/compartido/repositorio-archivo.test.js | ✅ |
+| HU-01/02 | - | Limpieza de temporales | Guardar múltiples veces | No quedan archivos `.tmp` residuales | backend/src/compartido/repositorio-archivo.test.js | ✅ |
+| HU-01/02 | - | Cableado persistente | `crearRepositoriosPersistentes({ directorio })` | Guarda y recupera en `eventos.json` y `grupos.json` | backend/src/compartido/repositorios.test.js | ✅ |
+| HU-01/02 | - | Configuración DATA_DIR | `process.env.DATA_DIR` definido | Utiliza el directorio configurado | backend/src/compartido/repositorios.test.js | ✅ |
+| HU-01/02 | - | Directorio por defecto | Sin argumento ni variable de entorno | Resuelve `backend/data/` | backend/src/compartido/repositorios.test.js | ✅ |
 
 Leyenda: ✅ prueba que pasa, ❌ prueba que falla o falta, ⏳ pendiente de otra funcionalidad, ➖ sin prueba por diseño.
