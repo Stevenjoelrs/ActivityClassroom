@@ -118,9 +118,9 @@ Clases CSS compartidas obligatorias: `.tarjeta`, `.grupo-campo`, `.etiqueta`, `.
 
 ## 4. Checklist final de entrega (en el siguiente chat)
 
-- [ ] `npm test` verde (reportar: 64 antes de esta fase, 74 actualmente tras backend de calendario/grupos, y verificar al final).
-- [ ] `cd frontend && npm run build` finaliza sin errores.
-- [ ] `git status` limpio.
-- [ ] `git log --format='%an | %s' -n 8` con autor Steven Joel Ramos Salazar.
-- [ ] `git log -n 8 --format=%b` con el trailer de `Co-authored-by: kn0wles <figueredojose27@gmail.com>`.
-- [ ] Ningún push ni merge realizado.
+- [x] `npm test` verde (reportar: 64 antes de esta fase, 74 actualmente tras backend de calendario/grupos, y verificar al final).
+- [x] `cd frontend && npm run build` finaliza sin errores.
+- [x] `git status` limpio.
+- [x] `git log --format='%an | %s' -n 8` con autor Steven Joel Ramos Salazar.
+- [x] `git log -n 8 --format=%b` con el trailer de `Co-authored-by: kn0wles <figueredojose27@gmail.com>`.
+- [x] Ningún push ni merge realizado.
