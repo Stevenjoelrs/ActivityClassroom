@@ -94,6 +94,6 @@ Las tareas siguientes están pendientes. Cada una empieza con una prueba que
 falle; después se escribe el código mínimo y se ejecutan las pruebas. Las tarjetas
 CRC se elaborarán manualmente a partir de las clases implementadas.
 
-CA-08 (continuar y entregar aunque un integrante no participe) requiere el flujo
+RN-04 (continuar y entregar aunque un integrante no participe) requiere el flujo
 de actividades y entregas, todavía pendiente. Esta clase no registra participación
 ni disuelve grupos automáticamente.
