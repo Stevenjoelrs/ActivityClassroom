@@ -4,9 +4,9 @@ Responsabilidades según la matriz de pair programming acordada para esta entreg
 
 | Componente | Descripción | Responsable | Respaldo | Archivos |
 |---|---|---|---|---|
-| Dominio (grupos) | GrupoTrabajo, RegistroGrupos | Stevenjoelrs | kn0wles | grupo-trabajo.js, registro-grupos.js |
-| Dominio (calendario) | EventoAcademico, CalendarioAcademico | kn0wles | Stevenjoelrs | calendario-academico.js |
+| Dominio (grupos) | GrupoTrabajo, RegistroGrupos | Stevenjoelrs | kn0wles | backend/src/modulos/grupos-trabajo/grupo-trabajo.js, backend/src/modulos/grupos-trabajo/registro-grupos.js |
+| Dominio (calendario) | EventoAcademico, CalendarioAcademico | kn0wles | Stevenjoelrs | backend/src/modulos/calendario-academico/calendario-academico.js |
 | Persistencia | Lectura/escritura de datos (pendiente, hoy todo vive en memoria) | Pendiente | - | - |
-| Pruebas / CI | node --test | kn0wles | Stevenjoelrs | *.test.js |
+| Pruebas / CI | node --test | kn0wles | Stevenjoelrs | backend/src/modulos/**/*.test.js |
 | Documentación | Historias, CRC, matriz, bitácora, fuentes | Stevenjoelrs | kn0wles | docs/ |
 | Integración / repo | Merge, revisión y publicación | kn0wles | Stevenjoelrs | .git/, README.md |

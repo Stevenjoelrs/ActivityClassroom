@@ -31,7 +31,7 @@ los eventos como los resultados de las consultas son de solo lectura.
 ### Uso mínimo
 
 ```javascript
-import { CalendarioAcademico, EventoAcademico } from "./calendario-academico.js";
+import { CalendarioAcademico, EventoAcademico } from "./backend/src/modulos/calendario-academico/calendario-academico.js";
 
 const calendario = new CalendarioAcademico();
 calendario.registrarEvento(
@@ -68,7 +68,7 @@ La modalidad sorteo registra un resultado ya definido; no distribuye estudiantes
 ### Uso mínimo
 
 ```javascript
-import { GrupoTrabajo } from "./grupo-trabajo.js";
+import { GrupoTrabajo } from "./backend/src/modulos/grupos-trabajo/grupo-trabajo.js";
 
 const grupo = new GrupoTrabajo({
   nombre: "Equipo Alfa",
