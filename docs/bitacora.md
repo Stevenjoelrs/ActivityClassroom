@@ -86,7 +86,53 @@ test at registro-grupos.test.js:53:1
 Salida del verde:
 
 ```
-(pegar aquí la salida de node --test)
+✔ HU-01: registra y permite consultar eventos de una materia (1.688347ms)
+✔ HU-01: devuelve únicamente los eventos de la materia consultada (0.320925ms)
+✔ HU-01: informa cuando no existen eventos para una materia (0.160516ms)
+✔ HU-01: refleja suspensiones registradas en el calendario (0.182283ms)
+✔ HU-01: rechaza identificadores inválidos de evento y materia (0.603795ms)
+✔ HU-01: rechaza tipos de evento no admitidos (0.233148ms)
+✔ HU-01: rechaza fechas inválidas o con formato distinto de AAAA-MM-DD (0.431432ms)
+✔ HU-01: acepta eventos sin horario o con horario nulo (0.239698ms)
+✔ HU-01: rechaza horarios vacíos o con espacios en los extremos (0.379375ms)
+✔ HU-01: rechaza descripciones vacías o no textuales (0.41596ms)
+✔ HU-01: rechaza un estado de suspensión no booleano (0.26404ms)
+✔ HU-01: registra todos los tipos de evento admitidos (0.215227ms)
+✔ HU-01: rechaza registrar objetos que no son eventos (0.309738ms)
+✔ HU-01: rechaza consultar una materia con identificador inválido (0.316806ms)
+✔ HU-01: no permite reasignar datos de un evento establecido (0.301494ms)
+✔ HU-01: no permite modificar el arreglo de eventos consultado (0.224153ms)
+✔ HU-01: la consulta vacía devuelve un arreglo congelado (0.162164ms)
+✔ HU-01: cada consulta devuelve una copia independiente de los eventos (0.139413ms)
+✔ registra y permite consultar un grupo por afinidad (3.869637ms)
+✔ registra integrantes de un sorteo ya realizado (0.327667ms)
+✔ rechaza integrantes duplicados (0.716318ms)
+✔ rechaza un grupo que supera el máximo (0.343427ms)
+✔ acepta un grupo con el máximo exacto (0.301063ms)
+✔ acepta un grupo sin máximo establecido (0.274678ms)
+✔ rechaza nombre o actividad sin datos válidos (0.548753ms)
+✔ rechaza modalidades no admitidas (0.422026ms)
+✔ rechaza grupos sin un arreglo de integrantes no vacío (0.405143ms)
+✔ rechaza identificadores de integrantes inválidos y arreglos con huecos (0.646256ms)
+✔ rechaza identificador de actividad con espacios en los extremos (0.295019ms)
+✔ rechaza un máximo que no sea un entero positivo seguro (0.463283ms)
+✔ no permite reasignar datos de un grupo establecido (0.321185ms)
+✔ no permite cambiar ni agregar integrantes (0.233271ms)
+✔ modificar la lista original no cambia el grupo (0.199036ms)
+✔ HU-02: un registro nuevo se crea sin grupos (2.317454ms)
+✔ HU-02 CA-01/CA-05: registra un grupo y lo consulta por su actividad (0.744466ms)
+✔ HU-02 CA-05: devuelve únicamente los grupos de la actividad consultada (0.35259ms)
+✔ HU-02: rechaza consultar con un identificador de actividad inválido (0.712901ms)
+✔ HU-02: rechaza registrar objetos que no son GrupoTrabajo (0.384847ms)
+✔ HU-02 RN-06: la consulta devuelve un arreglo de solo lectura (0.216737ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 114.406791
 ```
 
 ## Ciclo 2: registrar y consultar por actividad (CA-01, CA-05)

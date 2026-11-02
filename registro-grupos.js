@@ -1,8 +1,13 @@
 // registro-grupos.js
+import { GrupoTrabajo } from "./grupo-trabajo.js";
+
 export class RegistroGrupos {
     #grupos = [];
 
     registrar(grupo) {
+        if (!(grupo instanceof GrupoTrabajo)) {
+            throw new Error("El grupo debe ser una instancia de GrupoTrabajo.");
+        }
         this.#grupos.push(grupo);
     }
 
