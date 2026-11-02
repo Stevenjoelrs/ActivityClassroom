@@ -73,4 +73,4 @@ Los endpoints generales actuales están en `routes/status.routes.js`:
 
 `main` contiene la base compartida, los endpoints de prueba y las carpetas preparadas. La implementación de envío simulado y revisión con feedback permanece en `US-01-02`, junto a sus instrucciones específicas. Preparar la estructura no registra ni activa esos módulos en `main`.
 
-La carpeta `database/` de la raíz queda reservada para esquemas y datos iniciales cuando se defina su uso. No se crean ni modifican bases automáticamente.
+La carpeta `backend/database/` queda reservada para esquemas y datos iniciales cuando se defina su uso. No se crean ni modifican bases automáticamente.

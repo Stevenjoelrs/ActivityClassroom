@@ -28,6 +28,7 @@ Abre el frontend en la dirección que muestra Vite, normalmente `http://localhos
 sistema-academico/
 ├── frontend/              # Vistas, componentes, navegación, estilos y llamadas HTTP
 ├── backend/
+│   ├── database/           # Espacio para futuros scripts SQL
 │   └── src/
 │       ├── modulos/       # Funcionalidades; cada una tiene sus propias capas
 │       │   ├── entregas-tareas/
@@ -37,7 +38,6 @@ sistema-academico/
 │       ├── routes/        # Rutas generales de prueba y estado
 │       ├── app.js
 │       └── server.js
-├── database/              # Espacio para futuros scripts SQL
 └── .gitignore             # Excluye dependencias, compilaciones y configuración local
 ```
 
