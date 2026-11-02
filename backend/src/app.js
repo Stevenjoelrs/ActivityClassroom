@@ -5,6 +5,7 @@ import statusRoutes from './routes/status.routes.js';
 import entregasRoutes from './modulos/entregas-tareas/entregas.routes.js';
 import revisionRoutes from './modulos/revision-tareas/revision.routes.js';
 import calendarioRoutes from './modulos/calendario-academico/calendario.routes.js';
+import gruposRoutes from './modulos/grupos-trabajo/grupos.routes.js';
 import { AppError } from './compartido/error.js';
 
 const app = express();
@@ -15,6 +16,7 @@ app.use('/api', (req,res,next) => { res.set('Cache-Control', 'no-store'); next()
 app.use('/api/entregas', entregasRoutes);
 app.use('/api/revision', revisionRoutes);
 app.use('/api/calendario', calendarioRoutes);
+app.use('/api/grupos', gruposRoutes);
 app.use((req, res) => res.status(404).json({ mensaje: 'Ruta no encontrada' }));
 app.use((error, req, res, next) => {
   if (error.code === 'LIMIT_FILE_SIZE') return res.status(400).json({ mensaje: 'El archivo no puede superar los 10 MB' });
