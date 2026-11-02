@@ -82,6 +82,6 @@ No se incluyen unit tests. Las reglas están en los archivos `.service.js` y `.v
 
 ## Base de datos futura
 
-`database/schema.sql`, en la raíz, es una propuesta opcional con `estudiantes`, `docentes`, `tareas`, `entregas` y `feedback`. No se ejecuta ni se usa en esta demo; es para una base nueva y debe validarse antes de conectar PostgreSQL. No migra las tablas del prototipo anterior.
+`backend/database/schema.sql`, dentro del backend, es una propuesta opcional con `estudiantes`, `docentes`, `tareas`, `entregas` y `feedback`. No se ejecuta ni se usa en esta demo; es para una base nueva y debe validarse antes de conectar PostgreSQL. No migra las tablas del prototipo anterior.
 
 Cuando se agregue persistencia, se reemplazarán los repositorios en memoria por consultas parametrizadas con `pg`. `DATABASE_URL` puede quedar vacía mientras tanto.
