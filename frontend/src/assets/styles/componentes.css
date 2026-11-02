@@ -74,6 +74,7 @@ textarea.campo { min-height: 120px; resize: vertical; }
   fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
   .revision-distribucion { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: var(--espacio-4); }
   .lista-entregas { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--espacio-1); }
+  .lista-tarjetas { list-style: none; padding: 0; margin: var(--espacio-3) 0 0; display: grid; gap: var(--espacio-2); }
   .seleccionar-entrega { display: grid; gap: var(--espacio-1); width: 100%; text-align: left; padding: var(--espacio-2); border: 1px solid var(--color-borde-control); border-radius: var(--radio-borde); background: var(--color-superficie); color: var(--color-texto); cursor: pointer; overflow-wrap: anywhere; }
   .seleccionar-entrega[aria-pressed="true"] { border-color: var(--color-marino); background: var(--color-marino-suave); }
   .seleccionar-entrega:disabled { cursor: wait; }
