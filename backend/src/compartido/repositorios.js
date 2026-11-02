@@ -22,3 +22,6 @@ export function crearRepositoriosPersistentes({ directorio } = {}) {
     repositorioGrupos: grupos,
   };
 }
+
+export const repositorios = crearRepositoriosPersistentes();
+
