@@ -15,3 +15,5 @@ Recursos que no se vieron en aula. Verificar cada enlace antes de entregar.
 | node:path (rutas de archivos) | repositorio-archivo.js, repositorios.js, *.test.js | Node.js, "Path": https://nodejs.org/api/path.html |
 | node:os (directorio temporal os.tmpdir()) | *.test.js | Node.js, "OS": https://nodejs.org/api/os.html |
 | Escritura atómica (archivo temporal + renameSync) | repositorio-archivo.js | Node.js, "fs.renameSync": https://nodejs.org/api/fs.html#fsrenamesyncoldpath-newpath |
+| Jest con --experimental-vm-modules (soporte ESM) | backend/package.json, suites Jest (tests/) | Jest Docs, "ECMAScript Modules": https://jestjs.io/docs/ecmascript-modules |
+| Patrones entrecomillados para node --test | package.json ("test:dominio") | Node.js, "Test runner execution model and path resolution": https://nodejs.org/api/test.html |

@@ -81,4 +81,39 @@ Estado según las pruebas actuales. Actualizar después de cada `node --test`.
 | HU-02 | - | Filtro por actividad y validación | Actividad distinta o id vacío | No devuelve de otra y AppError(400) | backend/src/modulos/grupos-trabajo/grupos.service.test.js | ✅ |
 | HU-02 | - | Persistencia de servicio | Recrear servicio sobre archivo JSON | Datos se conservan intactos | backend/src/modulos/grupos-trabajo/grupos.service.test.js | ✅ |
 
+## HU-03 y HU-04 (repositorio externo)
+
+Pruebas unitarias de Jest importadas desde la rama `externo/US-01-unit-test` (autor: arubis). Total: 4 suites y 23 pruebas en verde.
+
+### `backend/src/modulos/entregas-tareas/tests/entregas.service.test.js` (7 pruebas)
+- Envío exitoso: dado un remitente institucional, un adjunto válido y el correo del docente, cuando envía, entonces se envía el correo y se guarda la entrega
+- Sin adjunto: dado que no adjunta archivo, cuando intenta enviar, entonces se rechaza con "Debe adjuntar un archivo"
+- Formato inválido: dado un archivo .exe, entonces se rechaza indicando los formatos permitidos (.pdf, .docx, .zip)
+- Tamaño excedido: dado un archivo mayor a 10 MB, entonces se rechaza
+- Remitente no institucional: dado un remitente fuera del dominio institucional, entonces se rechaza
+- Correo del docente inválido: dado un destinatario con formato inválido, entonces se rechaza
+- Fallo del servicio de correo: dado que el correo falla, entonces no se confirma el envío, se informa el error y no se guarda la entrega
+
+### `backend/src/modulos/entregas-tareas/tests/entregas.validaciones.test.js` (3 pruebas)
+- Sin adjunto: dado que no adjunta archivo, entonces se rechaza con "Debe adjuntar un archivo"
+- Formato inválido: dado un archivo .exe, entonces se rechaza indicando los formatos permitidos (.pdf, .docx, .zip)
+- Tamaño excedido: dado un archivo mayor a 10 MB, entonces se rechaza
+
+### `backend/src/modulos/revision-tareas/tests/revision.service.test.js` (8 pruebas)
+- Ver entregas recibidas: dado que existen correos de entrega, cuando el docente abre la revisión, entonces ve la lista de estudiantes con su fecha de recepción, todos POR REVISAR
+- Sin entregas: dado que no hay correos recibidos, entonces devuelve una lista vacía
+- Abrir la tarea: dada una entrega con archivo adjunto, cuando el docente la selecciona, entonces puede ver el archivo adjunto
+- Feedback completo: dado un estudiante con entrega, cuando el docente registra los tres campos, entonces el feedback se guarda asociado a esa entrega y pasa a REVISADA
+- Campo vacío: dado que falta uno de los tres campos, cuando intenta guardar, entonces se rechaza indicando cuál falta y no se modifica la entrega
+- Estudiante sin entrega: dado un estudiante que no envió su tarea, cuando se intenta registrar feedback, entonces se rechaza con "No existe entrega para revisar"
+- Modificar feedback: dada una entrega REVISADA, cuando el docente edita el feedback, entonces se actualiza el contenido y sigue REVISADA
+- Varios correos del mismo estudiante: dado un estudiante con más de un correo de la misma tarea, entonces se toma el más reciente
+
+### `backend/src/modulos/revision-tareas/tests/revision.validaciones.test.js` (5 pruebas)
+- Feedback completo: dados los tres campos completos, entonces se aceptan y se devuelven
+- Campo vacío: dado que falta "lo que está bien", entonces se rechaza indicando cuál falta
+- Campo vacío: dado que falta "lo que está mal", entonces se rechaza indicando cuál falta
+- Campo vacío: dado que falta "lo que debe corregir", entonces se rechaza indicando cuál falta
+- Campo vacío: dado un campo con solo espacios, entonces se rechaza
+
 Leyenda: ✅ prueba que pasa, ❌ prueba que falla o falta, ⏳ pendiente de otra funcionalidad, ➖ sin prueba por diseño.

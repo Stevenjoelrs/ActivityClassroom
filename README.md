@@ -3,29 +3,55 @@
 Primeros incrementos de **HU-01** (calendario académico) y **HU-02** (registro de
 grupos de trabajo). JavaScript con Node.js, sin dependencias externas.
 
-## Ejecutar las pruebas
+## Pruebas
 
-Desde la raíz del proyecto:
+El repositorio integra dos suites de pruebas automatizadas:
 
 ```sh
 npm test
 ```
 
-`npm test` equivale a `node --test` y descubre los `*.test.js` en todas las
-subcarpetas.
+Este comando ejecuta ambas suites en secuencia:
+1. `npm run test:dominio`: ejecuta **74 pruebas** nativas del dominio, persistencia y servicios de HU-01 y HU-02 utilizando el runner nativo `node --test` y `node:assert/strict`. No requiere ninguna dependencia externa instalada.
+2. `npm run test:backend`: ejecuta **23 pruebas** unitarias de los módulos de entregas y revisión (HU-03 y HU-04) utilizando **Jest** con módulos ESM (`--experimental-vm-modules`).
 
-Para una ruta explícita, entrecomillarla:
+### ¿Por qué dos suites separadas?
+Nuestras pruebas de HU-01 y HU-02 siguen la regla de cero dependencias externas y usan el ejecutor estándar `node --test` con patrones específicos por carpeta. Las pruebas de HU-03 y HU-04 provienen del repositorio externo de Joyce y arubis y fueron diseñadas con Jest, apoyándose en utilidades como `jest.fn()` y `expect()`. Para evitar que `node --test` intente ejecutar archivos de Jest o que Jest capture pruebas de `node:test`, cada suite corre con su propio entorno y patrones delimitados (`testMatch` en Jest y argumentos por carpeta en `node --test`).
+
+> **Nota:** Para ejecutar las pruebas de Jest se requiere haber instalado las dependencias del backend con `npm ci` dentro de la carpeta `backend/`.
+
+Para ejecutar cada suite por separado:
 
 ```sh
-node --test "backend/**/*.test.js"
+# Solo pruebas de dominio y persistencia (node --test)
+npm run test:dominio
+
+# Solo pruebas del backend externo (Jest)
+npm run test:backend
 ```
 
-El suite actual ejecuta **74 pruebas** nativas con `node:test` y
-`node:assert/strict`.
+## Equivalencia de historias
 
-Nuestras pruebas de dominio no necesitan instalar nada. Cuando se integren las
-pruebas de HU-03/HU-04 (repositorio externo), se requerirá `npm ci` dentro de
-`backend/`, porque sus servicios importan `dotenv`/`multer`.
+La correspondencia entre las historias de usuario de ambos equipos es la siguiente:
+
+| Repositorio externo | Nuestra numeración | Funcionalidad |
+|---|---|---|
+| **US-01** | **HU-03** | Envío simulado de tareas por correo institucional con validación de adjunto |
+| **US-02** | **HU-04** | Revisión de tareas por el docente y retroalimentación (lo que está bien, lo que está mal, lo que debe corregir) |
+| — | **HU-01** | Calendario académico (clases, tareas, actividades, suspensiones) |
+| — | **HU-02** | Grupos de trabajo (modalidades afinidad y sorteo) |
+
+## Créditos y autoría
+
+Este repositorio consolida el trabajo colaborativo de dos equipos:
+- **HU-01 y HU-02 (Calendario y Grupos):** Desarrolladas por Steven Joel Ramos Salazar y kn0wles.
+- **HU-03 y HU-04 (Entregas y Revisión):** Desarrolladas originalmente en el repositorio externo [Sistema-academico](https://github.com/anjoyy24/Sistema-academico.git) por **Joyce** (implementación de historias y configuración base) y **arubis** (diseño e implementación del conjunto de pruebas Jest en la rama `US-01-unit-test`).
+
+Para explorar el historial completo preservado de ambos equipos:
+
+```sh
+git log --graph --oneline --all
+```
 
 ## Calendario académico (HU-01)
 

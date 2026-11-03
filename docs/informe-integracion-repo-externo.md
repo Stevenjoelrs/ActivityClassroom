@@ -6,7 +6,7 @@
 |---|---|
 | Repositorio | `https://github.com/anjoyy24/Sistema-academico.git` |
 | Remoto local | `externo` (solo `fetch`, sin `push`) |
-| Ramas analizadas | `externo/main`, `externo/US-01-02` |
+| Ramas analizadas | `externo/main`, `externo/US-01-02`, `externo/US-01-unit-test` |
 | Método | `git ls-tree`, `git show`, `git log`, `git diff` |
 | Fecha del informe | 2026-11-02 |
 | Modo | Solo lectura: sin checkout, sin instalación de dependencias, sin ejecutar su código |
@@ -30,21 +30,20 @@ comparte historia con `ActivityClassroom`. La integración exige decisiones de
 persistencia, estructura, `package.json`, dependencias y consolidación documental
 antes de fusionar nada.
 
-## Comparación entre `main` y `US-01-02`
+## Comparación entre ramas del repositorio externo
 
-| Aspecto | `main` | `US-01-02` |
-|---|---|---|
-| Commits | 3 | 6 (incluye el merge de `main`) |
-| Módulos de negocio | Carpetas vacías con `.gitkeep` | `entregas-tareas` y `revision-tareas` completos |
-| Persistencia | Sin almacén | `compartido/datos-memoria.js` (memoria) |
-| Base de datos | Solo `database/README.md` | Agrega `database/schema.sql` (propuesta) |
-| Dependencias backend | `cors`, `dotenv`, `express`, `pg` | Agrega `multer` |
-| Variables de entorno | `PORT`, `FRONTEND_ORIGIN`, `DATABASE_URL` | Agrega `INSTITUTIONAL_DOMAIN` |
-| Frontend | Pantallas iniciales y cliente de prueba | Servicio de entregas y pantallas funcionales |
-| Pruebas | Ninguna | Ninguna |
+| Aspecto | `main` | `US-01-02` | `US-01-unit-test` |
+|---|---|---|---|
+| Commits | 3 | 6 (incluye el merge de `main`) | 13 (incluye autoría de arubis) |
+| Módulos de negocio | Carpetas vacías con `.gitkeep` | `entregas-tareas` y `revision-tareas` completos | Idem a `US-01-02` |
+| Persistencia | Sin almacén | `compartido/datos-memoria.js` (memoria) | `compartido/datos-memoria.js` (memoria) |
+| Base de datos | Solo `database/README.md` | Agrega `database/schema.sql` (propuesta) | Idem a `US-01-02` |
+| Dependencias backend | `cors`, `dotenv`, `express`, `pg` | Agrega `multer` | Agrega `jest` en `devDependencies` |
+| Variables de entorno | `PORT`, `FRONTEND_ORIGIN`, `DATABASE_URL` | Agrega `INSTITUTIONAL_DOMAIN` | Idem a `US-01-02` |
+| Frontend | Pantallas iniciales y cliente de prueba | Servicio de entregas y pantallas funcionales | Idem a `US-01-02` |
+| Pruebas | Ninguna | Ninguna | 4 suites y 23 pruebas unitarias con Jest |
 
-`US-01-02` contiene toda la base de `main` más la implementación de las dos historias.
-El diferencial entre ramas es de 28 archivos (`+587 / -62`).
+`US-01-02` contiene la base de `main` más la implementación de las dos historias por Joyce. Posteriormente, la rama `US-01-unit-test` añade las suites de pruebas unitarias implementadas por arubis con Jest.
 
 ## a) Variables de entorno
 
@@ -312,28 +311,21 @@ Equivalencia acordada entre equipos:
   `app.js`/`server.js` son el punto de entrada oficial y acordar reglas de formato
   (Prettier/ESLint o convención manual) antes de mezclar código.
 
-### 7. Estrategia de fusión con historiales no relacionados
+### 7. Estrategia de fusión con historiales no relacionados [RESUELTA]
 
-- No hay ancestro común; un `git merge` normal fallará.
-- Opciones:
-  - `git merge --allow-unrelated-histories`, resolviendo colisiones de `README.md`,
-    `.gitignore` y estructura.
-  - `git subtree add` para incorporar el externo como subproyecto con su historia.
-  - Copia selectiva de archivos en un commit propio, sin conservar su historial.
-- Decisión pendiente: elegir una estrategia antes de tocar `develop`. Si se usa
-  subtree, hay que decidir el prefijo y si se conservan sus dos `package.json`. Si se
-  usa merge, hay que resolver manualmente los archivos comunes. La copia es la opción
-  con menos historia, pero la más simple de auditar.
+- Se ejecutó la fusión mediante `git merge --no-ff --no-commit --allow-unrelated-histories externo/US-01-unit-test` sobre el commit `3dc8577c31df6e90ed73cf0f4850ee1f9ce3af8f`.
+- Resolución explícita aplicada:
+  - **Nuestras versiones (`--ours`):** `README.md`, `backend/.env.example`, `backend/src/app.js`, `backend/src/config/env.js`, `backend/src/server.js`, `frontend/src/assets/styles/componentes.css`, `frontend/src/components/Encabezado.vue`, `frontend/src/router/index.js` y `frontend/vite.config.js`.
+  - **Versión externa (`--theirs`):** `backend/package.json` y `backend/package-lock.json` para incorporar Jest y sus scripts.
+  - Los archivos nuevos del repo externo (`.gitignore`, `backend/README.md`, `backend/database/*`, `.gitkeep` y las suites de pruebas Jest en `tests/`) se integraron limpiamente al índice.
 
-### 8. Falta de pruebas y de TDD
+### 8. Pruebas y TDD [RESUELTA]
 
-- El externo no tiene pruebas, no tiene script `test` y no hay evidencia de ciclos
-  rojo-verde.
-- Nuestro requisito 1.4 exige TDD.
-- Decisión pendiente: antes de integrar sus historias, escribir pruebas para HU-03/HU-04
-  (US-01/US-02 en el repo externo): envío, validaciones, fallo simulado, feedback
-  obligatorio, entrega más reciente, permisos por docente y descarga de adjuntos;
-  registrar los ciclos en la bitácora. Sin eso, la integración no cumple el requisito.
+- La rama `externo/US-01-unit-test` incorporó 4 suites de pruebas unitarias con Jest (23 pruebas en total) creadas por arubis para validar los servicios y validaciones de entregas y revisión de tareas.
+- Se configuró el `package.json` de la raíz para orquestar ambas suites sin interferencias:
+  - `npm run test:dominio`: ejecuta las 74 pruebas nativas con `node --test` delimitadas por carpeta.
+  - `npm run test:backend`: ejecuta las 23 pruebas de Jest con `--experimental-vm-modules` en `backend/`.
+  - `npm test`: ejecuta secuencialmente ambas suites (97 pruebas en verde).
 
 ### 9. Documentación a consolidar
 
