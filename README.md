@@ -1,11 +1,10 @@
 # ActivityClassroom
 
-Primeros incrementos de **HU-01** (calendario académico) y **HU-02** (registro de
-grupos de trabajo). JavaScript con Node.js, sin dependencias externas.
+Sistema académico integral que consolida **HU-01** (calendario académico), **HU-02** (grupos de trabajo), **HU-03** (envío de tareas), **HU-04** (revisión de tareas), **HU-05** (asignación de asientos y asistencia) y **HU-06** (tomar apuntes). Desarrollado con Node.js, Express, Vue 3 y persistencia híbrida.
 
 ## Pruebas
 
-El repositorio integra dos suites de pruebas automatizadas:
+El repositorio integra una suite consolidada de **102 pruebas automatizadas**:
 
 ```sh
 pnpm test
@@ -13,41 +12,44 @@ pnpm test
 
 Este comando ejecuta ambas suites en secuencia:
 1. `pnpm run test:dominio`: ejecuta **74 pruebas** nativas del dominio, persistencia y servicios de HU-01 y HU-02 utilizando el runner nativo `node --test` y `node:assert/strict`. No requiere ninguna dependencia externa instalada.
-2. `pnpm run test:backend`: ejecuta **23 pruebas** unitarias de los módulos de entregas y revisión (HU-03 y HU-04) utilizando **Jest** con módulos ESM (`--experimental-vm-modules`).
+2. `pnpm run test:backend`: ejecuta **28 pruebas** unitarias utilizando **Jest**: 23 pruebas de los módulos de entregas y revisión (HU-03 y HU-04) con módulos ESM (`--experimental-vm-modules`), y 5 pruebas de asignación de asientos y asistencia (HU-05) con aislamiento CommonJS.
 
 ### ¿Por qué dos suites separadas?
-Nuestras pruebas de HU-01 y HU-02 siguen la regla de cero dependencias externas y usan el ejecutor estándar `node --test` con patrones específicos por carpeta. Las pruebas de HU-03 y HU-04 provienen del repositorio externo de Joyce y arubis y fueron diseñadas con Jest, apoyándose en utilidades como `jest.fn()` y `expect()`. Para evitar que `node --test` intente ejecutar archivos de Jest o que Jest capture pruebas de `node:test`, cada suite corre con su propio entorno y patrones delimitados (`testMatch` en Jest y argumentos por carpeta en `node --test`).
+Nuestras pruebas de HU-01 y HU-02 siguen la regla de cero dependencias externas y usan el ejecutor estándar `node --test` con patrones específicos por carpeta. Las pruebas de HU-03, HU-04 y HU-05 provienen de repositorios integrados y fueron diseñadas con Jest, apoyándose en utilidades como `jest.fn()` y `expect()`. Para evitar que `node --test` intente ejecutar archivos de Jest o que Jest capture pruebas de `node:test`, cada suite corre con su propio entorno y patrones delimitados (`testMatch` en Jest y argumentos por carpeta en `node --test`).
 
 > **Nota:** Para ejecutar las pruebas de Jest se requiere haber instalado las dependencias del backend con `pnpm install` dentro de la carpeta `backend/`.
 
 Para ejecutar cada suite por separado:
 
 ```sh
-# Solo pruebas de dominio y persistencia (node --test)
+# Solo pruebas de dominio y persistencia (node --test) - 74 pruebas
 pnpm run test:dominio
 
-# Solo pruebas del backend externo (Jest)
+# Solo pruebas unitarias de backend (Jest) - 28 pruebas
 pnpm run test:backend
 ```
 
 ## Equivalencia de historias
 
-La correspondencia entre las historias de usuario de ambos equipos es la siguiente:
+La correspondencia entre las historias de usuario del proyecto es la siguiente:
 
-| Repositorio externo | Nuestra numeración | Funcionalidad |
+| Repositorio de origen | Nuestra numeración | Funcionalidad |
 |---|---|---|
-| **US-01** | **HU-03** | Envío simulado de tareas por correo institucional con validación de adjunto |
-| **US-02** | **HU-04** | Revisión de tareas por el docente y retroalimentación (lo que está bien, lo que está mal, lo que debe corregir) |
 | — | **HU-01** | Calendario académico (clases, tareas, actividades, suspensiones) |
 | — | **HU-02** | Grupos de trabajo (modalidades afinidad y sorteo) |
+| **Sistema-academico** (US-01) | **HU-03** | Envío simulado de tareas por correo institucional con validación de adjunto |
+| **Sistema-academico** (US-02) | **HU-04** | Revisión de tareas por el docente y retroalimentación estructurada |
+| **SistemaAula** (`modulo-asientos`) | **HU-05** | Asignación física de asientos y control de asistencia en el aula |
+| **SistemaAula** (`backend-apuntes`) | **HU-06** | Gestión y toma de apuntes académicos vinculados a materias |
 
 ## Créditos y autoría
 
-Este repositorio consolida el trabajo colaborativo de dos equipos:
+Este repositorio consolida el trabajo colaborativo preservando los historiales completos de commits:
 - **HU-01 y HU-02 (Calendario y Grupos):** Desarrolladas por Steven Joel Ramos Salazar y kn0wles.
-- **HU-03 y HU-04 (Entregas y Revisión):** Desarrolladas originalmente en el repositorio externo [Sistema-academico](https://github.com/anjoyy24/Sistema-academico.git) por **Joyce** (implementación de historias y configuración base) y **arubis** (diseño e implementación del conjunto de pruebas Jest en la rama `US-01-unit-test`).
+- **HU-03 y HU-04 (Entregas y Revisión):** Desarrolladas originalmente en [Sistema-academico](https://github.com/anjoyy24/Sistema-academico.git) por **Joyce** (arquitectura base) y **arubis** (conjunto de pruebas unitarias Jest).
+- **HU-05 y HU-06 (Asientos y Apuntes):** Desarrolladas originalmente en [SistemaAula](https://github.com/araozcamila313/SistemaAula.git) por **Camila Araoz** (módulo de asignación de asientos, frontend y pruebas Jest) y **Ximena Mendoza Humerez** (backend de apuntes, persistencia relacional PostgreSQL y frontend de notas).
 
-Para explorar el historial completo preservado de ambos equipos:
+Para explorar el historial completo preservado de todos los equipos:
 
 ```sh
 git log --graph --oneline --all
@@ -123,6 +125,23 @@ inválidos producen `Error` con un mensaje descriptivo.
 
 La [documentación de la tarea 02 de grupos](docs/tarea-02-grupo-trabajo.md) incluye
 UML, los ciclos TDD y las tareas siguientes.
+
+## Asignación de asientos y asistencia (HU-05)
+
+Módulo que modela la distribución espacial de un aula física y el control de asistencia diaria:
+- **Clases de dominio:** `Aula`, `Asiento` y `Estudiante` en `backend/asignacion_de_asientos/`.
+- **Reglas:** Capacidad fija de 50 asientos (10 filas x 5 columnas), validación para impedir asignar asientos ocupados, liberación y asistencia inicial por defecto en `Ausente`.
+- **Persistencia local:** Serialización en `backend/asignacion_de_asientos/datos.json` mediante `guardarDatos()` y `cargarDatos()`.
+- **Frontend interactivo:** Cuadrícula interactiva de aula en `frontend/asignacion_de_asientos/index.html`.
+- **Pruebas:** 5 pruebas unitarias Jest en `backend/asignacion_de_asientos/pruebas.test.js` normalizadas al estándar `HU-05`.
+
+## Tomar apuntes de clase (HU-06)
+
+Módulo que permite a los estudiantes gestionar notas académicas asociadas a sus materias:
+- **Backend por capas:** `ApunteService` (reglas de negocio y validaciones), `ApunteRepository` (acceso a base de datos) y enrutador Express en `backend/apuntes/src/`.
+- **Operaciones:** Listar materias, listar apuntes cronológicamente por estudiante (`x-estudiante-id`), ver detalle, crear, editar y eliminar con confirmación explícita (`confirmar=true`).
+- **Persistencia relacional:** Tablas `materias`, `estudiantes` y `apuntes` en PostgreSQL (`backend/apuntes/db/schema.sql`).
+- **Frontend interactivo:** Interfaz web completa con modales para crear, ver, editar y eliminar notas en `frontend/apuntes/` (`index.html`, `app.js`, `styles.css`).
 
 ## Persistencia
 
@@ -206,7 +225,7 @@ El frontend está desarrollado en Vue 3 con Vite, Vue Router y componentes acces
 
 ### Documentación del Proyecto
 
-- [Historias de usuario (HU-01 a HU-04)](docs/US.md)
+- [Historias de usuario (HU-01 a HU-06)](docs/US.md)
 - [Diagrama de clases unificado](docs/diagrama-clases.md)
 - [Tarjetas CRC](docs/crc.md)
 - [Tarea 01: Calendario académico](docs/tarea-01-calendario-academico.md)

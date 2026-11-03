@@ -7,7 +7,7 @@ const crearRutas = require('./routes/apunteRoutes');
 
 const app = express();
 app.use(express.json());
-app.use(express.static(path.resolve(__dirname, '../../../public')));
+app.use(express.static(path.resolve(__dirname, '../../../frontend/apuntes')));
 
 const servicio = new ApunteService(new ApunteRepository());
 app.use('/api', crearRutas(servicio));

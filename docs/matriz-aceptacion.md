@@ -116,4 +116,42 @@ Pruebas unitarias de Jest importadas desde la rama `externo/US-01-unit-test` (au
 - Campo vacío: dado que falta "lo que debe corregir", entonces se rechaza indicando cuál falta
 - Campo vacío: dado un campo con solo espacios, entonces se rechaza
 
+## HU-05 - Asignación de asientos y asistencia (SistemaAula)
+
+Pruebas unitarias de Jest importadas desde la rama `sistemaaula/modulo-asientos` (autora: Camila Araoz), normalizadas bajo la nomenclatura oficial `HU-05`. Total: 1 suite y 5 pruebas en verde.
+
+| HU | CA/RN | Caso | Dado/Cuando | Esperado | Test | Estado |
+|----|-------|------|-------------|----------|------|--------|
+| HU-05 | CA-01 | Capacidad y dimensiones del aula | Instanciar un `Aula` | Posee 50 asientos (10 filas x 5 columnas) | backend/asignacion_de_asientos/pruebas.test.js | ✅ |
+| HU-05 | CA-02 | Asiento ocupado | Asignar estudiante a asiento ya ocupado | Lanza Error "El asiento no está disponible." | backend/asignacion_de_asientos/pruebas.test.js | ✅ |
+| HU-05 | CA-03 | Liberar asiento | Liberar un asiento asignado | Regresa a estado "Disponible" | backend/asignacion_de_asientos/pruebas.test.js | ✅ |
+| HU-05 | CA-04 | Asistencia por defecto | Instanciar un `Estudiante` | Asistencia inicial es "Ausente" | backend/asignacion_de_asientos/pruebas.test.js | ✅ |
+| HU-05 | CA-05 | Modificar asistencia | Docente registra asistencia "Presente" | Asistencia cambia a "Presente" | backend/asignacion_de_asientos/pruebas.test.js | ✅ |
+| HU-05 | CA-06 | Búsqueda de estudiante | Buscar por nombre o matrícula (`buscarEstudiante`) | Retorna estudiante coincidente | backend/asignacion_de_asientos/Aula.js | ➖ |
+| HU-05 | CA-07 | Persistencia local | Guardar y cargar en `datos.json` (`guardarDatos`/`cargarDatos`) | Estados conservados en archivo JSON | backend/asignacion_de_asientos/Aula.js | ➖ |
+
+### `backend/asignacion_de_asientos/pruebas.test.js` (5 pruebas)
+- `HU-05: el aula debe crearse con 50 asientos (10 filas x 5 columnas)`
+- `HU-05: no se debe poder asignar un asiento ya ocupado`
+- `HU-05: al liberar un asiento, este vuelve a estar disponible`
+- `HU-05: un estudiante debe empezar como ausente por defecto`
+- `HU-05: el docente debe poder cambiar la asistencia a presente`
+
+---
+
+## HU-06 - Tomar apuntes de clase (SistemaAula)
+
+Módulo importado desde la rama `sistemaaula/feature/backend-apuntes` (autora: Ximena Mendoza Humerez). Código backend Express con arquitectura por capas (`ApunteService`, `ApunteRepository`, `apunteRoutes`).
+
+| HU | CA/RN | Caso | Dado/Cuando | Esperado | Test | Estado |
+|----|-------|------|-------------|----------|------|--------|
+| HU-06 | CA-01 | Listar materias | `GET /api/materias` | Lista de materias académicas | Código integrado sin cobertura original | ➖ |
+| HU-06 | CA-02 | Listar apuntes por estudiante | `GET /api/apuntes` con cabecera `x-estudiante-id` | Apuntes del estudiante ordenados cronológicamente | Código integrado sin cobertura original | ➖ |
+| HU-06 | CA-03 | Detalle de apunte | `GET /api/apuntes/:id` | Objeto apunte completo con materia y fechas | Código integrado sin cobertura original | ➖ |
+| HU-06 | CA-04 | Crear apunte | `POST /api/apuntes` con título, materia y contenido | HTTP 201 y apunte creado | Código integrado sin cobertura original | ➖ |
+| HU-06 | CA-05 | Editar apunte | `PUT /api/apuntes/:id` con campos modificados | Objeto actualizado y fecha de modificación | Código integrado sin cobertura original | ➖ |
+| HU-06 | CA-06 | Eliminar apunte | `DELETE /api/apuntes/:id?confirmar=true` | Eliminación confirmada | Código integrado sin cobertura original | ➖ |
+
+> **Nota:** HU-06 cuenta con 0 pruebas unitarias automatizadas debido a que el repositorio fuente `SistemaAula` no incluía suite de pruebas para este módulo al momento de la integración.
+
 Leyenda: ✅ prueba que pasa, ❌ prueba que falla o falta, ⏳ pendiente de otra funcionalidad, ➖ sin prueba por diseño.

@@ -78,3 +78,53 @@ Como docente, quiero consultar las entregas recibidas de una tarea, descargar lo
 - **CA-05:** Ningún campo de retroalimentación puede quedar vacío o contener únicamente espacios.
 - **CA-06:** Al registrar el feedback completo, la entrega pasa al estado `REVISADA`.
 - **CA-07:** El docente puede modificar o actualizar el feedback de una entrega ya revisada conservando su estado.
+
+---
+
+## 5. Historia de usuario: Asignación de asientos y asistencia (HU-05)
+**ID:** HU-05  
+**Nombre:** Asignación de asientos en el aula y control de asistencia.
+
+### Historia de usuario
+Como docente, quiero asignar asientos a los estudiantes dentro de un aula estructurada y registrar su asistencia diaria, para gestionar la distribución espacial del aula y mantener el control de presencia.
+
+### Criterios de aceptación
+- **CA-01:** El aula se crea con una capacidad fija de 50 asientos organizados en una matriz de 10 filas por 5 columnas.
+- **CA-02:** No se puede asignar un asiento que ya esté ocupado; el sistema lanza un error indicando "El asiento no está disponible.".
+- **CA-03:** Al liberar un asiento previamente asignado, su estado regresa a `Disponible` y se elimina la asignación del estudiante.
+- **CA-04:** Todo estudiante registrado inicia por defecto con el estado de asistencia `Ausente`.
+- **CA-05:** El docente puede registrar o modificar la asistencia de un estudiante al estado `Presente`.
+- **CA-06:** El docente puede buscar estudiantes por nombre o número de matrícula para agilizar la asignación.
+- **CA-07:** El estado de las asignaciones de asientos se persiste en formato JSON (`datos.json`).
+
+### Reglas de negocio
+- **RN-01:** La distribución del aula se define con 10 filas y 5 columnas (50 asientos numerados correlativamente del 1 al 50).
+- **RN-02:** Un asiento solo puede ser asignado a un estudiante si se encuentra en estado `Disponible`.
+- **RN-03:** Pendiente de documentar por sus autoras.
+- **RN-04:** Pendiente de documentar por sus autoras.
+- **RN-05:** Pendiente de documentar por sus autoras.
+
+---
+
+## 6. Historia de usuario: Tomar apuntes de clase (HU-06)
+**ID:** HU-06  
+**Nombre:** Gestión de apuntes de clase.
+
+### Historia de usuario
+Como estudiante, quiero crear, consultar, modificar y organizar mis apuntes vinculados a una materia, para registrar y repasar los contenidos avanzados durante las clases.
+
+### Criterios de aceptación
+- **CA-01:** El estudiante puede listar las materias académicas disponibles para asociar sus notas.
+- **CA-02:** El estudiante puede consultar la lista de sus apuntes ordenados cronológicamente por fecha de creación.
+- **CA-03:** El estudiante puede visualizar el detalle completo de un apunte seleccionado (título, materia, contenido y fechas).
+- **CA-04:** El estudiante puede crear un nuevo apunte requiriendo obligatoriamente título, materia válida y contenido.
+- **CA-05:** El estudiante puede editar el título, la materia o el contenido de un apunte existente, actualizándose su fecha de modificación.
+- **CA-06:** El estudiante puede eliminar un apunte con confirmación explícita (`confirmar=true`).
+- **CA-07:** Pendiente de documentar por sus autoras.
+
+### Reglas de negocio
+- **RN-01:** Todo apunte debe pertenecer a un estudiante identificado mediante cabecera (`x-estudiante-id`).
+- **RN-02:** La eliminación de un apunte requiere confirmación obligatoria para prevenir pérdidas accidentales de datos.
+- **RN-03:** Pendiente de documentar por sus autoras.
+- **RN-04:** Pendiente de documentar por sus autoras.
+- **RN-05:** Pendiente de documentar por sus autoras.

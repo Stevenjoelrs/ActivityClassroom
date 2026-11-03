@@ -180,6 +180,56 @@ classDiagram
     %% Adaptadores de Archivo
     RepositorioCalendario ..> RepositorioArchivo : adaptador JSON
     RepositorioGrupos ..> RepositorioArchivo : adaptador JSON
+
+    %% HU-05: Asignación de Asientos y Asistencia (SistemaAula)
+    class Asiento {
+        +number numero
+        +number fila
+        +number columna
+        +string estado
+        +string estudianteAsignado
+        +asignarEstudiante(nombre)
+        +liberarAsiento()
+    }
+
+    class Aula {
+        +Array~Asiento~ asientos
+        +buscarEstudiante(listaEstudiantes, textoBusqueda)
+        +guardarDatos()
+        +cargarDatos()
+    }
+
+    class EstudianteAsiento {
+        +string nombre
+        +string apellido
+        +string matricula
+        +string asistencia
+        +registrarAsistencia(nuevoEstado)
+    }
+
+    Aula "1" *-- "50" Asiento : compone
+    Asiento ..> EstudianteAsiento : asigna
+
+    %% HU-06: Tomar Apuntes (SistemaAula)
+    class ApunteService {
+        -ApunteRepository repositorio
+        +listar(estudianteId) Array
+        +obtener(id, estudianteId) Object
+        +crear(estudianteId, datos) Object
+        +editar(id, estudianteId, datos) Object
+        +eliminar(id, estudianteId, confirmar)
+    }
+
+    class ApunteRepository {
+        -Pool pool
+        +listar(estudianteId) Array
+        +obtener(id, estudianteId) Object
+        +crear(estudianteId, datos) Object
+        +editar(id, estudianteId, datos) Object
+        +eliminar(id, estudianteId)
+    }
+
+    ApunteService --> ApunteRepository : delega
 ```
 
 ---
@@ -191,12 +241,15 @@ classDiagram
 - **`CalendarioAcademico` (HU-01)**: Colección y consultas especializadas por materia. Retorna estructuras defensivas e inmutables.
 - **`GrupoTrabajo` (HU-02)**: Entidad congelada que encapsula la formación por afinidad o sorteo, validando no duplicidad de integrantes y cumplimiento de cupos máximos.
 - **`RegistroGrupos` (HU-02)**: Gestiona el registro y consulta de grupos por actividad académica.
+- **`Aula` y `Asiento` (HU-05)**: Matriz física del aula con 50 asientos correlativos (10x5), validación de disponibilidad y persistencia en `datos.json`.
+- **`Estudiante` (HU-05)**: Representación de estudiante con registro de asistencia (por defecto `Ausente`).
 
 ### 2.2. Capa de Aplicación / Servicios
 - **`ServicioCalendario`**: Orquesta el registro y las consultas convirtiendo errores de dominio en `AppError(400)`.
 - **`ServicioGrupos`**: Coordina validaciones y el registro de grupos por actividad con `AppError(400)`.
 - **`ServicioEntregas` (HU-03)**: Valida archivos adjuntos (MIME, tamaño $\le$ 10 MB, extensiones `.pdf`, `.docx`, `.zip`), valida remitente institucional y coordina con `correoSimulado`.
 - **`ServicioRevision` (HU-04)**: Filtra entregas por docente y tarea, extrae la más reciente por estudiante y actualiza el feedback estructurado en tres aspectos (`correcto`, `incorrecto`, `corregir`).
+- **`ApunteService` (HU-06)**: Reglas de negocio para creación, edición, consulta y eliminación de apuntes asociados a materias y estudiantes.
 
 ### 2.3. Capa de Controladores y Rutas HTTP
 - **`ControladorCalendario`**: Expone `POST /api/calendario/eventos` y `GET /api/calendario?materia=:id`.

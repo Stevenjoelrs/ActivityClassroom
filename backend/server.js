@@ -22,7 +22,7 @@ const pool = new Pool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
 });
-const publicDirectory = path.join(__dirname, '..', 'public');
+const publicDirectory = path.join(__dirname, '..', 'frontend', 'apuntes');
 const seatingDirectory = path.join(__dirname, '..', 'frontend', 'asignacion_de_asientos');
 
 app.use(express.json({ limit: '100kb' }));

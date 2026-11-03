@@ -199,3 +199,52 @@ Una tarjeta por clase implementada. Los colaboradores coinciden con el código.
 | Actualizar feedback y estado de la entrega | AlmacenCompartido |
 
 **Atributos clave:** `listar`, `buscar`, `guardarFeedback`.
+
+## Aula (HU-05)
+
+| Responsabilidades | Colaboradores |
+| --- | --- |
+| Inicializar la cuadrícula física del aula con 50 asientos (10x5) | Asiento |
+| Buscar estudiantes en una lista por nombre o matrícula | Estudiante |
+| Guardar y cargar el estado de asignaciones en `datos.json` | fs, path |
+
+**Atributos clave:** `asientos`, `buscarEstudiante`, `guardarDatos`, `cargarDatos`.
+
+## Asiento (HU-05)
+
+| Responsabilidades | Colaboradores |
+| --- | --- |
+| Representar la posición física (número, fila, columna) de un asiento | - |
+| Asignar un estudiante validando que el asiento esté disponible | Estudiante |
+| Liberar un asiento asignado restableciendo estado 'Disponible' | - |
+
+**Atributos clave:** `numero`, `fila`, `columna`, `estado`, `estudianteAsignado`, `asignarEstudiante`, `liberarAsiento`.
+
+## Estudiante (HU-05)
+
+| Responsabilidades | Colaboradores |
+| --- | --- |
+| Representar datos del estudiante (nombre, apellido, matrícula) | - |
+| Gestionar el estado de asistencia (por defecto 'Ausente') | - |
+| Registrar cambio de estado de asistencia ('Presente', etc.) | - |
+
+**Atributos clave:** `nombre`, `apellido`, `matricula`, `asistencia`, `registrarAsistencia`.
+
+## ApunteService (HU-06)
+
+| Responsabilidades | Colaboradores |
+| --- | --- |
+| Validar reglas de negocio para creación, edición y consulta de notas | ApunteRepository, ErrorNegocio |
+| Validar confirmación obligatoria para eliminar apuntes | ApunteRepository |
+| Listar apuntes por estudiante y obtener detalle | ApunteRepository |
+
+**Atributos clave:** `listar`, `obtener`, `crear`, `editar`, `eliminar`.
+
+## ApunteRepository (HU-06)
+
+| Responsabilidades | Colaboradores |
+| --- | --- |
+| Ejecutar consultas SQL en PostgreSQL sobre la tabla `apuntes` | pg (Pool) |
+| Proveer operaciones CRUD aisladas por `estudiante_id` | - |
+
+**Atributos clave:** `listar(estudianteId)`, `obtener(id, estudianteId)`, `crear`, `editar`, `eliminar`.

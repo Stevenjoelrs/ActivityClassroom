@@ -8,7 +8,6 @@ dist-ssr/
 .env.*
 !.env.example
 *.local
-datos.json
 
 # Logs y archivos del equipo
 *.log
@@ -19,3 +18,10 @@ datos.json
 .agents/
 .aws/
 .codex/
+
+# Persistencia local de asignación de asientos
+datos.json
+
+# Archivos de bloqueo en raíz generados por scripts
+/pnpm-lock.yaml
+/package-lock.json
