@@ -13,5 +13,8 @@
     "javascript"
   ],
   "author": "Camila y Ximena",
-  "license": "ISC"
-} 
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^30.5.2"
+  }
+}
