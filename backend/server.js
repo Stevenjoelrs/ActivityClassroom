@@ -12,7 +12,7 @@ const {
   validateName,
   validateNote,
   validateStudent,
-} = require('./validation');
+} = require('./apuntes/src/validation');
 
 const app = express();
 const pool = new Pool({

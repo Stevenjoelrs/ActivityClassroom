@@ -13,7 +13,8 @@
   "jest": {
     "testMatch": [
       "<rootDir>/src/**/tests/**/*.test.js",
-      "<rootDir>/asignacion_de_asientos/**/*.test.js"
+      "<rootDir>/asignacion_de_asientos/**/*.test.js",
+      "<rootDir>/apuntes/**/*.test.js"
     ]
   },
   "dependencies": {
