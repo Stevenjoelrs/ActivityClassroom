@@ -3,8 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "pnpm run test:dominio && pnpm run test:backend",
+    "test": "pnpm run test:dominio && pnpm run test:backend && pnpm run test:frontend",
     "test:dominio": "node --test \"backend/src/compartido/*.test.js\" \"backend/src/modulos/calendario-academico/*.test.js\" \"backend/src/modulos/grupos-trabajo/*.test.js\"",
-    "test:backend": "pnpm --prefix backend test"
+    "test:backend": "pnpm --prefix backend test",
+    "test:frontend": "pnpm --prefix frontend test"
   }
 }
