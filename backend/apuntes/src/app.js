@@ -1,4 +1,5 @@
-require('dotenv').config();
+const path = require('node:path');
+require('dotenv').config({ path: path.resolve(__dirname, '../../../.env') });
 const express = require('express');
 const ApunteRepository = require('./repositories/apunteRepository');
 const { ApunteService } = require('./services/apunteService');
@@ -6,7 +7,7 @@ const crearRutas = require('./routes/apunteRoutes');
 
 const app = express();
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(path.resolve(__dirname, '../../../public')));
 
 const servicio = new ApunteService(new ApunteRepository());
 app.use('/api', crearRutas(servicio));
