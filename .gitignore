@@ -1,6 +1,21 @@
+# Dependencias y compilaciones
 node_modules/
+dist/
+dist-ssr/
+
+# Configuración local; solo se versionan los ejemplos
 .env
 .env.*
 !.env.example
+*.local
 datos.json
-frontend/dist/
+
+# Logs y archivos del equipo
+*.log
+.DS_Store
+.idea/
+
+# Directorios locales de herramientas
+.agents/
+.aws/
+.codex/

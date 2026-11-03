@@ -1,65 +1,220 @@
 # ActivityClassroom
 
-Sistema integrado de gestión de aula que combina módulos de **ActivityClassroom** (HU-01 y HU-02) y **SistemaAula** (asignación de asientos y apuntes).
+Primeros incrementos de **HU-01** (calendario académico) y **HU-02** (registro de
+grupos de trabajo). JavaScript con Node.js, sin dependencias externas.
 
-## Módulos
+## Pruebas
 
-### HU-01 — Calendario Académico (`backend/calendario/`)
-Registra y consulta eventos académicos (clases, entregas, actividades, suspensiones) de una materia.
-
-### HU-02 — Grupos de Trabajo (`backend/grupos/`)
-Registra grupos por afinidad o sorteo y valida integrantes, duplicados y máximos.
-
-### Asignación de Asientos y Asistencia (`backend/asignacion_de_asientos/`)
-Gestión de asientos en el aula (10 filas × 5 columnas), asignación de estudiantes y registro de asistencia. Datos persistidos en PostgreSQL.
-
-### Apuntes (`backend/apuntes/`)
-CRUD de apuntes asociados a estudiante y materia, con reglas de negocio de longitud y contenido. Backend Express + PostgreSQL. Requiere base de datos configurada.
-
----
-
-## Ejecutar pruebas
+El repositorio integra dos suites de pruebas automatizadas:
 
 ```sh
-npm install
-npm test
+pnpm test
 ```
 
-Resultado esperado: **43 pruebas de ActivityClassroom + 5 de asientos = 48 en verde**.
+Este comando ejecuta ambas suites en secuencia:
+1. `pnpm run test:dominio`: ejecuta **74 pruebas** nativas del dominio, persistencia y servicios de HU-01 y HU-02 utilizando el runner nativo `node --test` y `node:assert/strict`. No requiere ninguna dependencia externa instalada.
+2. `pnpm run test:backend`: ejecuta **23 pruebas** unitarias de los módulos de entregas y revisión (HU-03 y HU-04) utilizando **Jest** con módulos ESM (`--experimental-vm-modules`).
 
-> Los módulos de apuntes y el backend de asistencia no tienen pruebas unitarias aún.
+### ¿Por qué dos suites separadas?
+Nuestras pruebas de HU-01 y HU-02 siguen la regla de cero dependencias externas y usan el ejecutor estándar `node --test` con patrones específicos por carpeta. Las pruebas de HU-03 y HU-04 provienen del repositorio externo de Joyce y arubis y fueron diseñadas con Jest, apoyándose en utilidades como `jest.fn()` y `expect()`. Para evitar que `node --test` intente ejecutar archivos de Jest o que Jest capture pruebas de `node:test`, cada suite corre con su propio entorno y patrones delimitados (`testMatch` en Jest y argumentos por carpeta en `node --test`).
 
----
+> **Nota:** Para ejecutar las pruebas de Jest se requiere haber instalado las dependencias del backend con `pnpm install` dentro de la carpeta `backend/`.
 
-## Levantar el servidor (asientos + apuntes)
-
-### Requisitos
-
-- Node.js 20.13 o posterior
-- PostgreSQL
-
-### Configuración
+Para ejecutar cada suite por separado:
 
 ```sh
-cp .env.example .env
-# Editar .env con las credenciales de PostgreSQL
-npm install
-npm run db:setup   # Crea tablas en la base de datos
-npm run dev        # Servidor con recarga automática
+# Solo pruebas de dominio y persistencia (node --test)
+pnpm run test:dominio
+
+# Solo pruebas del backend externo (Jest)
+pnpm run test:backend
 ```
 
-La aplicación estará en:
-- Apuntes: `http://localhost:3000`
-- Asientos: `http://localhost:3000/asignacion-de-asientos/`
-- API: `http://localhost:3000/api`
+## Equivalencia de historias
 
-> La configuración `.env` no debe subirse al repositorio. Los módulos de calendario y grupos corren sin PostgreSQL.
+La correspondencia entre las historias de usuario de ambos equipos es la siguiente:
 
----
+| Repositorio externo | Nuestra numeración | Funcionalidad |
+|---|---|---|
+| **US-01** | **HU-03** | Envío simulado de tareas por correo institucional con validación de adjunto |
+| **US-02** | **HU-04** | Revisión de tareas por el docente y retroalimentación (lo que está bien, lo que está mal, lo que debe corregir) |
+| — | **HU-01** | Calendario académico (clases, tareas, actividades, suspensiones) |
+| — | **HU-02** | Grupos de trabajo (modalidades afinidad y sorteo) |
 
-## Pendientes
+## Créditos y autoría
 
-- Unificar identificadores de estudiante (`EST-01` vs `matricula`) y de materia (`MAT-101` vs `materia.id`).
-- Persistencia mixta: memoria (HU-01 y HU-02) vs PostgreSQL (asientos, apuntes).
-- Pruebas unitarias para apuntes.
-- Frontend de apuntes integrado a la estructura.
+Este repositorio consolida el trabajo colaborativo de dos equipos:
+- **HU-01 y HU-02 (Calendario y Grupos):** Desarrolladas por Steven Joel Ramos Salazar y kn0wles.
+- **HU-03 y HU-04 (Entregas y Revisión):** Desarrolladas originalmente en el repositorio externo [Sistema-academico](https://github.com/anjoyy24/Sistema-academico.git) por **Joyce** (implementación de historias y configuración base) y **arubis** (diseño e implementación del conjunto de pruebas Jest en la rama `US-01-unit-test`).
+
+Para explorar el historial completo preservado de ambos equipos:
+
+```sh
+git log --graph --oneline --all
+```
+
+## Calendario académico (HU-01)
+
+La clase `EventoAcademico` representa una clase, una entrega de tarea, una
+actividad o una suspensión, con fecha, horario opcional y descripción.
+`CalendarioAcademico` registra eventos y consulta únicamente los de una materia;
+si no existen eventos, devuelve un mensaje informativo y un arreglo vacío. Tanto
+los eventos como los resultados de las consultas son de solo lectura.
+
+### Uso mínimo
+
+```javascript
+import { CalendarioAcademico, EventoAcademico } from "./backend/src/modulos/calendario-academico/calendario-academico.js";
+
+const calendario = new CalendarioAcademico();
+calendario.registrarEvento(
+  new EventoAcademico({
+    id: "EV-01",
+    materiaId: "MAT-101",
+    tipo: "entrega_tarea",
+    fecha: "2026-11-10",
+    horario: "08:00 - 10:00",
+    descripcion: "Entrega del primer avance",
+  }),
+);
+
+console.log(calendario.consultarMateria("MAT-101").eventos);
+```
+
+Los identificadores son cadenas no vacías sin espacios en sus extremos y la
+fecha debe ser una fecha real en formato `AAAA-MM-DD`. Los tipos admitidos son
+`clase`, `entrega_tarea`, `actividad` y `suspension`. El horario es opcional. Los
+datos inválidos producen `Error` con un mensaje descriptivo.
+
+La [documentación de la tarea de calendario](docs/tarea-01-calendario-academico.md)
+incluye UML, los ciclos TDD y las tareas siguientes.
+
+## Grupos de trabajo (HU-02)
+
+Primer incremento de **HU-02**: registrar y consultar los datos de un grupo de
+trabajo asociado a una actividad académica.
+
+La clase `GrupoTrabajo` admite afinidad o sorteo, rechaza integrantes duplicados,
+respeta un tamaño máximo opcional y conserva los integrantes de solo lectura.
+La modalidad sorteo registra un resultado ya definido; no distribuye estudiantes.
+
+### Uso mínimo
+
+```javascript
+import { GrupoTrabajo } from "./backend/src/modulos/grupos-trabajo/grupo-trabajo.js";
+
+const grupo = new GrupoTrabajo({
+  nombre: "Equipo Alfa",
+  actividadId: "ACT-01",
+  modalidad: "afinidad",
+  integrantes: ["EST-01", "EST-02"],
+  maximoIntegrantes: 3,
+});
+
+console.log(grupo.nombre, grupo.actividadId, grupo.modalidad);
+console.log(grupo.integrantes);
+```
+
+Los identificadores son cadenas no vacías sin espacios en sus extremos. Los
+integrantes se reciben como un arreglo y se guardan en una copia congelada. El
+grupo también se congela para impedir reasignaciones. El máximo es opcional
+(`null` cuando no existe) y debe ser un entero positivo seguro. Los datos
+inválidos producen `Error` con un mensaje descriptivo.
+
+La [documentación de la tarea 02 de grupos](docs/tarea-02-grupo-trabajo.md) incluye
+UML, los ciclos TDD y las tareas siguientes.
+
+## Persistencia
+
+El almacenamiento en la aplicación se gestiona de forma desacoplada mediante el patrón repositorio:
+
+1. **Almacenamiento en memoria compartida (por defecto):**
+   Todos los módulos (`calendario-academico`, `grupos-trabajo`, `entregas-tareas` y `revision-tareas`) utilizan por defecto el almacén compartido en memoria (`backend/src/compartido/datos-memoria.js`), facilitando la ejecución de pruebas y demostraciones sin dependencias de servicios externos.
+
+2. **Esquema relacional unificado:**
+   En `backend/database/schema.sql` se define el modelo relacional para PostgreSQL con las tablas correspondientes a los 4 módulos: `estudiantes`, `docentes`, `tareas`, `entregas`, `feedback`, `eventos_academicos`, `grupos_trabajo` y `grupo_integrantes`.
+
+3. **Adaptador opcional a archivos JSON (HU-01 y HU-02):**
+   Para persistencia local en disco de eventos y grupos, se dispone de adaptadores en `backend/src/compartido/repositorios.js` que serializan a `eventos.json` y `grupos.json` dentro de `backend/data/` (o la ruta configurada en `DATA_DIR`).
+
+### Ubicación y configuración (DATA_DIR)
+
+La función `crearRepositoriosPersistentes({ directorio })` resuelve la ubicación
+según la siguiente prioridad:
+1. El argumento `{ directorio }` provisto explícitamente.
+2. La variable de entorno `process.env.DATA_DIR`.
+3. El directorio por defecto `backend/data/`.
+
+### Control de versiones y pruebas
+
+- Los archivos de datos generados en `backend/data/` están ignorados mediante
+  `backend/data/.gitignore` (`*` y `!.gitignore`), garantizando que la información
+  persistida localmente no se versione en el repositorio.
+- Las pruebas automatizadas no tocan `backend/data/`; en su lugar, utilizan directorios
+  temporales creados con `node:fs` (`mkdtempSync`) y `node:os` (`tmpdir()`),
+  limpiándose automáticamente al finalizar la ejecución.
+- La escritura a disco se realiza de forma atómica mediante un archivo temporal y
+  `fs.renameSync`, garantizando que tras guardar no queden archivos temporales residuales.
+
+## Interfaz
+
+El frontend está desarrollado en Vue 3 con Vite, Vue Router y componentes accesibles (shadcn-vue y lucide). Consume el backend Express a través del proxy configurado en Vite hacia `/api`.
+
+### Cómo ejecutar la aplicación
+
+1. **Iniciar el backend:**
+   ```bash
+   cd backend
+   pnpm install
+   pnpm run dev
+   ```
+   El servidor iniciará en `http://127.0.0.1:3000/api`.
+
+2. **Iniciar el frontend:**
+   ```bash
+   cd frontend
+   pnpm install
+   pnpm run dev
+   ```
+   La interfaz estará disponible en `http://127.0.0.1:5173`.
+
+### Rutas de la interfaz
+
+| Ruta | Nombre | Vista | Descripción |
+|---|---|---|---|
+| `/estudiante/calendario` | `calendario-estudiante` | `CalendarioView.vue` | Consulta de eventos por materia (HU-01) con avisos de clases suspendidas |
+| `/docente/eventos` | `eventos-docente` | `EventosView.vue` | Registro de eventos académicos (clase, tarea, actividad, suspensión) (HU-01) |
+| `/docente/grupos` | `grupos-docente` | `GruposView.vue` | Registro de grupos por afinidad o sorteo y consulta por actividad (HU-02) |
+| `/estudiante` | `inicio-estudiante` | `InicioEstudianteView.vue` | Envío simulado de tareas (HU-03) |
+| `/docente` | `inicio-docente` | `InicioDocenteView.vue` | Revisión de tareas y retroalimentación (HU-04) |
+| `/` | `inicio` | `InicioView.vue` | Estado de la API y presentación del sistema |
+
+### Endpoints HTTP de la API
+
+- **HU-01 (Calendario)**:
+  - `POST /api/calendario/eventos` → 201 `{ evento }`
+  - `GET /api/calendario?materia=<id>` → 200 `{ mensaje, eventos }`
+- **HU-02 (Grupos)**:
+  - `POST /api/grupos` → 201 `{ grupo }`
+  - `GET /api/grupos?actividad=<id>` → 200 `{ grupos }`
+- **HU-03 (Entregas)**:
+  - `POST /api/entregas` → 201 `{ id, estado, enviado, mensaje }`
+- **HU-04 (Revisión)**:
+  - `GET /api/revision/entregas?docente=<correo>&tarea=<codigo>` → 200 `{ entregas, simulado }`
+  - `PUT /api/revision/entregas/:id/feedback` → 200 `{ ...entregaRevisada }`
+  - `GET /api/revision/entregas/:id/adjunto?docente=<correo>` → Descarga binaria
+
+### Documentación del Proyecto
+
+- [Historias de usuario (HU-01 a HU-04)](docs/US.md)
+- [Diagrama de clases unificado](docs/diagrama-clases.md)
+- [Tarjetas CRC](docs/crc.md)
+- [Tarea 01: Calendario académico](docs/tarea-01-calendario-academico.md)
+- [Tarea 02: Formación de grupos](docs/tarea-02-grupo-trabajo.md)
+- [Tarea 03: Envío de tareas por correo](docs/tarea-03-entrega-tarea.md)
+- [Tarea 04: Revisión con feedback](docs/tarea-04-revision-tarea.md)
+- [Matriz de aceptación](docs/matriz-aceptacion.md)
+- [Roles y responsables](docs/roles.md)
+- [Bitácora](docs/bitacora.md)
+- [Informe de integración](docs/informe-integracion-repo-externo.md)
+- [Fuentes de consulta](docs/fuentes.md)

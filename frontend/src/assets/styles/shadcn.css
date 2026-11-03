@@ -1,0 +1,51 @@
+:root {
+  --background: var(--color-fondo);
+  --foreground: var(--color-texto);
+  --card: var(--color-superficie);
+  --card-foreground: var(--color-texto);
+  --popover: var(--color-superficie);
+  --popover-foreground: var(--color-texto);
+  --primary: var(--color-primario);
+  --primary-foreground: var(--color-texto);
+  --secondary: var(--color-secundario);
+  --secondary-foreground: var(--color-texto);
+  --muted: var(--color-deshabilitado);
+  --muted-foreground: var(--color-texto-secundario);
+  --accent: var(--color-primario-suave);
+  --accent-foreground: var(--color-texto);
+  --destructive: var(--color-peligro);
+  --destructive-foreground: var(--color-superficie);
+  --border: var(--color-borde);
+  --input: var(--color-borde-control);
+  --ring: var(--color-foco);
+  --radius: var(--radio-borde);
+}
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+/* Sustituye las propiedades de borde que normalmente aporta el reset de Tailwind. */
+@layer base {
+  *, ::before, ::after { border-style: solid; border-width: 0; border-color: var(--border); }
+}

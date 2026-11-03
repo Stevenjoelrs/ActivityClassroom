@@ -1,0 +1,51 @@
+:root {
+  /* Paleta de referencia y variantes para interacción. */
+  --color-primario: #958ce8;
+  --color-primario-hover: #8378df;
+  --color-primario-suave: #efedfc;
+  --color-marino: #183b63;
+  --color-marino-hover: #102c4b;
+  --color-marino-suave: #eaf3ff;
+  --color-sobre-marino: #ffffff;
+  --color-secundario: #acd1fd;
+  --color-secundario-hover: #92bff6;
+  --color-texto: #21222d;
+  --color-texto-secundario: #555664;
+  --color-fondo: #f5f5f9;
+  --color-superficie: #ffffff;
+  --color-borde: #dbdbe5;
+  --color-borde-control: #777885;
+  --color-enlace: #5143a6;
+  --color-enlace-hover: #3d307f;
+  --color-foco: #5143a6;
+  --color-deshabilitado: #dbdbe5;
+  --color-peligro: #b42335;
+  --color-peligro-hover: #911c2a;
+  --color-exito: #22643c;
+  --color-exito-suave: #edf7f0;
+  --color-advertencia: #795400;
+  --color-advertencia-suave: #fff5d6;
+  --color-error-suave: #fff0f1;
+  --color-info-suave: #eaf3ff;
+
+  --fuente-principal: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --texto-pequeno: 0.875rem;
+  --texto-normal: 1rem;
+  --texto-destacado: 1.125rem;
+  --titulo-pagina: clamp(1.75rem, 4vw, 2rem);
+  --titulo-seccion: 1.5rem;
+  --titulo-subseccion: 1.25rem;
+  --peso-normal: 400;
+  --peso-medio: 600;
+  --peso-fuerte: 700;
+  --interlineado-texto: 1.6;
+  --interlineado-titulo: 1.25;
+
+  --espacio-1: 0.5rem;
+  --espacio-2: 1rem;
+  --espacio-3: 1.5rem;
+  --espacio-4: 2rem;
+  --espacio-5: 3rem;
+  --radio-borde: 0.5rem;
+  --ancho-contenido: 70rem;
+}

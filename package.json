@@ -1,29 +1,10 @@
 {
   "name": "activity-classroom",
-  "version": "1.0.0",
-  "description": "Sistema integrado de gestión de aula (ActivityClassroom + SistemaAula)",
   "private": true,
-  "main": "backend/server.js",
+  "type": "module",
   "scripts": {
-    "start": "node backend/server.js",
-    "dev": "node --watch-path=backend --watch-path=public backend/server.js",
-    "db:setup": "node backend/setup-db.js",
-    "test": "node node_modules/jest/bin/jest.js --runInBand",
-    "test:seating": "node node_modules/jest/bin/jest.js pruebas.test.js --runInBand"
-  },
-  "dependencies": {
-    "dotenv": "^18.0.9",
-    "express": "^5.3.0",
-    "pg": "^8.23.1"
-  },
-  "devDependencies": {
-    "jest": "^30.5.2",
-    "nodemon": "^3.1.14"
-  },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "tests/validation.test.js"
-    ]
+    "test": "pnpm run test:dominio && pnpm run test:backend",
+    "test:dominio": "node --test \"backend/src/compartido/*.test.js\" \"backend/src/modulos/calendario-academico/*.test.js\" \"backend/src/modulos/grupos-trabajo/*.test.js\"",
+    "test:backend": "pnpm --prefix backend test"
   }
 }
