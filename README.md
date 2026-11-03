@@ -8,26 +8,26 @@ grupos de trabajo). JavaScript con Node.js, sin dependencias externas.
 El repositorio integra dos suites de pruebas automatizadas:
 
 ```sh
-npm test
+pnpm test
 ```
 
 Este comando ejecuta ambas suites en secuencia:
-1. `npm run test:dominio`: ejecuta **74 pruebas** nativas del dominio, persistencia y servicios de HU-01 y HU-02 utilizando el runner nativo `node --test` y `node:assert/strict`. No requiere ninguna dependencia externa instalada.
-2. `npm run test:backend`: ejecuta **23 pruebas** unitarias de los módulos de entregas y revisión (HU-03 y HU-04) utilizando **Jest** con módulos ESM (`--experimental-vm-modules`).
+1. `pnpm run test:dominio`: ejecuta **74 pruebas** nativas del dominio, persistencia y servicios de HU-01 y HU-02 utilizando el runner nativo `node --test` y `node:assert/strict`. No requiere ninguna dependencia externa instalada.
+2. `pnpm run test:backend`: ejecuta **23 pruebas** unitarias de los módulos de entregas y revisión (HU-03 y HU-04) utilizando **Jest** con módulos ESM (`--experimental-vm-modules`).
 
 ### ¿Por qué dos suites separadas?
 Nuestras pruebas de HU-01 y HU-02 siguen la regla de cero dependencias externas y usan el ejecutor estándar `node --test` con patrones específicos por carpeta. Las pruebas de HU-03 y HU-04 provienen del repositorio externo de Joyce y arubis y fueron diseñadas con Jest, apoyándose en utilidades como `jest.fn()` y `expect()`. Para evitar que `node --test` intente ejecutar archivos de Jest o que Jest capture pruebas de `node:test`, cada suite corre con su propio entorno y patrones delimitados (`testMatch` en Jest y argumentos por carpeta en `node --test`).
 
-> **Nota:** Para ejecutar las pruebas de Jest se requiere haber instalado las dependencias del backend con `npm ci` dentro de la carpeta `backend/`.
+> **Nota:** Para ejecutar las pruebas de Jest se requiere haber instalado las dependencias del backend con `pnpm install` dentro de la carpeta `backend/`.
 
 Para ejecutar cada suite por separado:
 
 ```sh
 # Solo pruebas de dominio y persistencia (node --test)
-npm run test:dominio
+pnpm run test:dominio
 
 # Solo pruebas del backend externo (Jest)
-npm run test:backend
+pnpm run test:backend
 ```
 
 ## Equivalencia de historias
@@ -161,18 +161,18 @@ El frontend está desarrollado en Vue 3 con Vite, Vue Router y componentes acces
 1. **Iniciar el backend:**
    ```bash
    cd backend
-   npm ci
-   npm run dev
+   pnpm install
+   pnpm run dev
    ```
-   El servidor iniciará en `http://localhost:3000/api`.
+   El servidor iniciará en `http://127.0.0.1:3000/api`.
 
 2. **Iniciar el frontend:**
    ```bash
    cd frontend
-   npm ci
-   npm run dev
+   pnpm install
+   pnpm run dev
    ```
-   La interfaz estará disponible en `http://localhost:5173`.
+   La interfaz estará disponible en `http://127.0.0.1:5173`.
 
 ### Rutas de la interfaz
 

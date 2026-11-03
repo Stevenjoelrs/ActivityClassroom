@@ -8,13 +8,13 @@ Desde la raíz del proyecto:
 
 ```bash
 cd frontend
-npm ci
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
-Abre la dirección que muestra Vite, normalmente `http://localhost:5173`.
+Abre la dirección que muestra Vite, normalmente `http://127.0.0.1:5173`.
 
-El backend debe ejecutarse en `http://localhost:3000` para que funcionen las peticiones a `/api`. El proxy de desarrollo se configura en `vite.config.js`.
+El backend debe ejecutarse en `http://127.0.0.1:3000` para que funcionen las peticiones a `/api`. El proxy de desarrollo se configura en `vite.config.js`.
 
 La demo usa correo simulado y datos en memoria. No requiere Google ni PostgreSQL. Los datos se pierden al reiniciar el backend.
 
@@ -51,7 +51,7 @@ frontend/
 ├── components.json           # Configuración de shadcn-vue en JavaScript
 ├── jsconfig.json             # Alias @ para importar desde src/
 ├── vite.config.js            # Configuración de Vite y proxy hacia el backend
-├── package.json              # Dependencias y scripts npm
+├── package.json              # Dependencias y scripts pnpm
 └── package-lock.json         # Versiones exactas de las dependencias
 ```
 

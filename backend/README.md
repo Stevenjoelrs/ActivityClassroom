@@ -8,13 +8,13 @@ Desde la raíz:
 
 ```bash
 cd backend
-npm ci
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 El puerto predeterminado es `3000`. Si ya tienes `.env`, verifica `PORT=3000`. El archivo `.env` es opcional para esta demo; `.env.example` muestra las variables admitidas.
 
-Deja el backend ejecutándose mientras usas el frontend. `npm start` ejecuta sin nodemon. Para detenerlo, presiona **Ctrl+C**. Las entregas, los archivos y el feedback se pierden al reiniciar Express, incluso cuando nodemon reinicia por un cambio de código.
+Deja el backend ejecutándose mientras usas el frontend. `pnpm start` ejecuta sin el modo watch. Para detenerlo, presiona **Ctrl+C**. Las entregas, los archivos y el feedback se pierden al reiniciar Express, incluso cuando se reinicia por un cambio de código.
 
 ## Estructura por funcionalidad
 
