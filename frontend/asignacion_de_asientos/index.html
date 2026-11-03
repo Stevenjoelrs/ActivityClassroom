@@ -4,131 +4,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistemas de Información 2 - AulaU</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #09090b;
-            --bg-card: rgba(24, 24, 27, 0.7);
+            --bg-dark: #0f172a; /* Azul muy oscuro, casi negro */
+            --bg-panel: #1e293b; /* Azul oscuro para paneles */
+            --bg-element: #334155; /* Un poco más claro para inputs */
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --primary-gradient: linear-gradient(135deg, #6366f1, #a855f7);
-            --danger-gradient: linear-gradient(135deg, #ef4444, #f97316);
-            --success-gradient: linear-gradient(135deg, #10b981, #3b82f6);
-            --border-color: rgba(255, 255, 255, 0.08);
+            --primary: #14b8a6; /* Verde Teal / Esmeralda */
+            --primary-hover: #0d9488;
+            --danger: #ef4444;
+            --success: #10b981;
+            --border: #334155;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         
-        body { 
-            background-color: var(--bg-dark); 
-            color: var(--text-main); 
-            min-height: 100vh;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.15) 0px, transparent 50%);
-            background-attachment: fixed;
-            padding-bottom: 40px;
-        }
+        body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
 
         /* --- HEADER SUPERIOR --- */
         .header {
-            padding: 20px 40px; display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid var(--border-color); background: rgba(9, 9, 11, 0.8); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 50;
+            background-color: var(--bg-panel); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border);
         }
-        .logo-area { display: flex; flex-direction: column; }
-        .logo-title { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .logo-subtitle { font-size: 13px; color: var(--text-muted); font-weight: 400; margin-top: 2px; }
+        .logo-area h1 { font-size: 22px; font-weight: 700; color: var(--text-main); }
+        .logo-area p { font-size: 13px; color: var(--primary); font-weight: 500; }
         
         .profile { display: flex; align-items: center; gap: 15px; }
         .profile-text { text-align: right; }
-        .profile-text h4 { font-size: 16px; font-weight: 600; }
-        .profile-text p { font-size: 13px; color: var(--text-muted); }
-        .avatar { 
-            width: 45px; height: 45px; border-radius: 50%; background: var(--primary-gradient); 
-            display: flex; justify-content: center; align-items: center; font-weight: 800; font-size: 18px; box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
-        }
+        .profile-text h4 { font-size: 14px; font-weight: 600; }
+        .profile-text p { font-size: 12px; color: var(--text-muted); }
+        .avatar { width: 40px; height: 40px; border-radius: 8px; background: var(--primary); color: var(--bg-dark); display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 16px; }
 
-        /* --- PESTAÑAS (Tabs) --- */
-        .tabs-wrapper { display: flex; justify-content: center; margin-top: 30px; padding: 0 20px; }
-        .tabs { 
-            display: flex; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); 
-            padding: 6px; border-radius: 100px; backdrop-filter: blur(10px); gap: 5px;
-        }
+        /* --- PESTAÑAS ARRIBA --- */
+        .tabs-container { display: flex; justify-content: center; gap: 10px; padding: 20px; background-color: var(--bg-dark); }
         .tab-btn {
-            background: transparent; border: none; color: var(--text-muted); padding: 12px 24px;
-            font-size: 15px; font-weight: 600; border-radius: 100px; cursor: pointer; transition: all 0.3s ease;
-            display: flex; align-items: center; gap: 10px;
+            background: transparent; border: 1px solid var(--border); color: var(--text-muted); 
+            padding: 10px 24px; border-radius: 30px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.3s;
         }
-        .tab-btn:hover { color: white; }
-        .tab-btn.active { background: var(--primary-gradient); color: white; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
-        .tab-btn svg { width: 18px; height: 18px; fill: currentColor; }
+        .tab-btn:hover { background: var(--bg-element); color: var(--text-main); }
+        .tab-btn.active { background: var(--primary); border-color: var(--primary); color: var(--bg-dark); box-shadow: 0 4px 10px rgba(20, 184, 166, 0.2); }
 
-        /* --- CONTENIDO PRINCIPAL --- */
-        .main-content { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
-        .vista { display: none; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        .vista.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        /* --- AREA DE CONTENIDO --- */
+        .main-area { flex: 1; padding: 0 40px 40px 40px; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .view { display: none; animation: fadeIn 0.3s; }
+        .view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- TARJETAS GLASSMORPHISM --- */
-        .card { 
-            background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 24px; 
-            padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); backdrop-filter: blur(20px); margin-bottom: 30px;
-        }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .card-header h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+        /* --- TARJETAS Y PANELES --- */
+        .panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .panel-header h2 { font-size: 18px; font-weight: 600; }
 
         /* --- BUSCADOR --- */
-        .search-box { position: relative; max-width: 500px; margin-bottom: 30px; }
-        .search-input { 
-            width: 100%; padding: 16px 20px 16px 50px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); 
-            border-radius: 16px; color: white; font-size: 15px; outline: none; transition: 0.3s; font-family: 'Outfit';
-        }
-        .search-input:focus { border-color: #a855f7; box-shadow: 0 0 20px rgba(168, 85, 247, 0.2); }
-        
-        /* Icono de lupa SVG */
-        .search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; fill: var(--text-muted); }
-        
-        .search-results { 
-            position: absolute; top: 110%; left: 0; right: 0; background: #18181b; border: 1px solid var(--border-color); 
-            border-radius: 16px; max-height: 250px; overflow-y: auto; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: none; 
-        }
-        .result-item { padding: 15px 20px; cursor: pointer; border-bottom: 1px solid var(--border-color); font-size: 15px; transition: 0.2s; }
-        .result-item:last-child { border-bottom: none; }
-        .result-item:hover { background: rgba(255,255,255,0.05); padding-left: 25px; }
+        .search-container { position: relative; max-width: 400px; margin-bottom: 25px; }
+        .search-input { width: 100%; padding: 12px 20px 12px 40px; background: var(--bg-element); border: 1px solid var(--border); border-radius: 8px; color: white; font-size: 14px; outline: none; transition: 0.2s; }
+        .search-input:focus { border-color: var(--primary); }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; fill: var(--text-muted); }
+        .search-results { position: absolute; top: 110%; left: 0; right: 0; background: var(--bg-panel); border: 1px solid var(--border); border-radius: 8px; max-height: 200px; overflow-y: auto; z-index: 20; display: none; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .result-item { padding: 12px 15px; cursor: pointer; border-bottom: 1px solid var(--border); font-size: 14px; }
+        .result-item:hover { background: var(--bg-element); }
         .result-item.disabled { color: var(--text-muted); cursor: not-allowed; text-decoration: line-through; }
 
         /* --- GRILLA DE ASIENTOS --- */
-        .seat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; max-width: 650px; margin: 0 auto; }
+        .classroom { background: var(--bg-element); padding: 30px; border-radius: 12px; border: 1px solid var(--border); display: flex; justify-content: center; }
+        .seat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+        
         .seat {
-            height: 80px; border-radius: 16px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color);
-            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px;
-            cursor: pointer; transition: all 0.3s ease; font-size: 15px; font-weight: 600; color: var(--text-muted);
+            width: 70px; height: 60px; background: var(--bg-panel); border: 1px solid var(--border); border-radius: 6px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            cursor: pointer; transition: 0.2s; font-size: 13px; color: var(--text-muted);
         }
-        .seat:hover { transform: translateY(-5px); border-color: #a855f7; background: rgba(168, 85, 247, 0.1); color: white; box-shadow: 0 10px 20px rgba(168, 85, 247, 0.2); }
-        .seat.occupied { background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.5); color: #fca5a5; }
-        .seat.occupied:hover { box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2); border-color: #ef4444; }
-        
-        .seat .name { font-size: 11px; font-weight: 400; opacity: 0.8; }
+        .seat:hover { border-color: var(--primary); background: rgba(20, 184, 166, 0.1); color: var(--primary); }
+        .seat.occupied { background: rgba(239, 68, 68, 0.1); border-color: var(--danger); color: var(--danger); }
+        .seat.occupied:hover { background: rgba(239, 68, 68, 0.2); }
+        .seat .name { font-size: 10px; margin-top: 3px; }
 
-        /* --- LISTAS --- */
-        .list-container { display: flex; flex-direction: column; gap: 12px; }
-        .list-item { 
-            display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; 
-            background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 16px; transition: 0.2s;
-        }
-        .list-item:hover { background: rgba(255,255,255,0.02); }
-        .list-item .info h4 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
-        .list-item .info p { font-size: 13px; color: var(--text-muted); }
+        /* --- TABLAS MODERNAS --- */
+        .table-container { width: 100%; border-collapse: collapse; }
+        .table-container th { text-align: left; padding: 15px; color: var(--text-muted); font-size: 13px; font-weight: 500; border-bottom: 1px solid var(--border); }
+        .table-container td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 14px; }
+        .table-container tr:hover td { background: var(--bg-element); }
         
-        /* --- BOTONES Y TAGS --- */
-        .btn { padding: 10px 20px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; transition: 0.3s; font-family: 'Outfit'; font-size: 14px; }
-        .btn-outline { background: transparent; border: 1px solid var(--border-color); color: white; }
-        .btn-outline:hover { background: rgba(255,255,255,0.1); border-color: white; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+        .badge-danger { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+        .badge-success { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .badge-primary { background: rgba(20, 184, 166, 0.15); color: var(--primary); }
         
-        .tag { padding: 6px 14px; border-radius: 100px; font-size: 13px; font-weight: 600; }
-        .tag-success { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .tag-danger { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-        .tag-primary { background: rgba(99, 102, 241, 0.15); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.3); }
+        .btn { padding: 8px 16px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: white; cursor: pointer; transition: 0.2s; font-size: 13px; }
+        .btn:hover { background: var(--bg-element); border-color: var(--primary); color: var(--primary); }
     </style>
 </head>
 <body>
@@ -136,8 +101,8 @@
     <!-- HEADER -->
     <header class="header">
         <div class="logo-area">
-            <div class="logo-title">Sistemas de Información 2</div>
-            <div class="logo-subtitle">AulaU - Gestión Académica</div>
+            <h1>SISTEMAS DE INFORMACIÓN 2</h1>
+            <p>AulaU - Gestión Académica</p>
         </div>
         <div class="profile">
             <div class="profile-text">
@@ -148,76 +113,86 @@
         </div>
     </header>
 
-    <!-- PESTAÑAS -->
-    <div class="tabs-wrapper">
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('asientos', this)">
-                <svg viewBox="0 0 24 24"><path d="M4 18v3h3v-3h10v3h3v-6H4v3zm15-8h3v3h-3v-3zM2 10h3v3H2v-3zm15 3H7v-3h10v3zm5-7v4H2V6h20z"/></svg>
-                Asientos
-            </button>
-            <button class="tab-btn" onclick="switchTab('asistencia', this)">
-                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                Asistencia
-            </button>
-            <button class="tab-btn" onclick="switchTab('alumnos', this)">
-                <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-                Alumnos
-            </button>
-        </div>
+    <!-- PESTAÑAS ARRIBA -->
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchView('asientos', this)">Asientos</button>
+        <button class="tab-btn" onclick="switchView('asistencia', this)">Asistencia</button>
+        <button class="tab-btn" onclick="switchView('alumnos', this)">Alumnos</button>
     </div>
 
     <!-- CONTENIDO -->
-    <main class="main-content">
+    <main class="main-area">
         
-        <!-- VISTA ASIENTOS -->
-        <div id="view-asientos" class="vista active">
-            <div class="card">
-                <div class="card-header">
-                    <h2>Mapa de Asientos</h2>
+        <!-- VISTA: ASIENTOS -->
+        <div id="view-asientos" class="view active">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Asignación de Asientos</h2>
                 </div>
                 
-                <div class="search-box">
+                <div class="search-container">
                     <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
                     <input type="text" id="search-input" class="search-input" placeholder="Buscar estudiante por nombre o código..." onkeyup="filterStudents()" onfocus="showResults()">
                     <div id="search-results" class="search-results"></div>
                 </div>
 
-                <div id="seat-grid" class="seat-grid"></div>
-            </div>
-        </div>
-
-        <!-- VISTA ASISTENCIA -->
-        <div id="view-asistencia" class="vista">
-            <div class="card">
-                <div class="card-header">
-                    <h2>Pase de Lista</h2>
+                <div class="classroom">
+                    <div id="seat-grid" class="seat-grid"></div>
                 </div>
-                <div id="attendance-list" class="list-container"></div>
             </div>
         </div>
 
-        <!-- VISTA ALUMNOS -->
-        <div id="view-alumnos" class="vista">
-            <div class="card">
-                <div class="card-header">
+        <!-- VISTA: ASISTENCIA -->
+        <div id="view-asistencia" class="view">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Control de Asistencia</h2>
+                </div>
+                <table class="table-container">
+                    <thead>
+                        <tr>
+                            <th>Estudiante</th>
+                            <th>Código</th>
+                            <th>Estado</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendance-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- VISTA: ALUMNOS -->
+        <div id="view-alumnos" class="view">
+            <div class="panel">
+                <div class="panel-header">
                     <h2>Directorio de Alumnos</h2>
                 </div>
-                <div id="student-list" class="list-container"></div>
+                <table class="table-container">
+                    <thead>
+                        <tr>
+                            <th>Estudiante</th>
+                            <th>Código</th>
+                            <th>Asiento Asignado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="students-body"></tbody>
+                </table>
             </div>
         </div>
 
     </main>
 
     <script>
-        // --- 1. NAVEGACIÓN (TABS) ---
-        function switchTab(tabId, btn) {
-            document.querySelectorAll('.vista').forEach(v => v.classList.remove('active'));
+        // --- 1. NAVEGACIÓN (Pestañas) ---
+        function switchView(viewId, btn) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('view-' + tabId).classList.add('active');
+            document.getElementById('view-' + viewId).classList.add('active');
             btn.classList.add('active');
         }
 
-        // --- 2. DATOS Y BD LOCAL ---
+        // --- 2. DATOS ---
         const students = [
             { name: "Ana Pérez", code: "2023001" }, { name: "Luis Gómez", code: "2023002" },
             { name: "María López", code: "2023003" }, { name: "Carlos Ruiz", code: "2023004" },
@@ -235,8 +210,8 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             renderSeats();
-            renderStudentList();
             renderAttendance();
+            renderStudentDirectory();
         });
 
         // --- 3. BUSCADOR ---
@@ -253,7 +228,7 @@
             const filtered = students.filter(s => s.name.toLowerCase().includes(query) || s.code.includes(query));
 
             if (filtered.length === 0) {
-                container.innerHTML = '<div class="result-item disabled">No se encontraron resultados</div>';
+                container.innerHTML = '<div class="result-item disabled">No hay resultados</div>';
                 return;
             }
 
@@ -264,7 +239,7 @@
                 
                 if (assignedSeat) {
                     div.classList.add('disabled');
-                    div.innerHTML = `${s.name} (${s.code}) - Asiento #${assignedSeat}`;
+                    div.innerHTML = `${s.name} - Ya tiene asiento #${assignedSeat}`;
                 } else {
                     div.innerHTML = `${s.name} (${s.code})`;
                     div.onclick = () => selectStudent(s.name);
@@ -280,31 +255,31 @@
         }
 
         document.addEventListener('click', (e) => {
-            const searchBox = document.querySelector('.search-box');
+            const searchBox = document.querySelector('.search-container');
             if (searchBox && !searchBox.contains(e.target)) {
                 document.getElementById('search-results').style.display = 'none';
             }
         });
 
-        // --- 4. ASIENTOS ---
+        // --- 4. RENDERIZAR ASIENTOS (5x10) ---
         function renderSeats() {
             const grid = document.getElementById('seat-grid');
             grid.innerHTML = ''; 
 
             for (let i = 1; i <= 50; i++) {
-                const seat = document.createElement('div');
-                seat.className = 'seat';
+                const seatDiv = document.createElement('div');
+                seatDiv.className = 'seat';
 
                 if (seats[i]) {
-                    seat.classList.add('occupied');
+                    seatDiv.classList.add('occupied');
                     const firstName = seats[i].split(' ')[0];
-                    seat.innerHTML = `<span>#${i}</span><span class="name">${firstName}</span>`;
+                    seatDiv.innerHTML = `<span>#${i}</span><span class="name">${firstName}</span>`;
                 } else {
-                    seat.innerHTML = `<span>#${i}</span>`;
+                    seatDiv.innerHTML = `<span>#${i}</span>`;
                 }
 
-                seat.onclick = () => handleSeatClick(i);
-                grid.appendChild(seat);
+                seatDiv.onclick = () => handleSeatClick(i);
+                grid.appendChild(seatDiv);
             }
         }
 
@@ -314,7 +289,7 @@
                     delete seats[num];
                     saveDB();
                     renderSeats();
-                    renderStudentList();
+                    renderStudentDirectory();
                 }
                 return;
             }
@@ -327,32 +302,29 @@
             seats[num] = selectedStudent;
             saveDB();
             renderSeats();
-            renderStudentList();
+            renderStudentDirectory();
             document.getElementById('search-input').value = "";
             selectedStudent = null;
         }
 
-        // --- 5. DIRECTORIO DE ALUMNOS ---
-        function renderStudentList() {
-            const list = document.getElementById('student-list');
-            list.innerHTML = '';
+        // --- 5. TABLA DE ALUMNOS ---
+        function renderStudentDirectory() {
+            const tbody = document.getElementById('students-body');
+            tbody.innerHTML = '';
 
             students.forEach(s => {
                 let assignedSeat = Object.keys(seats).find(key => seats[key] === s.name);
-                const div = document.createElement('div');
-                div.className = 'list-item';
-                div.innerHTML = `
-                    <div class="info">
-                        <h4>${s.name}</h4>
-                        <p>Código: ${s.code}</p>
-                    </div>
-                    <div>
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight: 600;">${s.name}</td>
+                    <td style="color: var(--text-muted);">${s.code}</td>
+                    <td>
                         ${assignedSeat 
-                            ? `<span class="tag tag-primary">Asiento #${assignedSeat}</span>` 
-                            : `<span class="tag tag-danger">Sin asiento</span>`}
-                    </div>
+                            ? `<span class="badge badge-primary">Asiento #${assignedSeat}</span>` 
+                            : `<span class="badge badge-danger">Sin asiento</span>`}
+                    </td>
                 `;
-                list.appendChild(div);
+                tbody.appendChild(tr);
             });
         }
 
@@ -360,37 +332,41 @@
             localStorage.setItem('seats_db', JSON.stringify(seats));
         }
 
-        // --- 6. ASISTENCIA ---
+        // --- 6. TABLA DE ASISTENCIA ---
         function renderAttendance() {
-            const list = document.getElementById('attendance-list');
-            list.innerHTML = '';
+            const tbody = document.getElementById('attendance-body');
+            tbody.innerHTML = '';
             
             students.forEach((s, index) => {
                 const status = attendance[index] || "Presente";
-                const div = document.createElement('div');
-                div.className = 'list-item';
-                div.innerHTML = `
-                    <div class="info">
-                        <h4>${s.name}</h4>
-                        <div id="status-${index}" style="margin-top: 6px;">
-                            <span class="tag ${status === 'Presente' ? 'tag-success' : 'tag-danger'}">${status}</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-outline" onclick="toggleAttendance(${index})">Cambiar</button>
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight: 600;">${s.name}</td>
+                    <td style="color: var(--text-muted);">${s.code}</td>
+                    <td>
+                        <span class="badge ${status === 'Presente' ? 'badge-success' : 'badge-danger'}" id="status-${index}">
+                            ${status}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn" onclick="toggleAttendance(${index})">Cambiar</button>
+                    </td>
                 `;
-                list.appendChild(div);
+                tbody.appendChild(tr);
             });
         }
 
         function toggleAttendance(index) {
-            const statusDiv = document.getElementById(`status-${index}`);
-            const isPresent = statusDiv.innerHTML.includes('Presente');
+            const statusSpan = document.getElementById(`status-${index}`);
+            const isPresent = statusSpan.innerText === "Presente";
             
             if (isPresent) {
-                statusDiv.innerHTML = '<span class="tag tag-danger">Ausente</span>';
+                statusSpan.innerText = "Ausente";
+                statusSpan.className = "badge badge-danger";
                 attendance[index] = "Ausente";
             } else {
-                statusDiv.innerHTML = '<span class="tag tag-success">Presente</span>';
+                statusSpan.innerText = "Presente";
+                statusSpan.className = "badge badge-success";
                 attendance[index] = "Presente";
             }
             localStorage.setItem('attendance_db', JSON.stringify(attendance));
