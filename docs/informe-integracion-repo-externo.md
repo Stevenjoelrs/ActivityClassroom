@@ -327,10 +327,7 @@ Equivalencia acordada entre equipos:
 - Falta en el externo: historias de usuario en archivos, tarjetas CRC, matriz de
   aceptación, bitácora, roles y UML.
 - Nuestro `docs/` ya contiene esos artefactos para HU-01 y HU-02.
-- Decisión pendiente: crear documentos equivalentes para HU-03/HU-04 (US-01/US-02 en
-  el repo externo), agregar sus clases al CRC y al UML, y unificar la matriz y la
-  bitácora con la autoría real de cada equipo. También hay que decidir si se conserva
-  su `README.md` o se integra en el nuestro.
+- **Documentación consolidada (resuelta):** Se crearon los documentos equivalentes `docs/tarea-03-entrega-tarea.md` y `docs/tarea-04-revision-tarea.md` para HU-03 y HU-04 siguiendo la misma estructura que las tareas 01 y 02. Se incorporaron sus tarjetas CRC en `docs/crc.md`, se unificó el diagrama de clases en `docs/diagrama-clases.md`, se actualizó `docs/roles.md` con los 4 autores y se incorporó el desglose de pruebas de Jest en `docs/matriz-aceptacion.md`.
 
 ## Evidencia de la inspección
 

@@ -140,3 +140,62 @@ Una tarjeta por clase implementada. Los colaboradores coinciden con el código.
 
 **Atributos clave:** `registrarGrupo`, `consultarGrupos`.
 
+
+## ServicioEntregas (HU-03)
+
+| Responsabilidades | Colaboradores |
+| --- | --- |
+| Validar correo institucional de remitente, correo docente y código de tarea | validaciones (institutionalEmail, email, taskCode) |
+| Validar archivo adjunto (extensión, tamaño $\le$ 10 MB, no vacío) | validarArchivo |
+| Enviar entrega a través del servicio de correo simulado | CorreoSimulado |
+| Persistir entrega confirmada con estado 'POR REVISAR' | RepositorioEntregas, crypto (randomUUID) |
+
+**Atributos clave:** `enviar(datos, archivo)`.
+
+## ControladorEntregas (HU-03)
+
+| Responsabilidades | Colaboradores |
+| --- | --- |
+| Atender solicitudes `POST /api/entregas` (multipart/form-data) | ServicioEntregas, multer, express |
+| Responder HTTP 201 con el resultado del envío simulado | express (res) |
+
+**Atributos clave:** `enviar`.
+
+## RepositorioEntregas (HU-03)
+
+| Responsabilidades | Colaboradores |
+| --- | --- |
+| Guardar la entrega en el almacén de datos (memoria / base de datos) | AlmacenCompartido |
+
+**Atributos clave:** `guardar(entrega)`.
+
+## ServicioRevision (HU-04)
+
+| Responsabilidades | Colaboradores |
+| --- | --- |
+| Listar entregas por docente y tarea, seleccionando la más reciente por estudiante | RepositorioRevision, validaciones |
+| Validar feedback estructurado en tres aspectos obligatorios | validarFeedback |
+| Registrar y actualizar feedback, cambiando estado a 'REVISADA' | RepositorioRevision |
+| Obtener contenido de archivo adjunto para descarga | RepositorioRevision |
+
+**Atributos clave:** `listar(docente, tarea)`, `guardarFeedback(id, docente, datos)`, `adjunto(id, docente)`.
+
+## ControladorRevision (HU-04)
+
+| Responsabilidades | Colaboradores |
+| --- | --- |
+| Atender `GET /api/revision/entregas?docente=...&tarea=...` y responder JSON | ServicioRevision, express |
+| Atender `PUT /api/revision/entregas/:id/feedback` y responder JSON | ServicioRevision, express |
+| Atender `GET /api/revision/entregas/:id/adjunto` con cabeceras de descarga binaria | ServicioRevision, express |
+
+**Atributos clave:** `listar`, `guardarFeedback`, `adjunto`.
+
+## RepositorioRevision (HU-04)
+
+| Responsabilidades | Colaboradores |
+| --- | --- |
+| Listar entregas que coincidan con docente y tarea | AlmacenCompartido |
+| Buscar entrega por identificador y docente | AlmacenCompartido |
+| Actualizar feedback y estado de la entrega | AlmacenCompartido |
+
+**Atributos clave:** `listar`, `buscar`, `guardarFeedback`.

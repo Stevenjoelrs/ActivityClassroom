@@ -189,14 +189,32 @@ El frontend está desarrollado en Vue 3 con Vite, Vue Router y componentes acces
 | `/docente` | `inicio-docente` | `InicioDocenteView.vue` | Revisión de tareas y retroalimentación (HU-04) |
 | `/` | `inicio` | `InicioView.vue` | Estado de la API y presentación del sistema |
 
-### Endpoints HTTP de HU-01 y HU-02
+### Endpoints HTTP de la API
 
-- `POST /api/calendario/eventos` → 201 `{ evento }`
-- `GET /api/calendario?materia=<id>` → 200 `{ mensaje, eventos }`
-- `POST /api/grupos` → 201 `{ grupo }`
-- `GET /api/grupos?actividad=<id>` → 200 `{ grupos }`
+- **HU-01 (Calendario)**:
+  - `POST /api/calendario/eventos` → 201 `{ evento }`
+  - `GET /api/calendario?materia=<id>` → 200 `{ mensaje, eventos }`
+- **HU-02 (Grupos)**:
+  - `POST /api/grupos` → 201 `{ grupo }`
+  - `GET /api/grupos?actividad=<id>` → 200 `{ grupos }`
+- **HU-03 (Entregas)**:
+  - `POST /api/entregas` → 201 `{ id, estado, enviado, mensaje }`
+- **HU-04 (Revisión)**:
+  - `GET /api/revision/entregas?docente=<correo>&tarea=<codigo>` → 200 `{ entregas, simulado }`
+  - `PUT /api/revision/entregas/:id/feedback` → 200 `{ ...entregaRevisada }`
+  - `GET /api/revision/entregas/:id/adjunto?docente=<correo>` → Descarga binaria
 
-La [documentación de historias de usuario](docs/US.md) y las
-[tarjetas CRC](docs/crc.md) resumen ambas historias. También están disponibles la
-[matriz de aceptación](docs/matriz-aceptacion.md), los [roles](docs/roles.md), la
-[bitácora](docs/bitacora.md) y las [fuentes](docs/fuentes.md).
+### Documentación del Proyecto
+
+- [Historias de usuario (HU-01 a HU-04)](docs/US.md)
+- [Diagrama de clases unificado](docs/diagrama-clases.md)
+- [Tarjetas CRC](docs/crc.md)
+- [Tarea 01: Calendario académico](docs/tarea-01-calendario-academico.md)
+- [Tarea 02: Formación de grupos](docs/tarea-02-grupo-trabajo.md)
+- [Tarea 03: Envío de tareas por correo](docs/tarea-03-entrega-tarea.md)
+- [Tarea 04: Revisión con feedback](docs/tarea-04-revision-tarea.md)
+- [Matriz de aceptación](docs/matriz-aceptacion.md)
+- [Roles y responsables](docs/roles.md)
+- [Bitácora](docs/bitacora.md)
+- [Informe de integración](docs/informe-integracion-repo-externo.md)
+- [Fuentes de consulta](docs/fuentes.md)
