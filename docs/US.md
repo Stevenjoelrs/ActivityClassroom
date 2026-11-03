@@ -38,4 +38,4 @@ Como docente, quiero registrar los grupos de trabajo de una actividad académica
 - **RN-02:** El sistema registra los grupos y sus integrantes; no genera automáticamente la distribución aleatoria.
 - **RN-03:** No se requiere aprobación del docente para confirmar cada grupo.
 - **RN-04:** La falta de participación de un integrante no disuelve automáticamente el grupo.
-- **RN-06:** Una vez establecido el grupo, sus integrantes no pueden cambiarse libremente durante la actividad.
+- **RN-05:** Una vez establecido el grupo, sus integrantes no pueden cambiarse libremente durante la actividad.

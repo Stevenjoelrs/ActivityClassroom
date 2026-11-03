@@ -1,0 +1,55 @@
+@startuml class
+hide empty members
+
+enum TipoEvento {
+  clase
+  entrega_tarea
+  actividad
+  suspension
+}
+
+class GrupoTrabajo <<inmutable>> {
+  +nombre: string
+  +actividadId: string
+  +modalidad: "afinidad" | "sorteo"
+  +integrantes: string[] {readOnly}
+  +maximoIntegrantes: number | null
+  +constructor(datos)
+}
+
+class RegistroGrupos {
+  -grupos: GrupoTrabajo[]
+  +registrar(grupo)
+  +consultarPorActividad(actividadId): GrupoTrabajo[]
+}
+
+class EventoAcademico <<inmutable>> {
+  +id: string
+  +materiaId: string
+  +tipo: TipoEvento
+  +fecha: string
+  +horario: string
+  +descripcion: string
+  +suspendido: boolean
+  +constructor(datos)
+}
+
+class CalendarioAcademico {
+  -eventos: EventoAcademico[]
+  +registrarEvento(evento)
+  +consultarMateria(materiaId): ResultadoConsulta
+}
+
+note right of CalendarioAcademico
+  ResultadoConsulta = { mensaje: string | null,
+  eventos: EventoAcademico[] (solo lectura) }
+end note
+
+note right of RegistroGrupos
+  consultarPorActividad devuelve un arreglo congelado.
+end note
+
+RegistroGrupos "1" o-- "0..*" GrupoTrabajo
+CalendarioAcademico "1" o-- "0..*" EventoAcademico
+EventoAcademico ..> TipoEvento
+@enduml

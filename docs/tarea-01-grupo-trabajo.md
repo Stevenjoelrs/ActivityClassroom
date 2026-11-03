@@ -45,6 +45,11 @@ classDiagram
         +number maximoIntegrantes
         +constructor(datos)
     }
+    class RegistroGrupos {
+        +registrar(grupo)
+        +consultarPorActividad(actividadId)
+    }
+    RegistroGrupos o-- GrupoTrabajo
 ```
 
 El constructor valida los datos. Los atributos se consultan directamente y no
@@ -55,8 +60,8 @@ recibe como dato: aún no existe un catálogo que lo obtenga desde la actividad.
 
 ## Evidencia del ciclo TDD
 
-Se ejecutó `npm test` en cada paso con Node.js 24.18.0. Se utilizan `node:test` y
-`node:assert/strict`, módulos nativos, sin instalar paquetes.
+Se ejecutó `node --test` en cada paso con Node.js 26.12.1. Se utilizan `node:test`
+y `node:assert/strict`, módulos nativos, sin instalar paquetes.
 
 | Ciclo | Rojo: prueba antes del código | Verde: implementación mínima | Commit en verde |
 | --- | --- | --- | --- |
@@ -65,17 +70,25 @@ Se ejecutó `npm test` en cada paso con Node.js 24.18.0. Se utilizan `node:test`
 | Composición estable | 3 pruebas fallan al intentar modificar el grupo o el arreglo de entrada | Grupo y copia del arreglo congelados; 15 pruebas pasan | `3fe843a` |
 
 Después se revisó el código para refactorizar: no hizo falta agregar más clases
-ni extraer abstracciones.
+ni extraer abstracciones. El suite actual de HU-02 tiene 22 pruebas; el proyecto
+completo, 43.
+
+## Operaciones descubiertas al programar
+
+- `RegistroGrupos.registrar` valida que el objeto recibido sea una instancia de
+  `GrupoTrabajo`.
+- `RegistroGrupos.consultarPorActividad` valida el identificador de la actividad
+  y devuelve una copia congelada de los grupos encontrados.
 
 ## Checklist XP de esta tarea
 
 - [x] Alcance, reglas y criterios del incremento identificados.
 - [x] Diagrama UML elaborado.
-- [ ] Tarjeta CRC: elaboración manual por el estudiante.
+- [x] Tarjeta CRC elaborada y revisada.
 - [x] Casos de aceptación diseñados y expresados como pruebas de dominio.
 - [x] Pruebas escritas y ejecutadas antes del código correspondiente.
 - [x] Funcionalidad mínima implementada.
-- [x] 15 pruebas ejecutadas satisfactoriamente.
+- [x] 43 pruebas del proyecto ejecutadas satisfactoriamente.
 - [x] Necesidad de refactorización revisada.
 - [x] Incremento contrastado con sus criterios.
 - [ ] HU-02 completa, con consulta de todos los grupos de una actividad y flujo de entregas.
@@ -84,7 +97,6 @@ ni extraer abstracciones.
 
 | Tarea | Primera prueba propuesta |
 | --- | --- |
-| Consultar los grupos registrados para una actividad | Al consultar ACT-01 se obtienen únicamente sus grupos |
 | Representar horarios, entregas y actividades ya registrados | Un evento conserva fecha, horario y descripción |
 | Consultar el calendario de una materia | Se muestran únicamente los eventos de esa materia |
 | Informar que no hay eventos | Una consulta vacía muestra un mensaje informativo |
@@ -94,6 +106,6 @@ Las tareas siguientes están pendientes. Cada una empieza con una prueba que
 falle; después se escribe el código mínimo y se ejecutan las pruebas. Las tarjetas
 CRC se elaborarán manualmente a partir de las clases implementadas.
 
-CA-08 (continuar y entregar aunque un integrante no participe) requiere el flujo
+RN-04 (continuar y entregar aunque un integrante no participe) requiere el flujo
 de actividades y entregas, todavía pendiente. Esta clase no registra participación
 ni disuelve grupos automáticamente.
