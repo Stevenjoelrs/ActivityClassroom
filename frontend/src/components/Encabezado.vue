@@ -9,6 +9,8 @@ import {
   CalendarDays,
   CalendarPlus,
   Users,
+  Armchair,
+  FileText,
   Menu,
   X,
   ArrowUpRight,
@@ -26,11 +28,13 @@ const abierto = ref(false)
 const controlMenu = ref(null)
 const enlaces = [
   { to: '/', texto: 'Inicio', icono: House },
-  { to: '/docente', texto: 'Docente', icono: Presentation },
-  { to: '/docente/eventos', texto: 'Eventos', icono: CalendarPlus },
-  { to: '/docente/grupos', texto: 'Grupos', icono: Users },
-  { to: '/estudiante', texto: 'Estudiante', icono: GraduationCap },
-  { to: '/estudiante/calendario', texto: 'Calendario', icono: CalendarDays },
+  { to: '/docente', texto: 'Docente (HU-04)', icono: Presentation },
+  { to: '/docente/eventos', texto: 'Eventos (HU-01)', icono: CalendarPlus },
+  { to: '/docente/grupos', texto: 'Grupos (HU-02)', icono: Users },
+  { to: '/docente/asientos', texto: 'Asientos (HU-05)', icono: Armchair },
+  { to: '/estudiante', texto: 'Estudiante (HU-03)', icono: GraduationCap },
+  { to: '/estudiante/calendario', texto: 'Calendario (HU-01)', icono: CalendarDays },
+  { to: '/estudiante/apuntes', texto: 'Apuntes (HU-06)', icono: FileText },
 ]
 watch(() => route.path, () => { abierto.value = false })
 async function cerrarMenu() {
