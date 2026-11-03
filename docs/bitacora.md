@@ -174,3 +174,45 @@ renombre real del test quedó en el commit `9b55857`.
 
 - Captura de la llamada o sesión compartida: pendiente de adjuntar.
 - Modalidad: remota por VPN, un solo piloto escribe a la vez.
+
+
+---
+
+## Ciclo de Integración: SistemaAula en ActivityClassroom
+
+| Fecha | Tarea / ciclo | Piloto | Copiloto | Rotación a los... | Commit |
+|---|---|---|---|---|---|
+| 2026-11-03 | Fusión de modulo-asientos y feature/frontend-apuntes | kn0wles | Stevenjoelrs | Stevenjoelrs | 8aafd8c, 97c3615 |
+| 2026-11-03 | Reorganización de estructura modular en backend con `git mv` | kn0wles | Stevenjoelrs | Stevenjoelrs | 87c0525 |
+| 2026-11-03 | Conversión mecánica a CommonJS y adaptación de pruebas a Jest | kn0wles | Stevenjoelrs | kn0wles | c6a09be |
+| 2026-11-03 | Actualización de documentación, roles, matriz y bitácora | Stevenjoelrs | kn0wles | kn0wles | pendiente |
+
+### Salida real de la verificación (`npm test`)
+
+```text
+$ node node_modules/jest/bin/jest.js --runInBand
+PASS backend/calendario/calendario-academico.test.js
+PASS ./pruebas.test.js
+PASS backend/grupos/grupo-trabajo.test.js
+PASS backend/grupos/registro-grupos.test.js
+
+Test Suites: 4 passed, 4 total
+Tests:       48 passed, 48 total
+Snapshots:   0 total
+Time:        0.753 s, estimated 1 s
+Ran all test suites.
+```
+
+Total de pruebas: 43 de ActivityClassroom (21 calendario, 15 grupos, 7 registro) + 5 de SistemaAula (asientos y asistencia) = **48 pruebas en verde**.
+
+### Evidencias de la sesión de integración
+
+- Capturas de pantalla o sesión compartida: pendiente de adjuntar.
+- Modalidad: pair programming remoto.
+
+### Pendientes identificados
+
+1. **Unificación de identificadores de dominio:** Homogeneizar formato de materia (`MAT-101` vs `materia.id`) y de estudiante (`EST-01` vs `matricula`).
+2. **Persistencia mixta:** Armonizar almacenamiento en memoria (`calendario`, `grupos`) con la base de datos relacional PostgreSQL (`asignacion_de_asientos`, `apuntes`).
+3. **Pruebas de apuntes:** Implementar suite de pruebas unitarias automatizadas con Jest para el servicio y repositorio de apuntes.
+4. **Frontend de apuntes:** Integrar el frontend de apuntes a la estructura general de interfaz.
