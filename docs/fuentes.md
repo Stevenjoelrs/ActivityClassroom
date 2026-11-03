@@ -23,3 +23,6 @@ Recursos que no se vieron en aula. Verificar cada enlace antes de entregar.
 | nodemon (^3.1.14) | backend/package.json (script dev) | npm, "nodemon": https://www.npmjs.com/package/nodemon |
 | Jest (^30.5.2) | backend/package.json, backend/asignacion_de_asientos/pruebas.test.js | Jest: https://jestjs.io/ |
 | Aislamiento CJS ({ "type": "commonjs" }) | backend/asignacion_de_asientos/package.json, backend/apuntes/package.json | Node.js, "Package type": https://nodejs.org/api/packages.html#type |
+| Vitest (^5.0.5) | frontend/package.json, frontend/src/tests/*.test.js | Vitest Docs: https://vitest.dev/ |
+| @vue/test-utils (^2.5.1) | frontend/src/tests/*.test.js | Vue Test Utils: https://test-utils.vuejs.org/ |
+| happy-dom (^21.0.4) | frontend/vite.config.js, frontend/src/tests/*.test.js | Happy DOM: https://github.com/capricorn86/happy-dom |
