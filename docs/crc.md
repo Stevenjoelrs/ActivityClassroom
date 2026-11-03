@@ -100,11 +100,43 @@ Una tarjeta por clase implementada. Los colaboradores coinciden con el código.
 
 **Atributos clave:** `directorio`, `calendario`, `grupos`.
 
-<!--
-PENDIENTE (servicios, controladores y rutas HTTP):
-- ServicioCalendario: orquesta el registro y consulta de eventos, convierte errores de dominio en AppError(400). Colaboradores: CalendarioAcademico, EventoAcademico, AppError.
-- ControladorCalendario: maneja peticiones HTTP para POST /api/calendario/eventos (201) y GET /api/calendario?materia=<id> (200). Colaborador: ServicioCalendario.
-- ServicioGrupos: orquesta el registro y consulta de grupos por actividad, convierte errores de dominio en AppError(400). Colaboradores: RegistroGrupos, GrupoTrabajo, AppError.
-- ControladorGrupos: maneja peticiones HTTP para POST /api/grupos (201) y GET /api/grupos?actividad=<id> (200). Colaborador: ServicioGrupos.
--->
+## ServicioCalendario (HU-01)
+
+| Responsabilidades | Colaboradores |
+| --- | --- |
+| Orquestar el registro y consulta de eventos académicos | CalendarioAcademico, EventoAcademico |
+| Capturar errores de dominio y convertirlos en `AppError(400)` | AppError |
+| Proveer fábrica `crearServicioCalendario()` con repositorio persistente por defecto | RepositoriosPersistentes |
+
+**Atributos clave:** `registrar(datos)`, `consultar(materiaId)`.
+
+## ControladorCalendario (HU-01)
+
+| Responsabilidades | Colaboradores |
+| --- | --- |
+| Atender solicitudes `POST /api/calendario/eventos` y responder 201 | ServicioCalendario, express |
+| Atender solicitudes `GET /api/calendario?materia=<id>` y responder 200 | ServicioCalendario, express |
+| Delegar errores al middleware central de Express | express (next) |
+
+**Atributos clave:** `registrarEvento`, `consultarCalendario`.
+
+## ServicioGrupos (HU-02)
+
+| Responsabilidades | Colaboradores |
+| --- | --- |
+| Orquestar el registro y consulta de grupos de trabajo por actividad | RegistroGrupos, GrupoTrabajo |
+| Capturar errores de validación de dominio y convertirlos en `AppError(400)` | AppError |
+| Proveer fábrica `crearServicioGrupos()` con repositorio persistente por defecto | RepositoriosPersistentes |
+
+**Atributos clave:** `registrar(datos)`, `consultar(actividadId)`.
+
+## ControladorGrupos (HU-02)
+
+| Responsabilidades | Colaboradores |
+| --- | --- |
+| Atender solicitudes `POST /api/grupos` y responder 201 | ServicioGrupos, express |
+| Atender solicitudes `GET /api/grupos?actividad=<id>` y responder 200 | ServicioGrupos, express |
+| Delegar errores al middleware central de Express | express (next) |
+
+**Atributos clave:** `registrarGrupo`, `consultarGrupos`.
 

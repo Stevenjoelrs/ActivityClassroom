@@ -124,18 +124,33 @@ RepositorioCalendario ..> EventoAcademico
 RepositorioGrupos ..> GrupoTrabajo
 EventoAcademico ..> TipoEvento
 
-/'
-PENDIENTE (servicios, controladores y rutas HTTP):
-- servicioCalendario / crearServicioCalendario({ calendario })
-  * registrar(datos): EventoAcademico
-  * consultar(materiaId): ResultadoConsulta
-- controladorCalendario: registrarEvento, consultarCalendario
-- rutas /api/calendario: POST /eventos (201), GET /?materia= (200)
+class ServicioCalendario {
+  -calendario: CalendarioAcademico
+  +constructor(calendario)
+  +registrar(datos): EventoAcademico
+  +consultar(materiaId): ResultadoConsulta
+}
 
-- servicioGrupos / crearServicioGrupos({ registro })
-  * registrar(datos): GrupoTrabajo
-  * consultar(actividadId): GrupoTrabajo[]
-- controladorGrupos: registrarGrupo, consultarGrupos
-- rutas /api/grupos: POST / (201), GET /?actividad= (200)
-'/
+class ControladorCalendario {
+  +registrarEvento(req, res, next)
+  +consultarCalendario(req, res, next)
+}
+
+class ServicioGrupos {
+  -registro: RegistroGrupos
+  +constructor(registro)
+  +registrar(datos): GrupoTrabajo
+  +consultar(actividadId): GrupoTrabajo[]
+}
+
+class ControladorGrupos {
+  +registrarGrupo(req, res, next)
+  +consultarGrupos(req, res, next)
+}
+
+ControladorCalendario --> ServicioCalendario : usa
+ServicioCalendario --> CalendarioAcademico : delega
+ControladorGrupos --> ServicioGrupos : usa
+ServicioGrupos --> RegistroGrupos : delega
+
 @enduml
