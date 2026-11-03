@@ -1,8 +1,23 @@
 {
   "name": "activity-classroom",
+  "version": "1.0.0",
+  "description": "Sistema integrado de gestión de aula (ActivityClassroom + SistemaAula)",
   "private": true,
-  "type": "module",
+  "main": "backend/server.js",
   "scripts": {
-    "test": "node --test"
+    "start": "node backend/server.js",
+    "dev": "node --watch-path=backend --watch-path=public backend/server.js",
+    "db:setup": "node backend/setup-db.js",
+    "test": "jest --runInBand",
+    "test:seating": "jest pruebas.test.js --runInBand"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "jest": "^30.5.2",
+    "nodemon": "^3.1.14"
   }
 }

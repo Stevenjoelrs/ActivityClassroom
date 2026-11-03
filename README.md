@@ -1,45 +1,65 @@
 # ActivityClassroom
 
-Primer incremento de **HU-02**: registrar y consultar los datos de un grupo de
-trabajo asociado a una actividad académica. JavaScript con Node.js, sin
-dependencias externas.
+Sistema integrado de gestión de aula que combina módulos de **ActivityClassroom** (HU-01 y HU-02) y **SistemaAula** (asignación de asientos y apuntes).
 
-La clase `GrupoTrabajo` admite afinidad o sorteo, rechaza integrantes duplicados,
-respeta un tamaño máximo opcional y conserva los integrantes de solo lectura.
-La modalidad sorteo registra un resultado ya definido; no distribuye estudiantes.
+## Módulos
 
-## Ejecutar las pruebas
+### HU-01 — Calendario Académico (`backend/calendario/`)
+Registra y consulta eventos académicos (clases, entregas, actividades, suspensiones) de una materia.
 
-Desde la raíz del proyecto:
+### HU-02 — Grupos de Trabajo (`backend/grupos/`)
+Registra grupos por afinidad o sorteo y valida integrantes, duplicados y máximos.
+
+### Asignación de Asientos y Asistencia (`backend/asignacion_de_asientos/`)
+Gestión de asientos en el aula (10 filas × 5 columnas), asignación de estudiantes y registro de asistencia. Datos persistidos en PostgreSQL.
+
+### Apuntes (`backend/apuntes/`)
+CRUD de apuntes asociados a estudiante y materia, con reglas de negocio de longitud y contenido. Backend Express + PostgreSQL. Requiere base de datos configurada.
+
+---
+
+## Ejecutar pruebas
 
 ```sh
+npm install
 npm test
 ```
 
-## Uso mínimo
+Resultado esperado: **43 pruebas de ActivityClassroom + 5 de asientos = 48 en verde**.
 
-```javascript
-import { GrupoTrabajo } from "./grupo-trabajo.js";
+> Los módulos de apuntes y el backend de asistencia no tienen pruebas unitarias aún.
 
-const grupo = new GrupoTrabajo({
-  nombre: "Equipo Alfa",
-  actividadId: "ACT-01",
-  modalidad: "afinidad",
-  integrantes: ["EST-01", "EST-02"],
-  maximoIntegrantes: 3,
-});
+---
 
-console.log(grupo.nombre, grupo.actividadId, grupo.modalidad);
-console.log(grupo.integrantes);
+## Levantar el servidor (asientos + apuntes)
+
+### Requisitos
+
+- Node.js 20.13 o posterior
+- PostgreSQL
+
+### Configuración
+
+```sh
+cp .env.example .env
+# Editar .env con las credenciales de PostgreSQL
+npm install
+npm run db:setup   # Crea tablas en la base de datos
+npm run dev        # Servidor con recarga automática
 ```
 
-Los identificadores son cadenas no vacías sin espacios en sus extremos. Los
-integrantes se reciben como un arreglo y se guardan en una copia congelada. El
-grupo también se congela para impedir reasignaciones. El máximo es opcional
-(`null` cuando no existe) y debe ser un entero positivo seguro. Los datos
-inválidos producen `Error` con un mensaje descriptivo.
+La aplicación estará en:
+- Apuntes: `http://localhost:3000`
+- Asientos: `http://localhost:3000/asignacion-de-asientos/`
+- API: `http://localhost:3000/api`
 
-La [documentación de la tarea 01](docs/tarea-01-grupo-trabajo.md) incluye UML, los
-ciclos TDD y las tareas siguientes. La tarjeta CRC queda pendiente de elaboración
-manual. El registro vive en memoria; todavía no hay interfaz ni almacenamiento
-persistente. HU-01 y el resto de HU-02 permanecen pendientes.
+> La configuración `.env` no debe subirse al repositorio. Los módulos de calendario y grupos corren sin PostgreSQL.
+
+---
+
+## Pendientes
+
+- Unificar identificadores de estudiante (`EST-01` vs `matricula`) y de materia (`MAT-101` vs `materia.id`).
+- Persistencia mixta: memoria (HU-01 y HU-02) vs PostgreSQL (asientos, apuntes).
+- Pruebas unitarias para apuntes.
+- Frontend de apuntes integrado a la estructura.
