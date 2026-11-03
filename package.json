@@ -4,7 +4,7 @@
   "description": "Proyecto de gestion de aula para apuntes y asignacion de asientos",
   "main": "backend/server.js",
   "scripts": {
-    "dev": "node --watch-path=backend backend/server.js",
+    "dev": "node --watch-path=backend --watch-path=public backend/server.js",
     "start": "node backend/server.js",
     "db:setup": "node backend/setup-db.js",
     "test": "node --test"
