@@ -1,6 +1,6 @@
-const Asiento = require('./backend/asinacion_de_asientos/Asiento');
-const Aula = require('./backend/asinacion_de_asientos/Aula');
-const Estudiante = require('./backend/asinacion_de_asientos/Estudiante');
+const Asiento = require('./backend/asignacion_de_asientos/Asiento');
+const Aula = require('./backend/asignacion_de_asientos/Aula');
+const Estudiante = require('./backend/asignacion_de_asientos/Estudiante');
 
 describe('Pruebas de Asignación de Asientos', () => {
 

@@ -1,5 +1,6 @@
 const Asiento = require('./Asiento');
 const fs = require('fs');
+const path = require('path');
 
 class Aula {
     constructor() {
@@ -29,12 +30,13 @@ class Aula {
             estado: asiento.estado,
             estudianteAsignado: asiento.estudianteAsignado
         }));
-        fs.writeFileSync('./backend/asinacion_de_asientos/datos.json', JSON.stringify({ asientos: datos }, null, 2));
+        fs.writeFileSync(path.join(__dirname, 'datos.json'), JSON.stringify({ asientos: datos }, null, 2));
     }
 
     cargarDatos() {
-        if (fs.existsSync('./backend/asinacion_de_asientos/datos.json')) {
-            const contenido = fs.readFileSync('./backend/asinacion_de_asientos/datos.json', 'utf8');
+        const archivo = path.join(__dirname, 'datos.json');
+        if (fs.existsSync(archivo)) {
+            const contenido = fs.readFileSync(archivo, 'utf8');
             const datos = JSON.parse(contenido);
             datos.asientos.forEach(dato => {
                 const asiento = this.asientos.find(a => a.numero === dato.numero);
