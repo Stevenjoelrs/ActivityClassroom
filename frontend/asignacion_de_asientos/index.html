@@ -94,6 +94,11 @@
         
         .btn { padding: 8px 16px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: white; cursor: pointer; transition: 0.2s; font-size: 13px; }
         .btn:hover { background: var(--bg-element); border-color: var(--primary); color: var(--primary); }
+        .student-form { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .student-form input, .date-control input { padding: 10px 12px; background: var(--bg-element); border: 1px solid var(--border); border-radius: 6px; color: var(--text-main); }
+        .student-form input:focus, .date-control input:focus { outline: none; border-color: var(--primary); }
+        .date-control { display: flex; align-items: center; gap: 10px; color: var(--text-muted); font-size: 13px; }
+        #app-message { display: none; padding: 12px 16px; margin-bottom: 16px; border-radius: 8px; background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
     </style>
 </head>
 <body>
@@ -122,6 +127,7 @@
 
     <!-- CONTENIDO -->
     <main class="main-area">
+        <div id="app-message" role="alert"></div>
         
         <!-- VISTA: ASIENTOS -->
         <div id="view-asientos" class="view active">
@@ -147,6 +153,10 @@
             <div class="panel">
                 <div class="panel-header">
                     <h2>Control de Asistencia</h2>
+                    <label class="date-control" for="attendance-date">
+                        Fecha
+                        <input type="date" id="attendance-date">
+                    </label>
                 </div>
                 <table class="table-container">
                     <thead>
@@ -168,6 +178,11 @@
                 <div class="panel-header">
                     <h2>Directorio de Alumnos</h2>
                 </div>
+                <form id="student-form" class="student-form">
+                    <input type="text" id="student-name" maxlength="120" placeholder="Nombre completo" required>
+                    <input type="text" id="student-code" maxlength="30" placeholder="Matrícula (opcional)">
+                    <button class="btn" type="submit">Agregar estudiante</button>
+                </form>
                 <table class="table-container">
                     <thead>
                         <tr>
@@ -184,193 +199,247 @@
     </main>
 
     <script>
-        // --- 1. NAVEGACIÓN (Pestañas) ---
+        const students = [];
+        const seats = {};
+        const attendance = {};
+        let selectedStudent = null;
+
+        function localDate() {
+            const now = new Date();
+            const offset = now.getTimezoneOffset() * 60000;
+            return new Date(now.getTime() - offset).toISOString().slice(0, 10);
+        }
+
+        async function api(url, options = {}) {
+            const response = await fetch(url, {
+                ...options,
+                headers: { 'Content-Type': 'application/json', ...options.headers },
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.error || 'No se pudo completar la solicitud');
+            }
+            return data;
+        }
+
+        function showMessage(message) {
+            const box = document.getElementById('app-message');
+            box.textContent = message;
+            box.style.display = message ? 'block' : 'none';
+        }
+
+        async function loadClassroom() {
+            try {
+                const date = document.getElementById('attendance-date').value;
+                const [studentRows, seatRows, attendanceRows] = await Promise.all([
+                    api('/api/estudiantes'),
+                    api('/api/asientos'),
+                    api(`/api/asistencia?fecha=${encodeURIComponent(date)}`),
+                ]);
+                students.splice(0, students.length, ...studentRows);
+                Object.keys(seats).forEach(key => delete seats[key]);
+                seatRows.forEach(row => { seats[row.asiento] = row; });
+                Object.keys(attendance).forEach(key => delete attendance[key]);
+                attendanceRows.forEach(row => { attendance[row.estudiante_id] = row.estado; });
+                renderSeats();
+                renderAttendance();
+                renderStudentDirectory();
+                filterStudents();
+                showMessage('');
+            } catch (error) {
+                showMessage(error.message);
+            }
+        }
+
         function switchView(viewId, btn) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.view').forEach(view => view.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(button => button.classList.remove('active'));
             document.getElementById('view-' + viewId).classList.add('active');
             btn.classList.add('active');
         }
 
-        // --- 2. DATOS ---
-        const students = [
-            { name: "Ana Pérez", code: "2023001" }, { name: "Luis Gómez", code: "2023002" },
-            { name: "María López", code: "2023003" }, { name: "Carlos Ruiz", code: "2023004" },
-            { name: "Elena Torres", code: "2023005" }, { name: "Jorge Mendoza", code: "2023006" },
-            { name: "Lucía Fernández", code: "2023007" }, { name: "Pedro Ramírez", code: "2023008" },
-            { name: "Sofía Castro", code: "2023009" }, { name: "Diego Vargas", code: "2023010" },
-            { name: "Camila Rojas", code: "2023011" }, { name: "Andrés Silva", code: "2023012" },
-            { name: "Valentina Ortiz", code: "2023013" }, { name: "Gabriel Morales", code: "2023014" },
-            { name: "Isabella Herrera", code: "2023015" }
-        ];
-
-        let seats = JSON.parse(localStorage.getItem('seats_db')) || {};
-        let attendance = JSON.parse(localStorage.getItem('attendance_db')) || {};
-        let selectedStudent = null;
-
-        document.addEventListener("DOMContentLoaded", () => {
-            renderSeats();
-            renderAttendance();
-            renderStudentDirectory();
-        });
-
-        // --- 3. BUSCADOR ---
         function showResults() {
             document.getElementById('search-results').style.display = 'block';
             filterStudents();
         }
 
         function filterStudents() {
-            const query = document.getElementById('search-input').value.toLowerCase();
+            const query = document.getElementById('search-input').value.trim().toLocaleLowerCase();
             const container = document.getElementById('search-results');
-            container.innerHTML = '';
-
-            const filtered = students.filter(s => s.name.toLowerCase().includes(query) || s.code.includes(query));
+            container.replaceChildren();
+            const filtered = students.filter(student =>
+                student.nombre.toLocaleLowerCase().includes(query) ||
+                (student.matricula || '').toLocaleLowerCase().includes(query)
+            );
 
             if (filtered.length === 0) {
-                container.innerHTML = '<div class="result-item disabled">No hay resultados</div>';
+                const empty = document.createElement('div');
+                empty.className = 'result-item disabled';
+                empty.textContent = 'No hay resultados';
+                container.appendChild(empty);
                 return;
             }
 
-            filtered.forEach(s => {
-                let assignedSeat = Object.keys(seats).find(key => seats[key] === s.name);
-                const div = document.createElement('div');
-                div.className = 'result-item';
-                
+            filtered.forEach(student => {
+                const assignedSeat = Object.values(seats).find(seat => seat.estudiante_id === student.id);
+                const item = document.createElement('div');
+                item.className = 'result-item';
                 if (assignedSeat) {
-                    div.classList.add('disabled');
-                    div.innerHTML = `${s.name} - Ya tiene asiento #${assignedSeat}`;
+                    item.classList.add('disabled');
+                    item.textContent = `${student.nombre} - Ya tiene asiento #${assignedSeat.asiento}`;
                 } else {
-                    div.innerHTML = `${s.name} (${s.code})`;
-                    div.onclick = () => selectStudent(s.name);
+                    item.textContent = student.matricula
+                        ? `${student.nombre} (${student.matricula})`
+                        : student.nombre;
+                    item.addEventListener('click', () => {
+                        selectedStudent = student;
+                        document.getElementById('search-input').value = student.nombre;
+                        container.style.display = 'none';
+                    });
                 }
-                container.appendChild(div);
+                container.appendChild(item);
             });
         }
 
-        function selectStudent(name) {
-            selectedStudent = name;
-            document.getElementById('search-input').value = name;
-            document.getElementById('search-results').style.display = 'none';
-        }
-
-        document.addEventListener('click', (e) => {
+        document.addEventListener('click', event => {
             const searchBox = document.querySelector('.search-container');
-            if (searchBox && !searchBox.contains(e.target)) {
+            if (searchBox && !searchBox.contains(event.target)) {
                 document.getElementById('search-results').style.display = 'none';
             }
         });
 
-        // --- 4. RENDERIZAR ASIENTOS (5x10) ---
         function renderSeats() {
             const grid = document.getElementById('seat-grid');
-            grid.innerHTML = ''; 
+            grid.replaceChildren();
+            for (let number = 1; number <= 50; number++) {
+                const seat = seats[number];
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = `seat${seat ? ' occupied' : ''}`;
+                button.textContent = seat
+                    ? `#${number} ${seat.nombre.split(' ')[0]}`
+                    : `#${number}`;
+                button.setAttribute('aria-label', seat
+                    ? `Asiento ${number}, ocupado por ${seat.nombre}`
+                    : `Asiento ${number}, disponible`);
+                button.addEventListener('click', () => handleSeatClick(number));
+                grid.appendChild(button);
+            }
+        }
 
-            for (let i = 1; i <= 50; i++) {
-                const seatDiv = document.createElement('div');
-                seatDiv.className = 'seat';
-
-                if (seats[i]) {
-                    seatDiv.classList.add('occupied');
-                    const firstName = seats[i].split(' ')[0];
-                    seatDiv.innerHTML = `<span>#${i}</span><span class="name">${firstName}</span>`;
+        async function handleSeatClick(number) {
+            const seat = seats[number];
+            try {
+                if (seat) {
+                    if (!confirm(`El asiento #${number} está ocupado por ${seat.nombre}.\n¿Deseas liberarlo?`)) {
+                        return;
+                    }
+                    await api(`/api/asientos/${number}`, { method: 'DELETE' });
                 } else {
-                    seatDiv.innerHTML = `<span>#${i}</span>`;
+                    if (!selectedStudent) {
+                        showMessage('Primero busca y selecciona un estudiante.');
+                        return;
+                    }
+                    await api(`/api/asientos/${number}`, {
+                        method: 'PUT',
+                        body: JSON.stringify({ estudianteId: selectedStudent.id }),
+                    });
+                    selectedStudent = null;
+                    document.getElementById('search-input').value = '';
                 }
-
-                seatDiv.onclick = () => handleSeatClick(i);
-                grid.appendChild(seatDiv);
+                await loadClassroom();
+                showMessage('');
+            } catch (error) {
+                showMessage(error.message);
             }
         }
 
-        function handleSeatClick(num) {
-            if (seats[num]) {
-                if (confirm(`El asiento #${num} está ocupado por ${seats[num]}.\n¿Deseas liberarlo?`)) {
-                    delete seats[num];
-                    saveDB();
-                    renderSeats();
-                    renderStudentDirectory();
-                }
-                return;
-            }
-
-            if (!selectedStudent) { 
-                alert("Primero busca y selecciona un estudiante."); 
-                return; 
-            }
-
-            seats[num] = selectedStudent;
-            saveDB();
-            renderSeats();
-            renderStudentDirectory();
-            document.getElementById('search-input').value = "";
-            selectedStudent = null;
-        }
-
-        // --- 5. TABLA DE ALUMNOS ---
         function renderStudentDirectory() {
             const tbody = document.getElementById('students-body');
-            tbody.innerHTML = '';
-
-            students.forEach(s => {
-                let assignedSeat = Object.keys(seats).find(key => seats[key] === s.name);
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td style="font-weight: 600;">${s.name}</td>
-                    <td style="color: var(--text-muted);">${s.code}</td>
-                    <td>
-                        ${assignedSeat 
-                            ? `<span class="badge badge-primary">Asiento #${assignedSeat}</span>` 
-                            : `<span class="badge badge-danger">Sin asiento</span>`}
-                    </td>
-                `;
-                tbody.appendChild(tr);
+            tbody.replaceChildren();
+            students.forEach(student => {
+                const assignedSeat = Object.values(seats).find(seat => seat.estudiante_id === student.id);
+                const row = document.createElement('tr');
+                const name = document.createElement('td');
+                name.textContent = student.nombre;
+                const code = document.createElement('td');
+                code.textContent = student.matricula || '—';
+                const assigned = document.createElement('td');
+                const badge = document.createElement('span');
+                badge.className = `badge ${assignedSeat ? 'badge-primary' : 'badge-danger'}`;
+                badge.textContent = assignedSeat ? `Asiento #${assignedSeat.asiento}` : 'Sin asiento';
+                assigned.appendChild(badge);
+                row.append(name, code, assigned);
+                tbody.appendChild(row);
             });
         }
 
-        function saveDB() {
-            localStorage.setItem('seats_db', JSON.stringify(seats));
-        }
-
-        // --- 6. TABLA DE ASISTENCIA ---
         function renderAttendance() {
             const tbody = document.getElementById('attendance-body');
-            tbody.innerHTML = '';
-            
-            students.forEach((s, index) => {
-                const status = attendance[index] || "Presente";
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td style="font-weight: 600;">${s.name}</td>
-                    <td style="color: var(--text-muted);">${s.code}</td>
-                    <td>
-                        <span class="badge ${status === 'Presente' ? 'badge-success' : 'badge-danger'}" id="status-${index}">
-                            ${status}
-                        </span>
-                    </td>
-                    <td>
-                        <button class="btn" onclick="toggleAttendance(${index})">Cambiar</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
+            tbody.replaceChildren();
+            students.forEach(student => {
+                const status = attendance[student.id] || 'Ausente';
+                const row = document.createElement('tr');
+                const name = document.createElement('td');
+                name.textContent = student.nombre;
+                const code = document.createElement('td');
+                code.textContent = student.matricula || '—';
+                const stateCell = document.createElement('td');
+                const badge = document.createElement('span');
+                badge.className = `badge ${status === 'Presente' ? 'badge-success' : 'badge-danger'}`;
+                badge.textContent = status;
+                stateCell.appendChild(badge);
+                const actionCell = document.createElement('td');
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'btn';
+                button.textContent = 'Cambiar';
+                button.addEventListener('click', () => toggleAttendance(student.id));
+                actionCell.appendChild(button);
+                row.append(name, code, stateCell, actionCell);
+                tbody.appendChild(row);
             });
         }
 
-        function toggleAttendance(index) {
-            const statusSpan = document.getElementById(`status-${index}`);
-            const isPresent = statusSpan.innerText === "Presente";
-            
-            if (isPresent) {
-                statusSpan.innerText = "Ausente";
-                statusSpan.className = "badge badge-danger";
-                attendance[index] = "Ausente";
-            } else {
-                statusSpan.innerText = "Presente";
-                statusSpan.className = "badge badge-success";
-                attendance[index] = "Presente";
+        async function toggleAttendance(studentId) {
+            const estado = attendance[studentId] === 'Presente' ? 'Ausente' : 'Presente';
+            try {
+                await api(`/api/asistencia/${studentId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        estado,
+                        fecha: document.getElementById('attendance-date').value,
+                    }),
+                });
+                await loadClassroom();
+            } catch (error) {
+                showMessage(error.message);
             }
-            localStorage.setItem('attendance_db', JSON.stringify(attendance));
         }
+
+        document.getElementById('student-form').addEventListener('submit', async event => {
+            event.preventDefault();
+            const nombre = document.getElementById('student-name').value.trim();
+            const matricula = document.getElementById('student-code').value.trim();
+            try {
+                await api('/api/estudiantes', {
+                    method: 'POST',
+                    body: JSON.stringify({ nombre, matricula }),
+                });
+                event.target.reset();
+                await loadClassroom();
+                showMessage('');
+            } catch (error) {
+                showMessage(error.message);
+            }
+        });
+
+        document.getElementById('attendance-date').addEventListener('change', loadClassroom);
+        document.getElementById('search-input').addEventListener('input', filterStudents);
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('attendance-date').value = localDate();
+            loadClassroom();
+        });
     </script>
 </body>
 </html>
