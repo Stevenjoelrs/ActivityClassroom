@@ -1,15 +1,20 @@
 {
   "name": "gestor-apuntes",
   "version": "1.0.0",
-  "description": "",
-  "main": "src/app.js",
-  "scripts": {    
-  "start": "node src/app.js",
-  "dev": "nodemon src/app.js",
-  "test": "jest"
-
+  "description": "Proyecto de gestion de aula para apuntes y asignacion de asientos",
+  "main": "backend/server.js",
+  "scripts": {
+    "dev": "node --watch-path=backend --watch-path=public backend/server.js",
+    "start": "node backend/server.js",
+    "db:setup": "node backend/setup-db.js",
+    "test": "node --test"
   },
-  "keywords": [],
+  "keywords": [
+    "aula",
+    "apuntes",
+    "asientos",
+    "javascript"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",

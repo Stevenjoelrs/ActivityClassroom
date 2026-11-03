@@ -1,2 +1,8 @@
 node_modules/
+<<<<<<< HEAD
 .env
+=======
+.env
+.env.*
+!.env.example
+>>>>>>> 8a745fa (feat: agrega interfaz para crear, editar, ver y eliminar apuntes)
