@@ -12,7 +12,8 @@
   "type": "module",
   "jest": {
     "testMatch": [
-      "<rootDir>/src/**/tests/**/*.test.js"
+      "<rootDir>/src/**/tests/**/*.test.js",
+      "<rootDir>/asignacion_de_asientos/**/*.test.js"
     ]
   },
   "dependencies": {

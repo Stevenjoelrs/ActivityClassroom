@@ -174,3 +174,138 @@ renombre real del test quedó en el commit `9b55857`.
 
 - Captura de la llamada o sesión compartida: pendiente de adjuntar.
 - Modalidad: remota por VPN, un solo piloto escribe a la vez.
+
+---
+
+## Sesión de integración: SistemaAula en ActivityClassroom (HU-05 y HU-06)
+
+- **Fecha:** 2026-11-03
+- **Piloto:** kn0wles
+- **Copiloto:** Stevenjoelrs
+- **Objetivo:** Integrar el repositorio externo `SistemaAula` (ramas `modulo-asientos` y `feature/backend-apuntes`), preservando todo su historial git sin `--squash` ni `--force`, alineando la arquitectura con la rama base `develop` y normalizando los runners de pruebas a 102 pruebas en verde.
+
+### Pasos ejecutados
+1. **Verificación y diagnóstico inicial:** Comprobación del estado limpio del árbol de trabajo, remotos configurados y confirmación de que la rama base activa en el origen es `develop`.
+2. **Fusión no trivial de historias:** En la rama de trabajo `integracion/sistema-aula`, se incorporaron los historiales de `sistemaaula/modulo-asientos` y `sistemaaula/feature/backend-apuntes` mediante `--allow-unrelated-histories`, resolviendo conflictos conservando el diseño estructural y los archivos originales de `develop`.
+3. **Puesta al día con `develop`:** Fusión de `origin/develop` dentro de `integracion/sistema-aula` (commit `9480897`), asegurando que todos los desarrollos de HU-01 a HU-04 (incluyendo los 74 tests de `node:test` y 23 tests de `jest`) permanezcan intactos.
+4. **Aislamiento modular CommonJS en raíz ESM:**
+   - Creación de `backend/asignacion_de_asientos/package.json` con `{"type": "commonjs"}`.
+   - Creación de `backend/apuntes/package.json` con `{"type": "commonjs"}`.
+   - Preservación de la raíz `"type": "module"` en `package.json` y `backend/package.json`.
+5. **Normalización de pruebas y runner:**
+   - Movimiento de `pruebas.test.js` a `backend/asignacion_de_asientos/pruebas.test.js`.
+   - Normalización de los títulos de las 5 pruebas de asientos al estándar `HU-05: ...`.
+   - Inclusión de `<rootDir>/asignacion_de_asientos/**/*.test.js` en `jest.testMatch` dentro de `backend/package.json`.
+6. **Reorganización y limpieza del árbol:**
+   - Frontend de apuntes ubicado en `frontend/apuntes/` (`index.html`, `app.js`, `styles.css`).
+   - Frontend de asientos preservado en `frontend/asignacion_de_asientos/index.html`.
+   - Ajuste de rutas estáticas en `backend/apuntes/src/app.js` y `backend/server.js`.
+   - Adición de `datos.json` al `.gitignore` para no versionar la persistencia local de asientos.
+   - Limpieza de archivos redundantes (`package-lock.json`, `pnpm-workspace.yaml`, `.gitkeep`, `docs/class.puml`, `tests/`).
+   - Unificación de variables relacionales en `backend/.env.example`.
+7. **Actualización documental integral:** Actualización de `docs/roles.md`, `docs/US.md`, `docs/matriz-aceptacion.md`, `docs/fuentes.md`, `docs/diagrama-clases.md`, `docs/crc.md` y `README.md`.
+
+### Problemas encontrados y soluciones aplicadas
+- **Incompatibilidad de módulos (ESM vs CommonJS):** El código heredado de `SistemaAula` utilizaba `require` y `module.exports`, lo que chocaba con el entorno ESM nativo de `develop`. Se resolvió definiendo submanifiestos locales `{"type": "commonjs"}` en cada subdirectorio correspondiente, permitiendo la coexistencia sin alterar la lógica de negocio.
+- **Ruta de persistencia local en `Aula.js`:** Se verificó que `Aula.js` utiliza `path.join(__dirname, 'datos.json')`, operando de manera aislada dentro de `backend/asignacion_de_asientos/` sin ensuciar la raíz del proyecto. Se agregó la regla correspondiente a `.gitignore`.
+- **Ausencia de pruebas en HU-06:** Se verificó que `feature/backend-apuntes` no contenía suite de pruebas en el repositorio de origen; se documentó explícitamente en la matriz y bitácora con 0 pruebas asignadas.
+
+### Evidencia de ejecución real (`pnpm test`):
+```text
+$ pnpm run test:dominio && pnpm run test:backend
+$ node --test "backend/src/compartido/*.test.js" "backend/src/modulos/calendario-academico/*.test.js" "backend/src/modulos/grupos-trabajo/*.test.js"
+✔ repositorio archivo: archivo inexistente devuelve lista vacía
+✔ repositorio archivo: guardar y volver a crear con la misma ruta devuelve instancias del dominio
+✔ repositorio archivo: JSON inválido lanza Error con mensaje claro
+✔ repositorio archivo: datos inválidos dentro del archivo lanzan el Error de validación del dominio
+✔ repositorio archivo: crea la carpeta si no existe
+✔ repositorio archivo: tras guardar no queda ningún archivo temporal en la carpeta
+✔ repositorios persistentes: guarda en eventos.json y grupos.json dentro del directorio y los recupera
+✔ repositorios persistentes: sin argumento usa process.env.DATA_DIR si está definido
+✔ repositorios persistentes: sin argumento ni DATA_DIR usa backend/data/
+✔ HU-01: CA-01/CA-05 registra y consulta una clase con fecha, horario y descripción
+✔ HU-01: CA-02 registra una entrega de tarea con su fecha
+✔ HU-01: CA-03 registra una actividad académica con su descripción
+✔ HU-01: CA-04 refleja suspensiones registradas en el calendario
+✔ HU-01: CA-06 informa cuando no existen eventos para una materia
+✔ HU-01: devuelve únicamente los eventos de la materia consultada
+✔ HU-01: rechaza identificadores inválidos de evento y materia
+✔ HU-01: rechaza tipos de evento no admitidos
+✔ HU-01: rechaza fechas inválidas o con formato distinto de AAAA-MM-DD
+✔ HU-01: acepta eventos sin horario o con horario nulo
+✔ HU-01: rechaza horarios vacíos o con espacios en los extremos
+✔ HU-01: rechaza descripciones vacías o no textuales
+✔ HU-01: rechaza un estado de suspensión no booleano
+✔ HU-01: admite todos los tipos de evento
+✔ HU-01: rechaza registrar objetos que no son eventos
+✔ HU-01: rechaza consultar una materia con identificador inválido
+✔ HU-01: no permite reasignar datos de un evento establecido
+✔ HU-01: no permite modificar el arreglo de eventos consultado
+✔ HU-01: la consulta vacía devuelve un arreglo congelado
+✔ HU-01: el resultado de la consulta es de solo lectura
+✔ HU-01: cada consulta devuelve una copia independiente de los eventos
+✔ HU-01: dos instancias que comparten el mismo repositorio ven los mismos datos
+✔ HU-01: una instancia sin argumentos sigue funcionando y queda aislada de otras
+✔ HU-01 repositorio: guardar y listar eventos
+✔ HU-01 repositorio: dos almacenes distintos no comparten datos
+✔ HU-01 repositorio: listar() devuelve una copia que no altera el almacén
+✔ HU-01 repositorio: expone el singleton repositorioCalendario
+✔ servicio calendario: registrar y consultar por materia (CA-01, CA-02, CA-03, CA-05)
+✔ servicio calendario: clase con suspendido: true reflejada (CA-04)
+✔ servicio calendario: materia sin eventos devuelve mensaje y arreglo vacío (CA-06)
+✔ servicio calendario: un Error del dominio se convierte en AppError(400) con el mismo mensaje
+✔ servicio calendario: conserva los eventos al recrearse sobre el mismo archivo JSON
+✔ HU-02: CA-02/CA-04 registra y permite consultar un grupo por afinidad
+✔ HU-02: CA-03 registra integrantes de un sorteo ya realizado
+✔ HU-02: CA-06 rechaza integrantes duplicados
+✔ HU-02: CA-07 rechaza un grupo que supera el máximo
+✔ HU-02: acepta un grupo con el máximo exacto
+✔ HU-02: acepta un grupo sin máximo establecido
+✔ HU-02: rechaza nombre o actividad sin datos válidos
+✔ HU-02: RN-01 rechaza modalidades no admitidas
+✔ HU-02: rechaza grupos sin un arreglo de integrantes no vacío
+✔ HU-02: rechaza identificadores de integrantes inválidos y arreglos con huecos
+✔ HU-02: rechaza identificador de actividad con espacios en los extremos
+✔ HU-02: rechaza un máximo que no sea un entero positivo seguro
+✔ HU-02: RN-05 no permite reasignar datos de un grupo establecido
+✔ HU-02: RN-05 no permite cambiar ni agregar integrantes
+✔ HU-02: RN-05 modificar la lista original no cambia el grupo
+✔ HU-02 repositorio: guardar y listar grupos
+✔ HU-02 repositorio: dos almacenes distintos no comparten datos
+✔ HU-02 repositorio: listar() devuelve una copia que no altera el almacén
+✔ HU-02 repositorio: expone el singleton repositorioGrupos
+✔ servicio grupos: registrar y consultar por actividad, afinidad y sorteo
+✔ servicio grupos: integrante duplicado lanza AppError(400)
+✔ servicio grupos: maximo superado lanza AppError(400)
+✔ servicio grupos: otra actividad no lo devuelve y valida id de actividad
+✔ servicio grupos: conserva los grupos al recrearse sobre el mismo archivo JSON
+✔ HU-02: un registro nuevo se crea sin grupos
+✔ HU-02: CA-01/CA-05 registra un grupo y lo consulta por su actividad
+✔ HU-02: CA-05 devuelve únicamente los grupos de la actividad consultada
+✔ HU-02: rechaza consultar con un identificador de actividad inválido
+✔ HU-02: rechaza registrar objetos que no son GrupoTrabajo
+✔ HU-02: RN-05 la consulta devuelve un arreglo de solo lectura
+✔ HU-02: cada consulta devuelve una copia independiente de los grupos
+✔ HU-02: dos instancias que comparten el mismo repositorio ven los mismos datos
+✔ HU-02: una instancia sin argumentos sigue funcionando y queda aislada de otras
+ℹ tests 74
+ℹ suites 0
+ℹ pass 74
+ℹ fail 0
+
+$ pnpm --prefix backend test
+$ node --experimental-vm-modules node_modules/jest/bin/jest.js
+PASS asignacion_de_asientos/pruebas.test.js
+PASS src/modulos/entregas-tareas/tests/entregas.service.test.js
+PASS src/modulos/revision-tareas/tests/revision.service.test.js
+PASS src/modulos/entregas-tareas/tests/entregas.validaciones.test.js
+PASS src/modulos/revision-tareas/tests/revision.validaciones.test.js
+
+Test Suites: 5 passed, 5 total
+Tests:       28 passed, 28 total
+Snapshots:   0 total
+Time:        0.598 s
+Ran all test suites.
+
+Total suite unificada: 74 (node:test) + 28 (Jest) = 102 pruebas en verde (0 fallos).
+```

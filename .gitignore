@@ -18,3 +18,10 @@ dist-ssr/
 .agents/
 .aws/
 .codex/
+
+# Persistencia local de asignación de asientos
+datos.json
+
+# Archivos de bloqueo en raíz generados por scripts
+/pnpm-lock.yaml
+/package-lock.json

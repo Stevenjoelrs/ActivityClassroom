@@ -12,6 +12,8 @@ Este documento detalla los roles, responsabilidades y contribuciones del equipo 
 | **Steven Joel Ramos Salazar** (`stevenjramossalazar`) | `stevenjramossalazar@gmail.com` | Conductor HU-02, Arquitectura HTTP, Vistas Frontend | 16 |
 | **arubis** (Wendy Puma Uribe) | `wendypumauribe@gmail.com` | QA / Pruebas unitarias en Jest (HU-03 y HU-04) | 7 |
 | **Joyce** | `joyfq23@gmail.com` | Implementación base y esquema SQL de HU-03 y HU-04 | 6 |
+| **Camila Araoz** (`araozcamila313`) | `araozcamila313@gmail.com` | Autora HU-05 (Asignación de asientos y asistencia), frontend interactivo y pruebas Jest | 14 |
+| **Ximena Mendoza Humerez** (`Ximena`) | `mendozahumerezximena@gmail.com` | Autora HU-06 (Tomar apuntes), backend Express, persistencia PostgreSQL para apuntes y asientos | 7 |
 
 ---
 
@@ -23,6 +25,12 @@ Este documento detalla los roles, responsabilidades y contribuciones del equipo 
 | **Dominio HU-02** (Grupos) | `GrupoTrabajo`, `RegistroGrupos`, TDD `node:test` | Stevenjoelrs | kn0wles | `f35aac5`, `0d53237`, `3fe843a` |
 | **Dominio / Backend HU-03** (Entregas) | `ServicioEntregas`, `ControladorEntregas`, validaciones de adjuntos | Joyce | Stevenjoelrs / kn0wles | `9328652`, `54f2348` |
 | **Dominio / Backend HU-04** (Revisión) | `ServicioRevision`, `ControladorRevision`, validaciones de feedback | Joyce | Stevenjoelrs / kn0wles | `9328652`, `54f2348` |
+| **Dominio / Backend HU-05** (Asientos) | `Aula`, `Asiento`, `Estudiante`, persistencia en `datos.json` | Camila Araoz | Ximena Mendoza | `commits de modulo-asientos` |
+| **Pruebas HU-05** (Jest) | 5 pruebas unitarias normalizadas en `backend/asignacion_de_asientos/pruebas.test.js` | Camila Araoz | - | `commits de modulo-asientos` |
+| **Frontend HU-05** (Asientos) | Interfaz visual e interactiva de asientos en `frontend/asignacion_de_asientos/index.html` | Camila Araoz | - | `commits de modulo-asientos` |
+| **Backend HU-06** (Apuntes) | `ApunteService`, `ApunteRepository`, rutas Express en `backend/apuntes/` | Ximena Mendoza | Camila Araoz | `commits de feature/backend-apuntes` |
+| **Frontend HU-06** (Apuntes) | Interfaz web de notas en `frontend/apuntes/` (`index.html`, `app.js`, `styles.css`) | Ximena Mendoza | - | `commits de feature/tomar-apuntes-frontend-pr` |
+| **Persistencia Relacional PostgreSQL** | Esquema SQL y endpoints de base de datos (`backend/server.js`, `backend/schema.sql`, `backend/setup-db.js`) | Ximena Mendoza | - | `346f3f5`, `5cde6c4` |
 | **Pruebas HU-03 y HU-04** (Jest) | 4 suites y 23 pruebas unitarias para validaciones y servicios | arubis | Joyce | `f73a649`, `ef10fa4`, `91c5289`, `3dc8577` |
 | **Pruebas HU-01 y HU-02** (`node:test`) | 74 pruebas unitarias de dominio, repositorios y servicios | kn0wles | Stevenjoelrs | `00d7dc6`, `0944352`, `e51e25c` |
 | **API REST / HTTP (HU-01 y HU-02)** | Controladores y rutas Express para Calendario y Grupos | Stevenjoelrs | kn0wles | `176188a`, `60e077c` |
@@ -50,3 +58,4 @@ Para el desarrollo conjunto entre **kn0wles** y **Steven Joel Ramos Salazar**, s
      Co-authored-by: Steven Joel Ramos Salazar <stevenjramossalazar@gmail.com>
      ```
    - Se preservó íntegramente la autoría original de **Joyce** y **arubis** en los commits importados del repositorio externo mediante el merge de dos padres (`6310ad9`).
+   - Se preservó íntegramente la autoría original de **Camila Araoz** y **Ximena Mendoza Humerez** en los commits importados del repositorio `SistemaAula` mediante la fusión de historias no relacionadas (`9480897`).

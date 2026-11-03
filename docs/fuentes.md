@@ -17,3 +17,9 @@ Recursos que no se vieron en aula. Verificar cada enlace antes de entregar.
 | Escritura atómica (archivo temporal + renameSync) | repositorio-archivo.js | Node.js, "fs.renameSync": https://nodejs.org/api/fs.html#fsrenamesyncoldpath-newpath |
 | Jest con --experimental-vm-modules (soporte ESM) | backend/package.json, suites Jest (tests/) | Jest Docs, "ECMAScript Modules": https://jestjs.io/docs/ecmascript-modules |
 | Patrones entrecomillados para node --test | package.json ("test:dominio") | Node.js, "Test runner execution model and path resolution": https://nodejs.org/api/test.html |
+| dotenv (^18.0.9) | backend/.env, backend/apuntes/src/config/db.js | npm, "dotenv": https://www.npmjs.com/package/dotenv |
+| pg (^8.23.1) | backend/apuntes/src/config/db.js, backend/server.js | node-postgres: https://node-postgres.com/ |
+| express (^5.3.0) | backend/src/app.js, backend/apuntes/src/app.js | Express: https://expressjs.com/ |
+| nodemon (^3.1.14) | backend/package.json (script dev) | npm, "nodemon": https://www.npmjs.com/package/nodemon |
+| Jest (^30.5.2) | backend/package.json, backend/asignacion_de_asientos/pruebas.test.js | Jest: https://jestjs.io/ |
+| Aislamiento CJS ({ "type": "commonjs" }) | backend/asignacion_de_asientos/package.json, backend/apuntes/package.json | Node.js, "Package type": https://nodejs.org/api/packages.html#type |
