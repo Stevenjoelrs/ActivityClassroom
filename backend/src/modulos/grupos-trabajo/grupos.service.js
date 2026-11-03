@@ -1,10 +1,10 @@
 import { AppError } from "../../compartido/error.js";
-import { repositorios } from "../../compartido/repositorios.js";
+import { repositorioGrupos } from "./grupos.repository.js";
 import { GrupoTrabajo } from "./grupo-trabajo.js";
 import { RegistroGrupos } from "./registro-grupos.js";
 
 export function crearServicioGrupos({
-  registro = new RegistroGrupos(repositorios.grupos),
+  registro = new RegistroGrupos(repositorioGrupos),
 } = {}) {
   return {
     registrar(datos = {}) {

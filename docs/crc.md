@@ -69,14 +69,14 @@ Una tarjeta por clase implementada. Los colaboradores coinciden con el código.
 
 **Atributos clave:** `guardar`, `listar`.
 
-## AlmacenAcademico (Compartido)
+## Almacen / AlmacenAcademico (Compartido)
 
 | Responsabilidades | Colaboradores |
 | --- | --- |
-| Proveer estructura de almacenamiento en memoria `{ eventos: [], grupos: [] }` | Ninguno |
-| Proveer fábrica `crearAlmacenAcademico()` y singleton `almacenAcademico` | |
+| Proveer estructura de almacenamiento unificada en memoria `{ entregas, eventos, grupos }` | Ninguno |
+| Proveer fábrica `crearAlmacen()` y singleton `almacen` (y compatibilidad con `crearAlmacenAcademico` / `almacenAcademico`) | |
 
-**Atributos clave:** `eventos`, `grupos`.
+**Atributos clave:** `entregas`, `eventos`, `grupos`.
 
 ## RepositorioArchivo (Compartido)
 

@@ -255,16 +255,11 @@ Equivalencia acordada entre equipos:
   mencionan como alias del repo externo en la matriz de trazabilidad.
 - HU-01 (calendario) y HU-02 (grupos) son nuestras y ya están implementadas.
 
-### 2. Persistencia compartida
+### 2. Persistencia compartida (resuelta)
 
-- Nosotros trabajamos con clases en memoria.
-- Ellos también usan memoria, pero además declaran `pg` y un `schema.sql` que no se
-  ejecuta.
-- No está definido quién es dueño de la persistencia común ni si se migrará a
-  PostgreSQL.
-- Decisión pendiente: mantener memoria para la entrega, adoptar PostgreSQL con
-  migraciones y repositorios, o definir una interfaz de repositorio común. Si se adopta
-  PostgreSQL, hay que decidir si se usa su `schema.sql` o uno propio y quién lo valida.
+- **Unificación en memoria**: Todos los módulos (HU-01 a HU-04) utilizan por defecto el almacén compartido `backend/src/compartido/datos-memoria.js` (`almacen`), permitiendo ejecutar pruebas y el servidor sin dependencias externas.
+- **Esquema relacional unificado**: Se amplió `backend/database/schema.sql` incorporando las tablas `eventos_academicos`, `grupos_trabajo` y `grupo_integrantes` junto a las existentes (`estudiantes`, `docentes`, `tareas`, `entregas`, `feedback`).
+- **Adaptadores de archivo**: Los módulos de calendario y grupos conservan soporte para persistencia en archivos JSON (`backend/data/` o `DATA_DIR`) mediante `backend/src/compartido/repositorios.js`.
 
 ### 3. Estructura de carpetas
 

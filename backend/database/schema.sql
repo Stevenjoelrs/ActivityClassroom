@@ -31,4 +31,25 @@ CREATE TABLE IF NOT EXISTS feedback (
   corregir TEXT NOT NULL CHECK (length(trim(corregir)) > 0),
   actualizado TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+CREATE TABLE IF NOT EXISTS eventos_academicos (
+  id VARCHAR(64) PRIMARY KEY,
+  materia_id VARCHAR(64) NOT NULL,
+  tipo VARCHAR(32) NOT NULL CHECK (tipo IN ('clase', 'entrega_tarea', 'actividad', 'suspension')),
+  fecha DATE NOT NULL,
+  horario VARCHAR(64),
+  descripcion TEXT NOT NULL,
+  suspendido BOOLEAN NOT NULL DEFAULT FALSE
+);
+CREATE TABLE IF NOT EXISTS grupos_trabajo (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  nombre VARCHAR(128) NOT NULL,
+  actividad_id VARCHAR(64) NOT NULL,
+  modalidad VARCHAR(32) NOT NULL CHECK (modalidad IN ('afinidad', 'sorteo')),
+  maximo_integrantes INT
+);
+CREATE TABLE IF NOT EXISTS grupo_integrantes (
+  grupo_id BIGINT NOT NULL REFERENCES grupos_trabajo(id) ON DELETE CASCADE,
+  estudiante_id VARCHAR(64) NOT NULL,
+  PRIMARY KEY (grupo_id, estudiante_id)
+);
 COMMIT;

@@ -1,4 +1,4 @@
-# Tarea 01: registrar un grupo de trabajo
+# Tarea 02: registrar un grupo de trabajo
 
 Historia: **HU-02 — Formación y registro de grupos de trabajo**.
 

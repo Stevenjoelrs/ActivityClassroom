@@ -1,12 +1,12 @@
 import { AppError } from "../../compartido/error.js";
-import { repositorios } from "../../compartido/repositorios.js";
+import { repositorioCalendario } from "./calendario.repository.js";
 import {
   CalendarioAcademico,
   EventoAcademico,
 } from "./calendario-academico.js";
 
 export function crearServicioCalendario({
-  calendario = new CalendarioAcademico(repositorios.calendario),
+  calendario = new CalendarioAcademico(repositorioCalendario),
 } = {}) {
   return {
     registrar(datos = {}) {

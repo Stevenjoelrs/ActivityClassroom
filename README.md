@@ -121,17 +121,21 @@ grupo también se congela para impedir reasignaciones. El máximo es opcional
 (`null` cuando no existe) y debe ser un entero positivo seguro. Los datos
 inválidos producen `Error` con un mensaje descriptivo.
 
-La [documentación de la tarea 01 de grupos](docs/tarea-01-grupo-trabajo.md) incluye
+La [documentación de la tarea 02 de grupos](docs/tarea-02-grupo-trabajo.md) incluye
 UML, los ciclos TDD y las tareas siguientes.
 
 ## Persistencia
 
-El almacenamiento de eventos y grupos se gestiona a través del patrón repositorio,
-desacoplando el dominio de la tecnología de persistencia.
+El almacenamiento en la aplicación se gestiona de forma desacoplada mediante el patrón repositorio:
 
-Por defecto, los repositorios persistentes guardan los datos en archivos JSON:
-- `eventos.json`: colección serializada de `EventoAcademico`.
-- `grupos.json`: colección serializada de `GrupoTrabajo`.
+1. **Almacenamiento en memoria compartida (por defecto):**
+   Todos los módulos (`calendario-academico`, `grupos-trabajo`, `entregas-tareas` y `revision-tareas`) utilizan por defecto el almacén compartido en memoria (`backend/src/compartido/datos-memoria.js`), facilitando la ejecución de pruebas y demostraciones sin dependencias de servicios externos.
+
+2. **Esquema relacional unificado:**
+   En `backend/database/schema.sql` se define el modelo relacional para PostgreSQL con las tablas correspondientes a los 4 módulos: `estudiantes`, `docentes`, `tareas`, `entregas`, `feedback`, `eventos_academicos`, `grupos_trabajo` y `grupo_integrantes`.
+
+3. **Adaptador opcional a archivos JSON (HU-01 y HU-02):**
+   Para persistencia local en disco de eventos y grupos, se dispone de adaptadores en `backend/src/compartido/repositorios.js` que serializan a `eventos.json` y `grupos.json` dentro de `backend/data/` (o la ruta configurada en `DATA_DIR`).
 
 ### Ubicación y configuración (DATA_DIR)
 

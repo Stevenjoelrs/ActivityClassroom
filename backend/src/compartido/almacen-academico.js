@@ -1,8 +1,7 @@
+import { almacen, crearAlmacen } from "./datos-memoria.js";
+
 export function crearAlmacenAcademico() {
-  return {
-    eventos: [],
-    grupos: [],
-  };
+  return crearAlmacen();
 }
 
-export const almacenAcademico = crearAlmacenAcademico();
+export const almacenAcademico = almacen;

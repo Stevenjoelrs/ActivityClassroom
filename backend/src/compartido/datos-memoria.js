@@ -1,6 +1,10 @@
 // Almacenamiento compartido del ejercicio: se pierde al reiniciar Express.
-// Cada instancia permite que Wendy aísle los datos de sus pruebas.
+// Cada instancia permite aislar los datos en pruebas.
 export function crearAlmacen() {
-  return { entregas: new Map() };
+  return {
+    entregas: new Map(),
+    eventos: [],
+    grupos: [],
+  };
 }
 export const almacen = crearAlmacen();

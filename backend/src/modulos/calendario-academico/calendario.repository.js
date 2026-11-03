@@ -1,11 +1,12 @@
-import { almacenAcademico } from "../../compartido/almacen-academico.js";
+import { almacen } from "../../compartido/datos-memoria.js";
 import { crearRepositorioArchivo } from "../../compartido/repositorio-archivo.js";
 import { EventoAcademico } from "./calendario-academico.js";
 
-export function crearRepositorioCalendario(datos = almacenAcademico) {
+export function crearRepositorioCalendario(datos = almacen) {
   return {
     guardar(evento) {
       datos.eventos.push(evento);
+      return evento;
     },
     listar() {
       return [...datos.eventos];
