@@ -4,29 +4,31 @@ Sistema académico integral que consolida **HU-01** (calendario académico), **H
 
 ## Pruebas
 
-El repositorio integra una suite consolidada de **102 pruebas automatizadas**:
+El repositorio integra una suite consolidada de **148 pruebas automatizadas** que cubren el 100% de las 6 historias de usuario tanto en backend como en frontend:
 
 ```sh
 pnpm test
 ```
 
-Este comando ejecuta ambas suites en secuencia:
+Este comando ejecuta las tres suites en secuencia:
 1. `pnpm run test:dominio`: ejecuta **74 pruebas** nativas del dominio, persistencia y servicios de HU-01 y HU-02 utilizando el runner nativo `node --test` y `node:assert/strict`. No requiere ninguna dependencia externa instalada.
-2. `pnpm run test:backend`: ejecuta **28 pruebas** unitarias utilizando **Jest**: 23 pruebas de los módulos de entregas y revisión (HU-03 y HU-04) con módulos ESM (`--experimental-vm-modules`), y 5 pruebas de asignación de asientos y asistencia (HU-05) con aislamiento CommonJS.
+2. `pnpm run test:backend`: ejecuta **61 pruebas** unitarias utilizando **Jest**: 23 pruebas de entregas y revisión (HU-03 y HU-04) con módulos ESM (`--experimental-vm-modules`), 9 pruebas de asignación de asientos y asistencia (HU-05) con aislamiento CommonJS, y 26 pruebas de gestión de apuntes y validaciones (HU-06).
+3. `pnpm run test:frontend`: ejecuta **13 pruebas** de interfaz de usuario utilizando **Vitest**, `@vue/test-utils` y `happy-dom`, verificando el renderizado reactivo y flujo de componentes para las 6 historias de usuario (HU-01 a HU-06).
 
-### ¿Por qué dos suites separadas?
-Nuestras pruebas de HU-01 y HU-02 siguen la regla de cero dependencias externas y usan el ejecutor estándar `node --test` con patrones específicos por carpeta. Las pruebas de HU-03, HU-04 y HU-05 provienen de repositorios integrados y fueron diseñadas con Jest, apoyándose en utilidades como `jest.fn()` y `expect()`. Para evitar que `node --test` intente ejecutar archivos de Jest o que Jest capture pruebas de `node:test`, cada suite corre con su propio entorno y patrones delimitados (`testMatch` en Jest y argumentos por carpeta en `node --test`).
-
-> **Nota:** Para ejecutar las pruebas de Jest se requiere haber instalado las dependencias del backend con `pnpm install` dentro de la carpeta `backend/`.
+### ¿Por qué suites separadas?
+Nuestras pruebas de HU-01 y HU-02 siguen la regla de cero dependencias externas y usan el ejecutor estándar `node --test` con patrones específicos por carpeta. Las pruebas de HU-03, HU-04, HU-05 y HU-06 provienen de módulos integrados y fueron diseñadas con Jest, apoyándose en utilidades como `jest.fn()` y `expect()`. Por su parte, el frontend corre sobre Vitest con el entorno DOM simulado. Cada suite corre con su propio entorno y patrones delimitados (`testMatch` en Jest, argumentos por carpeta en `node --test` y `vite.config.js` en Vitest).
 
 Para ejecutar cada suite por separado:
 
 ```sh
-# Solo pruebas de dominio y persistencia (node --test) - 74 pruebas
+# Pruebas de dominio y persistencia (node --test) - 74 pruebas
 pnpm run test:dominio
 
-# Solo pruebas unitarias de backend (Jest) - 28 pruebas
+# Pruebas unitarias de backend (Jest) - 61 pruebas
 pnpm run test:backend
+
+# Pruebas de interfaz gráfica frontend (Vitest) - 13 pruebas
+pnpm run test:frontend
 ```
 
 ## Equivalencia de historias

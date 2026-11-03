@@ -309,3 +309,49 @@ Ran all test suites.
 
 Total suite unificada: 74 (node:test) + 28 (Jest) = 102 pruebas en verde (0 fallos).
 ```
+
+## Ciclo 4: Consolidación final de HU-05, HU-06 y Frontend Vitest
+
+| Fecha | Tarea / ciclo TDD | Piloto | Copiloto | Rotación a los... |
+|---|---|---|---|---|
+| 2026-11-03 | Ampliación suite Jest HU-05 (CA-06 búsqueda, CA-07 persistencia) | Camila Araoz | kn0wles | Ximena Mendoza Humerez |
+| 2026-11-03 | Creación suite Jest HU-06 ApunteService (15 tests) y validaciones (11 tests) | Ximena Mendoza Humerez | kn0wles | kn0wles |
+| 2026-11-03 | Integración frontend Vue: AsientosView (HU-05), ApuntesView (HU-06), Dashboard e Iconografía | kn0wles | Steven Joel Ramos Salazar | kn0wles |
+| 2026-11-03 | Creación suite Vitest frontend para HU-01 a HU-06 (13 pruebas de componentes) | kn0wles | Steven Joel Ramos Salazar | kn0wles |
+
+### Evidencia de ejecución unificada (148 pruebas automatizadas)
+
+```
+$ pnpm test
+$ pnpm run test:dominio && pnpm run test:backend && pnpm run test:frontend
+
+# 1. Dominio y persistencia (node --test)
+ℹ tests 74
+ℹ pass 74
+ℹ fail 0
+
+# 2. Backend Jest suites (7 suites)
+PASS apuntes/tests/validation.test.js
+PASS src/modulos/entregas-tareas/tests/entregas.service.test.js
+PASS apuntes/tests/apunteService.test.js
+PASS src/modulos/revision-tareas/tests/revision.service.test.js
+PASS src/modulos/revision-tareas/tests/revision.validaciones.test.js
+PASS src/modulos/entregas-tareas/tests/entregas.validaciones.test.js
+PASS asignacion_de_asientos/pruebas.test.js
+
+Test Suites: 7 passed, 7 total
+Tests:       61 passed, 61 total
+
+# 3. Frontend Vitest suites (6 suites)
+✓ src/tests/hu04-revision.test.js (2 tests)
+✓ src/tests/hu01-calendario.test.js (3 tests)
+✓ src/tests/hu02-grupos.test.js (2 tests)
+✓ src/tests/hu03-entregas.test.js (2 tests)
+✓ src/tests/hu06-apuntes.test.js (2 tests)
+✓ src/tests/hu05-asientos.test.js (2 tests)
+
+Test Files  6 passed (6)
+Tests       13 passed (13)
+
+Total unificado: 74 (node:test) + 61 (Jest) + 13 (Vitest) = 148 pruebas en verde (0 fallos).
+```

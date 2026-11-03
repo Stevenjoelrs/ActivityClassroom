@@ -118,7 +118,7 @@ Pruebas unitarias de Jest importadas desde la rama `externo/US-01-unit-test` (au
 
 ## HU-05 - Asignación de asientos y asistencia (SistemaAula)
 
-Pruebas unitarias de Jest importadas desde la rama `sistemaaula/modulo-asientos` (autora: Camila Araoz), normalizadas bajo la nomenclatura oficial `HU-05`. Total: 1 suite y 5 pruebas en verde.
+Pruebas unitarias de Jest importadas desde la rama `sistemaaula/modulo-asientos` (autora: Camila Araoz), normalizadas bajo la nomenclatura oficial `HU-05` y ampliadas para cubrir búsqueda y persistencia. Total: 1 suite y 9 pruebas en verde.
 
 | HU | CA/RN | Caso | Dado/Cuando | Esperado | Test | Estado |
 |----|-------|------|-------------|----------|------|--------|
@@ -127,31 +127,75 @@ Pruebas unitarias de Jest importadas desde la rama `sistemaaula/modulo-asientos`
 | HU-05 | CA-03 | Liberar asiento | Liberar un asiento asignado | Regresa a estado "Disponible" | backend/asignacion_de_asientos/pruebas.test.js | ✅ |
 | HU-05 | CA-04 | Asistencia por defecto | Instanciar un `Estudiante` | Asistencia inicial es "Ausente" | backend/asignacion_de_asientos/pruebas.test.js | ✅ |
 | HU-05 | CA-05 | Modificar asistencia | Docente registra asistencia "Presente" | Asistencia cambia a "Presente" | backend/asignacion_de_asientos/pruebas.test.js | ✅ |
-| HU-05 | CA-06 | Búsqueda de estudiante | Buscar por nombre o matrícula (`buscarEstudiante`) | Retorna estudiante coincidente | backend/asignacion_de_asientos/Aula.js | ➖ |
-| HU-05 | CA-07 | Persistencia local | Guardar y cargar en `datos.json` (`guardarDatos`/`cargarDatos`) | Estados conservados en archivo JSON | backend/asignacion_de_asientos/Aula.js | ➖ |
+| HU-05 | CA-06 | Búsqueda de estudiante | Buscar por nombre o matrícula (`buscarEstudiante`) | Retorna estudiante coincidente | backend/asignacion_de_asientos/pruebas.test.js | ✅ |
+| HU-05 | CA-07 | Persistencia local | Guardar y cargar en `datos.json` (`guardarDatos`/`cargarDatos`) | Estados conservados en archivo JSON | backend/asignacion_de_asientos/pruebas.test.js | ✅ |
 
-### `backend/asignacion_de_asientos/pruebas.test.js` (5 pruebas)
+### `backend/asignacion_de_asientos/pruebas.test.js` (9 pruebas)
 - `HU-05: el aula debe crearse con 50 asientos (10 filas x 5 columnas)`
 - `HU-05: no se debe poder asignar un asiento ya ocupado`
 - `HU-05: al liberar un asiento, este vuelve a estar disponible`
 - `HU-05: un estudiante debe empezar como ausente por defecto`
 - `HU-05: el docente debe poder cambiar la asistencia a presente`
+- `HU-05: CA-06 buscarEstudiante encuentra estudiante por nombre o matricula`
+- `HU-05: CA-06 buscarEstudiante retorna null si no existe`
+- `HU-05: CA-07 guardarDatos y cargarDatos persiste y restaura el estado del aula`
+- `HU-05: CA-07 cargarDatos restaura correctamente asientos ocupados y vacios`
 
 ---
 
 ## HU-06 - Tomar apuntes de clase (SistemaAula)
 
-Módulo importado desde la rama `sistemaaula/feature/backend-apuntes` (autora: Ximena Mendoza Humerez). Código backend Express con arquitectura por capas (`ApunteService`, `ApunteRepository`, `apunteRoutes`).
+Módulo importado desde la rama `sistemaaula/feature/backend-apuntes` (autora: Ximena Mendoza Humerez). Código backend Express con arquitectura por capas (`ApunteService`, `ApunteRepository`, `apunteRoutes`). Cubierto mediante suites completas de pruebas unitarias con Jest. Total: 2 suites y 26 pruebas en verde (15 de servicio + 11 de validaciones).
 
 | HU | CA/RN | Caso | Dado/Cuando | Esperado | Test | Estado |
 |----|-------|------|-------------|----------|------|--------|
-| HU-06 | CA-01 | Listar materias | `GET /api/materias` | Lista de materias académicas | Código integrado sin cobertura original | ➖ |
-| HU-06 | CA-02 | Listar apuntes por estudiante | `GET /api/apuntes` con cabecera `x-estudiante-id` | Apuntes del estudiante ordenados cronológicamente | Código integrado sin cobertura original | ➖ |
-| HU-06 | CA-03 | Detalle de apunte | `GET /api/apuntes/:id` | Objeto apunte completo con materia y fechas | Código integrado sin cobertura original | ➖ |
-| HU-06 | CA-04 | Crear apunte | `POST /api/apuntes` con título, materia y contenido | HTTP 201 y apunte creado | Código integrado sin cobertura original | ➖ |
-| HU-06 | CA-05 | Editar apunte | `PUT /api/apuntes/:id` con campos modificados | Objeto actualizado y fecha de modificación | Código integrado sin cobertura original | ➖ |
-| HU-06 | CA-06 | Eliminar apunte | `DELETE /api/apuntes/:id?confirmar=true` | Eliminación confirmada | Código integrado sin cobertura original | ➖ |
+| HU-06 | CA-01 | Listar materias | Consultar catálogo de materias | Lista de materias académicas disponibles | backend/apuntes/tests/apunteService.test.js | ✅ |
+| HU-06 | CA-02 | Listar apuntes por estudiante | Consultar apuntes por `estudianteId` | Arreglo de apuntes ordenados cronológicamente | backend/apuntes/tests/apunteService.test.js | ✅ |
+| HU-06 | CA-03 | Detalle de apunte | Consultar por ID existente o inexistente | Retorna apunte completo o error 404 | backend/apuntes/tests/apunteService.test.js | ✅ |
+| HU-06 | CA-04 | Crear apunte | Registrar apunte con título, materia y contenido | Apunte persistido con fechas y autor | backend/apuntes/tests/apunteService.test.js | ✅ |
+| HU-06 | CA-05 | Editar apunte | Modificar contenido con control de autoría | Actualización aplicada o rechazo 403 si ajeno | backend/apuntes/tests/apunteService.test.js | ✅ |
+| HU-06 | CA-06 | Eliminar apunte | Eliminar apunte exigiendo confirmación | Eliminado con éxito o rechazo 400 sin confirmar | backend/apuntes/tests/apunteService.test.js | ✅ |
 
-> **Nota:** HU-06 cuenta con 0 pruebas unitarias automatizadas debido a que el repositorio fuente `SistemaAula` no incluía suite de pruebas para este módulo al momento de la integración.
+### `backend/apuntes/tests/apunteService.test.js` (15 pruebas)
+- CA-01: listar materias académicas disponibles
+- CA-02: listar apuntes por estudiante ordenados cronológicamente
+- CA-02: listar apuntes con estudiante inexistente devuelve arreglo vacío
+- CA-02: rechaza listar con estudianteId inválido (no positivo)
+- CA-03: obtener detalle de apunte existente con materia vinculada
+- CA-03: lanza error 404 cuando el apunte no existe
+- CA-04: crear apunte exitosamente con campos válidos
+- CA-04: rechaza crear apunte sin título o con título vacío
+- CA-04: rechaza crear apunte con materiaId inválido
+- CA-04: rechaza crear apunte con contenido vacío
+- CA-05: editar apunte existente por el estudiante autor
+- CA-05: rechaza edición si el estudiante no es el autor (error 403)
+- CA-05: lanza error 404 al editar apunte inexistente
+- CA-06: eliminar apunte cuando se proporciona confirmación explícita
+- CA-06: rechaza eliminación si no se confirma explícitamente (error 400)
+
+### `backend/apuntes/tests/validation.test.js` (11 pruebas)
+- Validaciones de formato y longitud de nombres, enteros positivos, números de asiento, datos de estudiante, fechas ISO, asistencia y contenido de notas académicas.
+
+---
+
+## Pruebas de interfaz de usuario (Frontend - Vitest)
+
+Suite de pruebas automatizadas del frontend Vue 3 utilizando **Vitest**, `@vue/test-utils` y `happy-dom`. Total: 6 suites y 13 pruebas en verde.
+
+| HU | Módulo | Caso | Esperado | Test | Estado |
+|----|--------|------|----------|------|--------|
+| HU-01 | CalendarioView | Renderizado inicial | Título, campo `#materia` y botón submit | frontend/src/tests/hu01-calendario.test.js | ✅ |
+| HU-01 | CalendarioView | Consulta y eventos | Muestra clases y badge de suspensión | frontend/src/tests/hu01-calendario.test.js | ✅ |
+| HU-01 | EventosView | Registro docente | Campos `#evento-id`, `#evento-materia`, etc. | frontend/src/tests/hu01-calendario.test.js | ✅ |
+| HU-02 | GruposView | Formulario de registro | Inputs de nombre, actividad, modalidad, integrantes | frontend/src/tests/hu02-grupos.test.js | ✅ |
+| HU-02 | GruposView | Consulta de grupos | Visualización de integrantes por actividad | frontend/src/tests/hu02-grupos.test.js | ✅ |
+| HU-03 | InicioEstudianteView | Formulario de entrega | Inputs de remitente, tarea, destinatario y archivo | frontend/src/tests/hu03-entregas.test.js | ✅ |
+| HU-03 | InicioEstudianteView | Validación de formatos | Acepta exclusivamente `.pdf`, `.docx`, `.zip` | frontend/src/tests/hu03-entregas.test.js | ✅ |
+| HU-04 | InicioDocenteView | Búsqueda de entregas | Campos de docente y tarea | frontend/src/tests/hu04-revision.test.js | ✅ |
+| HU-04 | InicioDocenteView | Feedback estructurado | Despliega campos `#correcto`, `#incorrecto`, `#corregir` | frontend/src/tests/hu04-revision.test.js | ✅ |
+| HU-05 | AsientosView | Mapa de aula 10x5 | 50 asientos interactivos y selector de acción | frontend/src/tests/hu05-asientos.test.js | ✅ |
+| HU-05 | AsientosView | Pestaña de asistencia | Lista de estudiantes con botón de alternancia | frontend/src/tests/hu05-asientos.test.js | ✅ |
+| HU-06 | ApuntesView | Gestión de notas | Selector de estudiante, materias y filtros | frontend/src/tests/hu06-apuntes.test.js | ✅ |
+| HU-06 | ApuntesView | Creación de notas | Formulario con título, materia y contenido | frontend/src/tests/hu06-apuntes.test.js | ✅ |
 
 Leyenda: ✅ prueba que pasa, ❌ prueba que falla o falta, ⏳ pendiente de otra funcionalidad, ➖ sin prueba por diseño.
