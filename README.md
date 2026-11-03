@@ -15,3 +15,9 @@ Proyecto de gestión de aula sobre (Tomar apuntes y Asignación de asientos)
 5. Puedes comprobar `http://localhost:3000/api/estudiantes` y `http://localhost:3000/api/materias`.
 
 Los apuntes se asocian al estudiante mediante el encabezado `x-estudiante-id`. Usa `npm start` para iniciar el servidor sin recarga automática. La configuración local `.env` no debe subirse al repositorio.
+
+## Interfaz
+
+Abre `http://localhost:3000` para usar la interfaz. Permite crear, editar, consultar y eliminar apuntes, cambiar de estudiante, y agregar estudiantes y materias. Los nombres de materias iniciales incluyen cursos universitarios como Sistemas de Información II y Base de Datos II.
+
+Los archivos del frontend están en `public/`: `index.html`, `styles.css` y `app.js`. La interfaz envía los datos a la API mediante `fetch` y muestra mensajes cuando faltan campos obligatorios.
