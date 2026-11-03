@@ -1,8 +1,9 @@
-import assert from "node:assert/strict";
-import { test } from "node:test";
+"use strict";
 
-import { GrupoTrabajo } from "./grupo-trabajo.js";
-import { RegistroGrupos } from "./registro-grupos.js";
+const assert = require("node:assert/strict");
+
+const { GrupoTrabajo } = require("./grupo-trabajo");
+const { RegistroGrupos } = require("./registro-grupos");
 
 const datosValidos = {
   nombre: "Grupo 1",

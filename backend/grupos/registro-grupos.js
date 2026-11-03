@@ -1,10 +1,10 @@
-import { GrupoTrabajo } from "./grupo-trabajo.js";
+const { GrupoTrabajo } = require("./grupo-trabajo");
 
 function esIdentificadorValido(valor) {
   return typeof valor === "string" && valor.length > 0 && valor === valor.trim();
 }
 
-export class RegistroGrupos {
+class RegistroGrupos {
   #grupos = [];
 
   registrar(grupo) {
@@ -23,3 +23,5 @@ export class RegistroGrupos {
     );
   }
 }
+
+module.exports = { RegistroGrupos };

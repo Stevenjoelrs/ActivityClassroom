@@ -1,4 +1,4 @@
-export class GrupoTrabajo {
+class GrupoTrabajo {
   constructor({ nombre, actividadId, modalidad, integrantes, maximoIntegrantes = null }) {
     if (typeof nombre !== "string" || !nombre.trim()) {
       throw new Error("El grupo debe tener un nombre.");
@@ -37,3 +37,5 @@ export class GrupoTrabajo {
     Object.freeze(this);
   }
 }
+
+module.exports = { GrupoTrabajo };

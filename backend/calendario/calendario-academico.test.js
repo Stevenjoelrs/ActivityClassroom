@@ -1,7 +1,8 @@
-import assert from "node:assert/strict";
-import { test } from "node:test";
+"use strict";
 
-import { CalendarioAcademico, EventoAcademico } from "./calendario-academico.js";
+const assert = require("node:assert/strict");
+
+const { CalendarioAcademico, EventoAcademico } = require("./calendario-academico");
 
 const datosValidos = {
   id: "EV-01",

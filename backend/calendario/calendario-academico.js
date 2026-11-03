@@ -22,7 +22,7 @@ function esFechaValida(fecha) {
   );
 }
 
-export class EventoAcademico {
+class EventoAcademico {
   constructor({ id, materiaId, tipo, fecha, horario, descripcion, suspendido = false }) {
     if (!esIdentificadorValido(id)) {
       throw new Error("El evento debe tener un identificador válido.");
@@ -63,7 +63,7 @@ export class EventoAcademico {
   }
 }
 
-export class CalendarioAcademico {
+class CalendarioAcademico {
   #eventos = [];
 
   registrarEvento(evento) {
@@ -95,3 +95,8 @@ export class CalendarioAcademico {
     });
   }
 }
+
+module.exports = {
+  EventoAcademico,
+  CalendarioAcademico,
+};

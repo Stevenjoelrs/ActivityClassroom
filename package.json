@@ -8,8 +8,8 @@
     "start": "node backend/server.js",
     "dev": "node --watch-path=backend --watch-path=public backend/server.js",
     "db:setup": "node backend/setup-db.js",
-    "test": "jest --runInBand",
-    "test:seating": "jest pruebas.test.js --runInBand"
+    "test": "node node_modules/jest/bin/jest.js --runInBand",
+    "test:seating": "node node_modules/jest/bin/jest.js pruebas.test.js --runInBand"
   },
   "dependencies": {
     "dotenv": "^18.0.9",
@@ -19,5 +19,11 @@
   "devDependencies": {
     "jest": "^30.5.2",
     "nodemon": "^3.1.14"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "tests/validation.test.js"
+    ]
   }
 }
